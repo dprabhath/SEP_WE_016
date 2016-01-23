@@ -9,7 +9,7 @@
 		body{
 			background-image: url("resources/common/picutres/background.jpg");
 			color:white;
-			
+
 		}
 	</style>
 	
@@ -23,7 +23,7 @@
 
 			<div class="col-md-3">
 				<div class="container" style="max-width:80%;height:auto;">
-					<img src="http://www.pptbackgroundstemplates.com/backgrounds/dna-gray-medical-ppt-backgrounds-powerpoint.jpg" class="img-thumbnail" alt="Cinque Terre" width="304" height="236">
+					<img src="http://www.keenthemes.com/preview/metronic/theme/assets/pages/media/profile/profile_user.jpg" class="img-thumbnail" alt="Cinque Terre" width="304" height="236">
 				</div>
 				<div class="container-fluid">
 					<h3>User Contribution</h3>
@@ -41,8 +41,34 @@
 
 		</div>
 		<div class="col-md-9">
+		<div class="well" style="background:rgba(0,0,0,0.5);color:white;border: none;">
+			<form role="form" style="margin-left:10%;margin-right:10%;color:white;">
 
+			<div class="form-group">
+					<label for="email" style="float:left;">Username:</label>
+					<input type="text" class="form-control" id="email" value="Sleepy" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
+				</div>
+				<div class="form-group">
+					<label for="email" style="float:left;">NIC:</label>
+					<input type="text" class="form-control" id="email" value="123456789V" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
+				</div>
+				<div class="form-group">
+					<label for="email" style="float:left;">Email address:</label>
+					<input type="email" class="form-control" id="email" value="alexvista1234@gmail.com" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
+				</div>
+				<div class="form-group">
+					<label for="pwd" style="float:left;">Password:</label>
+					<input type="password" class="form-control" id="pwd" value="124" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
+				</div>
 
+				<div class="form-group">
+					<label for="pwd" style="float:left;">Telephone no:</label>
+					<input type="number" class="form-control" id="pwd" value="0774117218" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
+				</div>
+				
+				<button type="submit" class="btn btn-default">Save</button>
+			</form>
+	</div>
 		</div>
 	</div>
 

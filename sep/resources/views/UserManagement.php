@@ -14,7 +14,7 @@
 			overflow: hidden;
 			text-align: center;
 			vertical-align: middle;
-			background: rgba(0,0,0,0.5);
+			background: rgba(0,0,0,0.7);
 			
 			
 
@@ -54,6 +54,7 @@
 	include 'template/body.php';
 	?>
 	<div class="container-fluid">
+	<div class="well" style="background:rgba(0,0,0,0.5);color:white;border: none;">
 		<div class="container-fluid" >
 			<div class="row">
 				<div class="col-sm-6"></div>
@@ -65,6 +66,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<div class="container-fluid" style="border:0px solid white;padding-top:50px;">
 			<div class="row">
 				<div class="col-md-3">
@@ -87,7 +89,7 @@
 										<th style="margin:0px;padding:0px;" class="col-md-2 col-sm-2 col-xs-3"></th>
 									</tr>
 								</thead>
-								<tbody class="ellipsis">
+								<tbody >
 									<tr>
 										<td colspan="4" style="width:100%;" class="hidden-lg hidden-md" >
 											<div class="input-group hiders" style="width:100%;">
@@ -140,9 +142,9 @@
 										</td>
 									</tr>
 
-									<tr style="background: transparent;background-color: transparent;">
-										<td colspan="4" style="background-color: transparent;">
-											<div class="container-fluid" align="center" style="background: transparent;background-color: transparent;">
+									<tr style="background:rgba(0,0,0,0.7);background-color: transparent;">
+										<td colspan="4" >
+											<div class="container-fluid" align="center" >
 												<nav>
 													<ul class="pager">
 														<li class="previous disabled">
@@ -171,7 +173,7 @@
 				<div class="col-md-3 hidden-xs hidden-sm">
 					
 				</div>
-				<div class="col-md-9 col-xs-12 col-sm-12" align="center">
+				<div class="col-md-9 col-xs-12 col-sm-12" align="right">
 					<div class="btn-group">
 						<button type="button" class="btn btn-primary">Activate/Diactivate</button>
 						<button type="button" class="btn btn-primary">Remove</button>
@@ -179,6 +181,7 @@
 						<button type="button" class="btn btn-primary">Mass Mail</button>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	</div>
