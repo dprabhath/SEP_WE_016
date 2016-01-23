@@ -17,6 +17,8 @@ Route::get('home', 'HomeController@index');
 
 Route::get('usermanage', 'RegisterdUserManagment@index');
 
+Route::get('profile', 'UsrProfileController@index');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
