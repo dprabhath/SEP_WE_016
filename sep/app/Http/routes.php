@@ -19,6 +19,8 @@ Route::get('usermanage', 'RegisterdUserManagment@index');
 
 Route::get('profile', 'UsrProfileController@index');
 
+Route::get('doctors', 'DoctorListController@index');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
