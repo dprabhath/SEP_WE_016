@@ -1,4 +1,4 @@
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="myModal" role="dialog" style="color:black;">
     <div class="modal-dialog">
     
       <!-- Modal content-->
