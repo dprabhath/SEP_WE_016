@@ -1,12 +1,13 @@
 <meta charset="utf-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="resources/common/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/common/css/bootstrap.css">
 <link rel="stylesheet" href="resources/common/css/clndr.css">
 <link rel="stylesheet" href="resources/common/css/custom.css">
 <link rel="stylesheet" href="resources/common/css/font-awesome.css">
 <link rel="stylesheet" href="resources/common/css/jqvmap.css">
 <link rel="stylesheet" href="resources/common/css/lines.css">
 <link rel="stylesheet" href="resources/common/css/style.css">
+
 <!-- jQuery library -->
 
 
@@ -49,7 +50,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 }
 
 .navbar-brand {
-  padding: 0px; /* firefox bug fix */
+  padding: 0px !important;
+  /* firefox bug fix */
 }
 .navbar-brand>img {
   height: 100%;
@@ -64,16 +66,64 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 }
 @media (min-width: 768px) {
 
-.navbar-nav > li > a, .navbar-brand {
-    padding-top:0px !important; 
+.navbar-nav > li > a {
+    padding-top:25px !important; 
      padding-bottom:0 !important; 
     height: 70px;
 }
 .navbar {min-height:70px !important;}
 
+.navbar-brand {
+  padding: 0px !important;
+  height: 65px; /* firefox bug fix */
+}
+
+}
+.custom_profile_pic {
+   position: relative;
+    top: -5px;
+    float: left;
+    left: -5px;
+    width:32px;
+    max-width:32px;
+}
+#wrapper {
+	width:1000px;
+	min-height:100%;
+	position:relative;
+	background-color: rgba(255,255,255,0.5) !important;
+	padding:0px;
+}
+#header {
+	background:#ededed;
+	padding:0px;
+}
+#content {
+	padding-bottom:100px !important;
+	padding: 15px; /* Height of the footer element */
+}
+#footer {
+	background:black;
+	width:100%;
+	height:50px;
+	position:absolute;
+	margin-top: 100px;
+	bottom:0;
+	left:0;
+	color:white !important;
+	background-color: rgba(0,0,0,0.7) !important;
+
 
 }
 
+@media (max-width: 768px) {
+    /* For mobile phones: */
+    #wrapper {
+    width:100%;
+	min-height:100%;
+	position:relative;
+}
+}
 </style>
 <!--nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;" style="border-radius:0px;background:rgba(0,0,0,0.7);border:none;"-->
   
