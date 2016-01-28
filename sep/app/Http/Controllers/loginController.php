@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-class recoverController extends Controller {
+class loginController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ class recoverController extends Controller {
 	 */
 	public function index()
 	{
-		return view('passrecover');
+		return view('login');
 	}
 
 }

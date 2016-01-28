@@ -4,74 +4,145 @@
 	<?php
 	include 'template/head.php';
 	?>
+	
+
 	<style type="text/css">
 
-		body{
-			background-image: url("resources/common/picutres/background.jpg");
-			color:white;
+	.fa-spinner {
 
-		}
+	margin-top:-12px !important;
+	margin-right:-12px !important;
+	}
+		@media (max-width: 768px) {
+    /* For mobile phones: */
+    .fa-spinner {
+
+	margin-top:-6px !important;
+	margin-right:-12px !important;
+	}
+    
+	}
+
+
+
 	</style>
-	
 </head>
-<body>
-	<?php
-	include 'template/body.php';
-	?>
-	<div class="container-fluid" align="center">
-		<div class="row">
 
-			<div class="col-md-3">
-				<div class="container" style="max-width:80%;height:auto;">
-					<img src="http://www.keenthemes.com/preview/metronic/theme/assets/pages/media/profile/profile_user.jpg" class="img-thumbnail" alt="Cinque Terre" width="304" height="236">
+<body >
+	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
+		
+		<div id="header" align="left">
+			<?php
+			include 'template/body.php';
+			?>
+		</div><!-- #header -->
+		
+		<div id="content" align="left">
+			<div class="row">
+				<div class="col-md-4">
+					
+					<div class="list-group list-group-alternate"> 
+						<a data-toggle="tab" href="#home" class="list-group-item"><i class="ti ti-email"></i> Profile </a> 
+						<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">4.5/5</span>Rating </a> 
+						<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Posts created </a>
+						<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">100</span>Contributions </a> 
+						<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Messages </a> 
+						<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-danger">30</span>Notifications </a> 
+					</div>
 				</div>
-				<div class="container-fluid">
-					<h3>User Contribution</h3>
-					<div class="container-fluid" style="background-color: transparent;">
+				<div class="col-md-8">
+					<div class="tab-content" style="margin:0px;">
+						<div id="home" class="tab-pane fade in active r3_counter_box">
+							
+							<h3>Mr.Sampath</h3>
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">UserName</label>
+									<div class="col-sm-8">
+										<div class="input-group">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+											</span>
+											<input type="text" disabled="" class="form-control1" placeholder="" value="Sampath widushan" >
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+										</p>
+									</div>
+								</div>
 
-						<ul class="list-group" style="background-color: transparent;border: none;">
-							<li style="background:rgba(0,0,0,0.5);color:white;border: none;" class="list-group-item"><span style="background:rgba(0,0,0,0.5);color:white;" class="badge">12</span> Doctors Added</li>
-							<li style="background:rgba(0,0,0,0.5);color:white;border: none;" class="list-group-item"><span style="background:rgba(0,0,0,0.5);color:white;" class="badge">5</span> Forum activites</li> 
-							<li style="background:rgba(0,0,0,0.5);color:white;border: none;" class="list-group-item"><span style="background:rgba(0,0,0,0.5);color:white;" class="badge">3</span> Tickets</li>
-						</ul>
+								<div class="form-group has-success has-feedback">
+									<label for="focusedinput" class="col-sm-2 col-xs-2 control-label">Password</label>
+									<div class="col-sm-8 ">
+										<div class="input-group">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+											</span>
+											<input type="password" disabled="" class="form-control1" id="focusedinput" placeholder="" value="Sampath widushan">
+											<span class="glyphicon glyphicon-ok form-control-feedback"></span>
+										</div>
+									</div>
+									<div class="col-sm-2 ">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+										</p>
+									</div>
 
-					</ul>
-				</div>
-			</div>
 
-		</div>
-		<div class="col-md-9">
-		<div class="well" style="background:rgba(0,0,0,0.5);color:white;border: none;">
-			<form role="form" style="margin-left:10%;margin-right:10%;color:white;">
 
-			<div class="form-group">
-					<label for="email" style="float:left;">Username:</label>
-					<input type="text" class="form-control" id="email" value="Sleepy" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
-				</div>
-				<div class="form-group">
-					<label for="email" style="float:left;">NIC:</label>
-					<input type="text" class="form-control" id="email" value="123456789V" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
-				</div>
-				<div class="form-group">
-					<label for="email" style="float:left;">Email address:</label>
-					<input type="email" class="form-control" id="email" value="alexvista1234@gmail.com" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
-				</div>
-				<div class="form-group">
-					<label for="pwd" style="float:left;">Password:</label>
-					<input type="password" class="form-control" id="pwd" value="124" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
-				</div>
-
-				<div class="form-group">
-					<label for="pwd" style="float:left;">Telephone no:</label>
-					<input type="number" class="form-control" id="pwd" value="0774117218" style="background:rgba(0,0,0,0.7);background-color: transparent;color:white;">
-				</div>
+								</div>
+								<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 control-label">Email</label>
+									<div class="col-sm-8">
+										<div class="input-group input-icon right spinner">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+											</span>
 				
-				<button type="submit" class="btn btn-default">Save</button>
-			</form>
-	</div>
-		</div>
-	</div>
+											<i class="fa fa-fw fa-spin fa-spinner"></i>
+											<input type="email" disabled="" class="form-control1" id="focusedinput" placeholder="" value="Sampathwidushan@gmail.com">
+											
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+										</p>
+									</div>
+								</div>
 
-</div>
+							</form>
+							
+							
+						</div>
+						<div id="menu1" class="tab-pane fade r3_counter_box">
+							<h3>Menu 1</h3>
+							<p>Some content in menu 2.</p>
+						</div>
+						<div id="menu2" class="tab-pane fade r3_counter_box">
+							<h3>Menu 2</h3>
+							<p>Some content in menu 2.</p>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+			
+		</div><!-- #content -->
+		
+		<div id="footer" align="left">
+			<?php
+			include 'template/footer.php';
+			?>
+		</div><!-- #footer -->
+		
+	</div><!-- #wrapper -->
 </body>
+
 </html>

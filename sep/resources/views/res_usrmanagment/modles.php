@@ -17,12 +17,12 @@
     
      
      
-    <input style="min-wdith:90%;" type="password" class="form-control">
+    <input style="min-wdith:90%;" type="password" class="form-control1">
     
     
   </div>
   <button type="button" class="btn btn-primary btn-lg btn-block" id="sendReset">Change Password</button>
-  
+
 </form>
         </div>
         <div class="modal-footer">

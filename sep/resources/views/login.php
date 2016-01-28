@@ -18,7 +18,7 @@
 	<script>
 		$(document).ready(function(){
 			
-    		$("#myBtn").click(function(){
+    		$("#myBtn1").click(function(){
         	$("#myModal").modal();
     		});
     		
@@ -32,39 +32,72 @@
 
  <body class="bodybg">
  <?php
-	include 'template/body.php';
+	//include 'template/body.php';
 	?>
     	
 
 	<div class="container-fluid">
 		<div class="row" style="padding-top:10%;">
-			<div class="col-md-3">
+			<div class="col-md-4">
 			</div>
-			<div class="col-md-6" >
+			<div class="col-md-4" >
 				<div class="well" id="login_well" style="background:rgba(0,0,0,0.5);color:white;border: none;">
 			
 				<form role="form">
 					<div class="form-group">
 						<div class="input-group">
                         	<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span  class="glyphicon glyphicon-envelope"></span></span>
-							<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" class="form-control transparent" id="email" placeholder="Email address/Phone Number">
+							<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="input-group">
                                  <span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span class="glyphicon glyphicon-lock"></span></span>
-						<input type="password " class="form-control transparent" id="pwd" placeholder="Password" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;">
+						<input type="password " class="form-control1 transparent" id="pwd" placeholder="Password" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;">
 						</div>
+
 					</div>
-					<button type="submit" class="btn btn-primary btn-lg btn-block" >
+					<div class="container-fluid" align="center">
+					<label class="col-sm-6">
+							
+							
+							<button type="button" class="btn btn-link" id="myBtn1" style="color:white;">
+								Lost Your Password?
+							</button>
+							
+							
+					</label>
+					<div class="form-group col-sm-6">
+					<button  type="submit" class="btn btn-primary btn-lg btn-block" >
 						Login
 					</button>
-					<div class="container-fluid" align="center">
-						<label>
-							<button type="button" class="btn btn-link" id="myBtn" style="color:white;">
-								Lost Your Password?
-							</button></label>
 					</div>
+					</div>
+					<div class="form-group col-sm-12" align="center">
+							<button type="button" class="btn btn-link" id="myBtn" style="color:white;margin-bottom:0px;padding-bottom:0px;">
+								New ? Register here
+							</button>
+					</div>
+					
+					<div class="container-fluid" align="center">
+							<h2></h2>
+					</div>
+
+					<div class="form-group">
+						<div class="input-group">
+                                 <span class="input-group-addon warning_1 btn-success" style="color:white;">g+</span>
+						<button type="button" class="form-control1 btn-success warning_1" id="pwd" style="color:white;" >Google +</button>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="input-group">
+                                 <span class="input-group-addon btn-warning warning_11">f</span>
+						<button type="button" class="form-control1 btn-warning warning_11" id="pwd" style="color:white;padding-right:100px;">FaceBook</button>
+						</div>
+					</div>
+
+					
 					
 					
 					
@@ -73,7 +106,7 @@
 			</div>
 
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 			</div>
 		</div>
 	</div>
@@ -98,9 +131,9 @@
     <br>
     
      <div class="input-group">
-     <span class="input-group-addon">@</span>
-    <input type="email" class="form-control" id="email" id="inputWarning2" aria-describedby="inputWarning2Status">
-    <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+     
+    <input type="email" class="form-control1" id="email" id="inputWarning2" aria-describedby="inputWarning2Status">
+   
     </div>
   </div>
   <button type="button" class="btn btn-primary btn-lg btn-block" id="sendReset">Send Rest Link</button>

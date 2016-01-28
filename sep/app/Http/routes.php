@@ -21,7 +21,7 @@ Route::get('profile', 'UsrProfileController@index');
 
 Route::get('doctors', 'DoctorListController@index');
 
-Route::get('login', 'recoverController@index');
+Route::get('login', 'loginController@index');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
