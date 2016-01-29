@@ -22,6 +22,7 @@ Route::get('profile', 'UsrProfileController@index');
 Route::get('doctors', 'DoctorListController@index');
 
 Route::get('login', 'loginController@index');
+Route::post('login','loginController@inputs');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

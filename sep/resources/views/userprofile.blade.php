@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<?php
-	include 'template/head.php';
-	?>
+@extends('template/template_user')
 	
+@section('head')
 
 	<style type="text/css">
 
@@ -22,22 +18,15 @@
 	}
     
 	}
-
-
-
 	</style>
-</head>
+@stop
 
-<body >
-	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
+@section('navbar')
+@stop
+	
 		
-		<div id="header" align="left">
-			<?php
-			include 'template/body.php';
-			?>
-		</div><!-- #header -->
-		
-		<div id="content" align="left">
+@section('body')
+
 			<div class="row">
 				<div class="col-md-4">
 					
@@ -134,15 +123,6 @@
 
 			</div>
 			
-		</div><!-- #content -->
-		
-		<div id="footer" align="left">
-			<?php
-			include 'template/footer.php';
-			?>
-		</div><!-- #footer -->
-		
-	</div><!-- #wrapper -->
-</body>
-
-</html>
+@stop
+@section('footer')
+@stop

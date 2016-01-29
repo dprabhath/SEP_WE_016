@@ -1,29 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<?php
-	include 'template/head.php';
-	?>
-	
-	<style type="text/css">
-		
+@extends('template/template_user')
 
+@section('head')
+@stop
+@section('navbar')
+@stop
+@section('body')
 
-
-	</style>
-</head>
-
-<body >
-	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
-		
-		<div id="header" align="left">
-			<?php
-			include 'template/body.php';
-			?>
-		</div><!-- #header -->
-		
-		<div id="content" align="left">
-			<div class="col_3">
+	<div class="col_3">
 				<div class="col-md-3 widget widget1">
 					<div class="r3_counter_box">
 						<i class="pull-left fa fa-thumbs-up icon-rounded"></i>
@@ -257,15 +240,7 @@
 				</div>
 				<div class="clearfix"> </div>
 			</div>
-		</div><!-- #content -->
-		
-		<div id="footer" align="left">
-			<?php
-			include 'template/footer.php';
-			?>
-		</div><!-- #footer -->
-		
-	</div><!-- #wrapper -->
-</body>
 
-</html>
+@stop
+@section('footer')
+@stop
