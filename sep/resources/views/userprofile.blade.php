@@ -15,10 +15,92 @@
 
 	margin-top:-6px !important;
 	margin-right:-12px !important;
+
 	}
     
 	}
+	#wait{
+			
+    		display:    none;
+    		position:   fixed;
+    		z-index:    10000000;
+    		top:        0;
+    		left:       0;
+   			 height:     100%;
+    		width:      100%;
+    		background: rgba( 255, 255, 255, .8 ) 
+                url('resources/common/gif/ajax-loader.gif') 
+                50% 50% 
+                no-repeat;
+		}
 	</style>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#changePic').click(function(){
+				$('#picfile').click();
+				
+			});
+			$('#picfile').change(function (){
+       			var fileName = $(this).val();
+      			//alert(fileName);
+
+      			$("#picture").submit();
+
+					/** upload to the server **/
+
+     		});
+     		$("form#picture").submit(function(e){
+     			$('#wait').show();
+    			var formData = new FormData($(this)[0]);
+
+    		$.ajax({
+        		url: window.location.pathname,
+        		type: 'POST',
+        		data: formData,
+        		async: false,
+       			 success: function (data) {
+            		if(data['code']=="success"){
+            				Lobibox.notify("success", {
+            				title: 'success',
+    						msg: data['message'],
+    						sound: '../resources/common/sounds/sound2'
+							});
+							d = new Date();
+							$("#profile_pic").attr("src",data['filename']+"?"+d.getTime());
+							
+            			}else if(data['code']=="warning"){
+            				Lobibox.notify("warning", {
+            				title: 'warning',
+    						msg: data['message'],
+    						sound: '../resources/common/sounds/sound5'
+							});
+            			}else{
+            				Lobibox.notify("error", {
+            				title: 'Erro',
+    						msg: data['message'],
+    						sound: '../resources/common/sounds/sound4'
+							}); 
+            			}
+            			$('#wait').hide();
+        	},
+        		error: function(data){
+        			Lobibox.notify("error", {
+            				title: 'Erro',
+    						msg: 'An erro occurd',
+    						sound: '../resources/common/sounds/sound4'
+					}); 
+					$('#wait').hide();
+        	},
+        		cache: false,
+        		contentType: false,
+        		processData: false
+    		});
+    		e.preventDefault();
+    		return false;
+		});
+
+		});
+	</script>
 @stop
 
 @section('navbar')
@@ -43,26 +125,36 @@
 					<div class="tab-content" style="margin:0px;">
 						<div id="home" class="tab-pane fade in active r3_counter_box">
 							
-							<h3>Mr.Sampath</h3>
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-2 control-label">UserName</label>
-									<div class="col-sm-8">
-										<div class="input-group">							
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-											</span>
-											<input type="text" disabled="" class="form-control1" placeholder="" value="Sampath widushan" >
-										</div>
+							<h3>{{$user->name}}</h3>
+							<!--form class="form-horizontal"-->
+							{!! Form::open(['id' => 'picture','class'=>'form-horizontal','files' => true]) !!}
+
+							{!! Form::file('pic',['style'=>'visibility: hidden;display:none;','id'=>'picfile','accept'=>'image/*']) !!}
+							{!! Form::hidden('formname','picture') !!}
+							
+							<div class="form-group">
+									<div class="col-sm-2  container-fluid"></div>
+									<div class="col-sm-8 container-fluid" align="center">
+									@if($user->pic!='')
+										<img src={{$user->pic}} class="img-thumbnail" alt="Cinque Terre" width="304" height="236" id="profile_pic">
+
+									@else
+										<img src="uploads/profile_pics/emp.png" class="img-thumbnail" alt="Cinque Terre" width="304" height="236" id="profile_pic">
+									@endif
+
+										 
+
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-2  container-fluid">
 										<p class="help-block">
 											
-											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+											<button style="padding-bottom:0px;" id="changePic" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
 										</p>
 									</div>
 								</div>
-
+							<!--/form-->
+							{!! Form::close() !!}
+							<form class="form-horizontal">
 								<div class="form-group has-success has-feedback">
 									<label for="focusedinput" class="col-sm-2 col-xs-2 control-label">Password</label>
 									<div class="col-sm-8 ">
@@ -82,8 +174,32 @@
 									</div>
 
 
+							</div>
 
+							
+								
+								</form>
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">TP No</label>
+									<div class="col-sm-8">
+										<div class="input-group">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+											</span>
+											<input type="text" disabled="" class="form-control1" placeholder="" value={{$user->tp}} >
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+										</p>
+									</div>
 								</div>
+							</form>
+							
+								<form class="form-horizontal">
 								<div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Email</label>
 									<div class="col-sm-8">
@@ -93,7 +209,7 @@
 											</span>
 				
 											<i class="fa fa-fw fa-spin fa-spinner"></i>
-											<input type="email" disabled="" class="form-control1" id="focusedinput" placeholder="" value="Sampathwidushan@gmail.com">
+											<input type="email" disabled="" class="form-control1" id="focusedinput" placeholder="" value={{$user->email}}>
 											
 										</div>
 									</div>
@@ -122,6 +238,9 @@
 				</div>
 
 			</div>
+			<div id="wait">
+		
+	</div>
 			
 @stop
 @section('footer')

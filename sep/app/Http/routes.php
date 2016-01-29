@@ -18,6 +18,7 @@ Route::get('home', 'HomeController@index');
 Route::get('usermanage', 'RegisterdUserManagment@index');
 
 Route::get('profile', 'UsrProfileController@index');
+Route::post('profile', 'UsrProfileController@inputs');
 
 Route::get('doctors', 'DoctorListController@index');
 

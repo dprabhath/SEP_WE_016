@@ -233,7 +233,8 @@
             				title: 'Erro',
     						msg: 'An erro occurd',
     						sound: '../resources/common/sounds/sound4'
-						}); 
+						});
+						$('#wait').hide(); 
         			}
     			});
    				e.preventDefault(); //STOP default action

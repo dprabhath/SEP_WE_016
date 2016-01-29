@@ -3,6 +3,7 @@
 use App\user;
 use Mail;
 use Illuminate\Support\Str;
+use Session;
 //use Illuminate\http\Request;
 use Request;
 class loginController extends Controller {
@@ -35,8 +36,9 @@ class loginController extends Controller {
 	 */
 	public function index()
 	{
-		$users = user::all();
+		//$users = user::all();
 		//return $users;
+		Session::put('userid', 1);
 		return view('login');
 	}
 	

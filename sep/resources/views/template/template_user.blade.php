@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="resources/common/css/jqvmap.css">
 <link rel="stylesheet" href="resources/common/css/lines.css">
 <link rel="stylesheet" href="resources/common/css/style.css">
+<link rel="stylesheet" href="resources/common/css/lobibox.css">
 
 <!-- jQuery library -->
 
@@ -31,6 +32,7 @@
 <script src="resources/common/js/rickshaw.js"></script>
 <script src="resources/common/js/site.js"></script>
 <script src="resources/common/js/underscore-min.js"></script>
+<script src="resources/common/js/lobibox.js"></script>
 <link href="//fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900" rel='stylesheet' type='text/css'>
 <style type="text/css">
 
