@@ -1,6 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-class DoctorListController extends Controller {
+use App\Doctor;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
+
+class DoctorController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -30,7 +36,19 @@ class DoctorListController extends Controller {
 	 */
 	public function index()
 	{
-		return view('DoctorList');
+		$doctors = Doctor::all();
+
+		return view('doctor.index')->with('doctors', $doctors);
+		//return $doctors;
 	}
+
+	public function show($id)
+	{
+		$doctor = Doctor::findOrFail($id);
+
+		return View::make('doctor.show')->with('doctor', $doctor);
+	}
+
+
 
 }

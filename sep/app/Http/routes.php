@@ -20,7 +20,8 @@ Route::get('usermanage', 'RegisterdUserManagment@index');
 Route::get('profile', 'UsrProfileController@index');
 Route::post('profile', 'UsrProfileController@inputs');
 
-Route::get('doctors', 'DoctorListController@index');
+Route::get('doctors', 'DoctorController@index');
+Route::get('doctors/{id}', 'DoctorController@show');
 
 Route::get('login', 'loginController@index');
 Route::post('login','loginController@inputs');
