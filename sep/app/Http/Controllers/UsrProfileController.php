@@ -85,6 +85,26 @@ class UsrProfileController extends Controller {
 			}
 			
         	
+		}elseif(Request::get('formname')=="nicForm"){
+			$nic = Request::get('nic');
+			if(preg_match("/^[0-9]{9}[v]{1}$/", $nic)){
+				$user->nic=$nic;
+				$user->save();
+				return response()->json(['message'=>'NIC updated success!','code'=>'success']);
+			}else{
+				return response()->json(['message'=>'Check your NIC!','code'=>'warning']);
+			}
+			
+		}elseif(Request::get('formname')=="passwordForm"){
+			$password = Request::get('password');
+			if($password!=''){
+				$user->password=$password;
+				$user->save();
+				return response()->json(['message'=>'Passowrd updated success!','code'=>'success']);
+			}else{
+				return response()->json(['message'=>'Check your Passowrd!','code'=>'warning']);
+			}
+
 		}
 	}
 
