@@ -19,23 +19,31 @@
 
 
                 <div class="col-md-3 stats-info" style="margin-left:0px;">
+                 {!! Form::open() !!}
                     <div class="panel-heading">
-                        <h4 class="panel-title">Filters</h4>
+                        <h4 class="panel-title">Sort</h4>
                         <div class="panel-body">
-                            <ul class="list-unstyled">
-                            
-                                <li>By Name</li>
-                                   
                                     <div class="radio block">
-                                        {!! Form::radio('filtername', 'first', 'true') !!}
+                                        {!! Form::radio('sorttype', 'rating', 'true') !!}
+                                        <label>  Rating</label>
+                                    </div>
+                                    <div class="radio block">
+                                        {!! Form::radio('sorttype', 'first_name') !!}
                                         <label>  First Name</label>
                                     </div>
                                     <div class="radio block">
-                                        {!! Form::radio('filtername', 'last') !!}
+                                        {!! Form::radio('sorttype', 'last_name') !!}
                                         <label>  Last Name</label>
                                     </div>
+                        </div>
+                         <h4 class="panel-title">Filter</h4>   
+                        <div class="panel-body">                    
+                            <ul class="list-unstyled">
                                 <li>By Specialization</li>
-                                   
+                                    <div class="radio block">
+                                         {!! Form::radio('spec', 'all', 'true') !!}
+                                        <label> All</label>
+                                    </div>
                                     <div class="radio block">
                                          {!! Form::radio('spec', 'spec1') !!}
                                         <label> Specialization 1</label>
@@ -53,7 +61,10 @@
                                         <label> Specialization 4</label>
                                     </div>
                                 <li>By Location</li>
-                                   
+                                   <div class="radio block">
+                                         {!! Form::radio('location', 'all', 'true') !!}
+                                        <label> All</label>
+                                   </div>
                                    <div class="radio block">
                                          {!! Form::radio('location', 'loc1') !!}
                                         <label> Location 1</label>
@@ -68,8 +79,10 @@
                                    </div>
 
                             </ul>
+                            {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}
+                           
                         </div>
-
+                        {!! Form::close() !!}
                     </div>
                 
                 </div>

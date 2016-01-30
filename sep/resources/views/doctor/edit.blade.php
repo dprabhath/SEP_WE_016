@@ -1,13 +1,13 @@
 @extends('template/template_user')
-	
+    
 @section('head')
 
 @stop
 
 @section('navbar')
 @stop
-	
-		
+    
+        
 @section('body')
 
 
@@ -31,18 +31,21 @@
                                     </h4>
                                 </div>
                             </div>
+
+                            {!! Form::open() !!}
                             <div class="panel-body">
 
                                 <ul class="list-group">
                                     <li class="list-group-item"> 
-                                        <h4 id="h4" style="margin-left:10px"> Specialization: {!! $doctor->specialization !!}</h4>
+                                        <h4 id="h4" style="margin-left:10px"> Specialization: {!! Form::text('spec', $doctor->specialization) !!}</h4>
                                     </li>
                                     <li class="list-group-item">
-                                        <h4 id="h4" style="margin-left:10px"> Location: {!! $doctor->location !!}</h4>
+                                        <h4 id="h4" style="margin-left:10px"> Location: {!! Form::text('loc', $doctor->location) !!} </h4>
                                     </li>
-                                    <a href="#" onclick="history.back()" class="btn btn_5 btn-lg btn-info" style="margin-top:50px">Back</a>   
+                                    {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
                                 </ul>
                             </div>
+                            {!! Form::close() !!}
                         </div>
 
                     </div>

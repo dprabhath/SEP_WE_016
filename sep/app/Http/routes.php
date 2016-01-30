@@ -21,7 +21,11 @@ Route::get('profile', 'UsrProfileController@index');
 Route::post('profile', 'UsrProfileController@inputs');
 
 Route::get('doctors', 'DoctorController@index');
+Route::get('doctors/edit/{id}', 'DoctorController@edit');
+Route::post('doctors/edit/{id}', 'DoctorController@update');
 Route::get('doctors/{id}', 'DoctorController@show');
+Route::post('doctors', 'DoctorController@sortfilter');
+
 
 Route::get('login', 'loginController@index');
 Route::post('login','loginController@inputs');
