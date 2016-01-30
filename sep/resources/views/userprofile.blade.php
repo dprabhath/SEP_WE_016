@@ -36,6 +36,16 @@
 	</style>
 	<script type="text/javascript">
 		$(document).ready(function(){
+
+
+			$('#input_email').dbclick(function(){
+				$(this).removeAttr( "disabled" );
+
+
+			});
+
+
+/*---------------profile picuter change jquery functions -------------------*/
 			$('#changePic').click(function(){
 				$('#picfile').click();
 				
@@ -43,13 +53,15 @@
 			$('#picfile').change(function (){
        			var fileName = $(this).val();
       			//alert(fileName);
-
-      			$("#picture").submit();
+      			if(fileName!=''){
+      				$("#picture").submit();
+      			}
+      			
 
 					/** upload to the server **/
 
      		});
-     		$("form#picture").submit(function(e){
+     		$("form#pictureForm").submit(function(e){
      			$('#wait').show();
     			var formData = new FormData($(this)[0]);
 
@@ -127,7 +139,7 @@
 							
 							<h3>{{$user->name}}</h3>
 							<!--form class="form-horizontal"-->
-							{!! Form::open(['id' => 'picture','class'=>'form-horizontal','files' => true]) !!}
+							{!! Form::open(['id' => 'pictureForm','class'=>'form-horizontal','files' => true]) !!}
 
 							{!! Form::file('pic',['style'=>'visibility: hidden;display:none;','id'=>'picfile','accept'=>'image/*']) !!}
 							{!! Form::hidden('formname','picture') !!}
@@ -152,54 +164,9 @@
 										</p>
 									</div>
 								</div>
-							<!--/form-->
+							
 							{!! Form::close() !!}
-							<form class="form-horizontal">
-								<div class="form-group has-success has-feedback">
-									<label for="focusedinput" class="col-sm-2 col-xs-2 control-label">Password</label>
-									<div class="col-sm-8 ">
-										<div class="input-group">							
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-											</span>
-											<input type="password" disabled="" class="form-control1" id="focusedinput" placeholder="" value="Sampath widushan">
-											<span class="glyphicon glyphicon-ok form-control-feedback"></span>
-										</div>
-									</div>
-									<div class="col-sm-2 ">
-										<p class="help-block">
-											
-											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-										</p>
-									</div>
-
-
-							</div>
-
-							
-								
-								</form>
-							<form class="form-horizontal">
-								<div class="form-group">
-									<label class="col-sm-2 control-label">TP No</label>
-									<div class="col-sm-8">
-										<div class="input-group">							
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-											</span>
-											<input type="text" disabled="" class="form-control1" placeholder="" value={{$user->tp}} >
-										</div>
-									</div>
-									<div class="col-sm-2">
-										<p class="help-block">
-											
-											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-										</p>
-									</div>
-								</div>
-							</form>
-							
-								<form class="form-horizontal">
+							{!! Form::open(['id' => 'emailForm','class'=>'form-horizontal']) !!}
 								<div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Email</label>
 									<div class="col-sm-8">
@@ -208,20 +175,94 @@
 												<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 											</span>
 				
-											<i class="fa fa-fw fa-spin fa-spinner"></i>
-											<input type="email" disabled="" class="form-control1" id="focusedinput" placeholder="" value={{$user->email}}>
+											
+											<input id="input_email" type="email" disabled class="form-control1" id="focusedinput" placeholder="" value={{$user->email}}>
 											
 										</div>
 									</div>
 									<div class="col-sm-2">
 										<p class="help-block">
 											
-											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
 										</p>
 									</div>
 								</div>
 
-							</form>
+							{!! Form::close() !!}
+
+							{!! Form::open(['id' => 'passwordForm','class'=>'form-horizontal']) !!}
+								<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 col-xs-2 control-label">Password</label>
+									<div class="col-sm-8 ">
+										<div class="input-group">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+											</span>
+											<input id="input_password" type="password" disabled class="form-control1" id="focusedinput" placeholder="" value="Sampath widushan">
+											
+										</div>
+									</div>
+									<div class="col-sm-2 ">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+										</p>
+									</div>
+
+
+							</div>
+
+							
+								
+								{!! Form::close() !!}
+
+							{!! Form::open(['id' => 'tpnoForm','class'=>'form-horizontal']) !!}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">TP No</label>
+									<div class="col-sm-8">
+										<div class="input-group">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+											</span>
+											<input id="input_tpno" type="text" disabled class="form-control1" placeholder="" value={{$user->tp}} >
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+										</p>
+									</div>
+								</div>
+							{!! Form::close() !!}
+							
+								
+
+							
+							
+								{!! Form::open(['id' => 'nicForm','class'=>'form-horizontal']) !!}
+								<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 control-label">NIC</label>
+									<div class="col-sm-8">
+										<div class="input-group input-icon right spinner">							
+											<span class="input-group-addon">
+												<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+											</span>
+				
+											
+											<input type="text" id="input_nic"  disabled class="form-control1" id="focusedinput" placeholder="" value={{$user->nic}}>
+											
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block">
+											
+											<button style="padding-bottom:0px;" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+										</p>
+									</div>
+								</div>
+
+							{!! Form::close() !!}
 							
 							
 						</div>

@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use Session;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 //use Illuminate\Http\Request;
 use Input;
 use Validator;
@@ -42,7 +43,7 @@ class UsrProfileController extends Controller {
 	{
 			$user = user::where('id',Session::get('userid'))->first();
 			if(is_null($user)){
-				return view('login');
+				return Redirect::to('login');
 			}else{
 				return view('userprofile')->with('user',$user);
 			}
@@ -54,6 +55,10 @@ class UsrProfileController extends Controller {
 		//return $value;
 	}
 	public function inputs(){
+		$user = user::where('id',Session::get('userid'))->first();
+			if(is_null($user)){
+				return response()->json(['message'=>'pak you hacker']);
+			}
 		//return  response()->json(['message' => 'File size is too large', 'code' => 'warning']);
 		$user = user::where('id',Session::get('userid'))->first();
 		if(Request::get('formname')=="picture"){

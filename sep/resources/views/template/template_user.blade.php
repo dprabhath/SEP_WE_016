@@ -162,7 +162,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 							<li><a href="#">Page 3</a></li> 
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<img src="https://pbs.twimg.com/media/BTAxC_2CIAE6iv3.jpg" class="profile-image img-circle custom_profile_pic"><b class="caret"></b></a>
+
+
+								@if(! empty($user) && $user->pic!='')
+
+										<img src={{$user->pic}} class="profile-image img-circle custom_profile_pic">
+
+									@else
+										<img src="uploads/profile_pics/emp.png" class="profile-image img-circle custom_profile_pic">
+									@endif
+
+									<b class="caret"></b></a>
 									<!--img src="http://placehold.it/60x60" class="profile-image img-circle custom_profile_pic"> Username <b class="caret"></b></a-->
 									<ul class="dropdown-menu">
 										<li><a href="#"><span class="glyphicon glyphicon-user"></span> Username</a></li>

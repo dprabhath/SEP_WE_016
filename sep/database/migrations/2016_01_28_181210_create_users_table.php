@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password');
 			$table->string('tp');
 			$table->string('pic');
+			$table->string('level');
 			
 		});
 	}
