@@ -3,14 +3,14 @@
 <head>
 	<meta charset="utf-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="resources/common/css/bootstrap.css">
-<link rel="stylesheet" href="resources/common/css/clndr.css">
-<link rel="stylesheet" href="resources/common/css/custom.css">
-<link rel="stylesheet" href="resources/common/css/font-awesome.css">
-<link rel="stylesheet" href="resources/common/css/jqvmap.css">
-<link rel="stylesheet" href="resources/common/css/lines.css">
-<link rel="stylesheet" href="resources/common/css/style.css">
-<link rel="stylesheet" href="resources/common/css/lobibox.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/bootstrap.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/clndr.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/custom.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/font-awesome.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/jqvmap.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/lines.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/style.css">
+<link rel="stylesheet" href="{{ url('/') }}/resources/common/css/lobibox.css">
 
 <!-- jQuery library -->
 
@@ -18,21 +18,22 @@
 <!-- Latest compiled JavaScript -->
 
 
-<script src="resources/common/js/jquery.min.js"></script>
-<script src="resources/common/js/bootstrap.min.js"></script>
-<script src="resources/common/js/Chart.js"></script>
-<script src="resources/common/js/clndr.js"></script>
-<script src="resources/common/js/custom.js"></script>
-<script src="resources/common/js/d3.v3.js"></script>
 
-<script src="resources/common/js/jquery.vmap.js"></script>
-<script src="resources/common/js/jquery.vmap.sampledata.js"></script>
-<script src="resources/common/js/metisMenu.min.js"></script>
-<script src="resources/common/js/moment-2.2.1.js"></script>
-<script src="resources/common/js/rickshaw.js"></script>
-<script src="resources/common/js/site.js"></script>
-<script src="resources/common/js/underscore-min.js"></script>
-<script src="resources/common/js/lobibox.js"></script>
+<script src="{{ url('/') }}/resources/common/js/jquery.min.js"></script>
+<script src="{{ url('/') }}/resources/common/js/bootstrap.min.js"></script>
+<script src="{{ url('/') }}/resources/common/js/Chart.js"></script>
+<script src="{{ url('/') }}/resources/common/js/clndr.js"></script>
+<script src="{{ url('/') }}/resources/common/js/custom.js"></script>
+<script src="{{ url('/') }}/resources/common/js/d3.v3.js"></script>
+
+<script src="{{ url('/') }}/resources/common/js/jquery.vmap.js"></script>
+<script src="{{ url('/') }}/resources/common/js/jquery.vmap.sampledata.js"></script>
+<script src="{{ url('/') }}/resources/common/js/metisMenu.min.js"></script>
+<script src="{{ url('/') }}/resources/common/js/moment-2.2.1.js"></script>
+<script src="{{ url('/') }}/resources/common/js/rickshaw.js"></script>
+<script src="{{ url('/') }}/resources/common/js/site.js"></script>
+<script src="{{ url('/') }}/resources/common/js/underscore-min.js"></script>
+<script src="{{ url('/') }}/resources/common/js/lobibox.js"></script>
 <link href="//fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900" rel='stylesheet' type='text/css'>
 <style type="text/css">
 
@@ -152,7 +153,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span> 
 						</button>
-						<a class="navbar-brand" href="#" ><img src="resources/common/picutres/m_logo_primary_rwd.png" style="max-height:100%;width:auto;"></a>
+						<a class="navbar-brand" href="#" ><img src="{{ url('/') }}/resources/common/picutres/m_logo_primary_rwd.png" style="max-height:100%;width:auto;"></a>
 					</div>
 					<div class="collapse navbar-collapse" id="myNavbar">
 						<ul class="nav navbar-nav navbar-right">
@@ -169,7 +170,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 										<img src={{$user->pic}} class="profile-image img-circle custom_profile_pic">
 
 									@else
-										<img src="uploads/profile_pics/emp.png" class="profile-image img-circle custom_profile_pic">
+										<img src="{{ url('/') }}/uploads/profile_pics/emp.png" class="profile-image img-circle custom_profile_pic">
 									@endif
 
 									<b class="caret"></b></a>
