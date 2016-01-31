@@ -76,15 +76,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
     padding-top:25px !important; 
      padding-bottom:0 !important; 
     height: 70px;
+
 }
-.navbar {min-height:70px !important;}
+.navbar {
+min-height:70px !important;
+-webkit-box-shadow: 0 8px 6px -6px #999 !important;;
+    -moz-box-shadow: 0 8px 6px -6px #999 !important;;
+    box-shadow: 0 8px 6px -6px #999 !important;;
+
+}
 
 .navbar-brand {
   padding: 0px !important;
   height: 65px; /* firefox bug fix */
+
 }
 
 }
+
 .custom_profile_pic {
    position: relative;
     top: -5px;
@@ -144,8 +153,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
 		
 		<div id="header" align="left">
-
-			<nav class="navbar navbar-inverse" style="border-radius:0px;background:rgba(0,0,0,0.7);border:none;">
+		<div class="container-fluid" style="min-height:30px;background:rgb(0,0,0);border:none;"></div>
+			<nav class="navbar navbar-default" style="border-radius:0px;background:rgba(255,255,255,1);border:none;">
 				<div class="container-fluid" >
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
