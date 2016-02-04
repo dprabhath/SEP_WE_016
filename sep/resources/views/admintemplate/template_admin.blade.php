@@ -51,7 +51,9 @@
 
 <style type="text/css">
 
-	
+	#page-wrapper{
+		background-color: rgba(255,255,255,0.9);
+	}
 	
 </style>
 <!--nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;" style="border-radius:0px;background:rgba(0,0,0,0.7);border:none;"-->
