@@ -1,5 +1,15 @@
 <?php namespace App\Http\Controllers;
-
+use App\user;
+use Mail;
+use Illuminate\Support\Str;
+use Session;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
+//use Illuminate\Http\Request;
+use Input;
+use Validator;
+use Request;
 class RegisterdUserManagment extends Controller {
 
 	/*
@@ -33,4 +43,57 @@ class RegisterdUserManagment extends Controller {
 		return view('admin/usermanage');
 	}
 
+	public function registerdUsers(){
+		
+
+		//return view('admin/usermanage')->with('id',1);
+	}
+
+	public function view()
+	{
+		
+		//return view('admin/usermanage');
+	}
+	public function inputs(){
+		if(Request::get('task')=="loadtableRegisterd"){
+			$user = user::all();
+			return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd']);
+		}elseif (Request::get('task')=="resetPassword") {
+			
+			$ids = Request::get('users');
+			if(!is_null($ids)){
+
+
+				foreach ($ids as &$value) {
+    					$user = user::find($value);
+    					if(!is_null($user)){
+
+    							$pass = Str::random(10);
+								$user->password = $pass;
+								$user->save();
+								Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
+										$m->from('hello@app.com', 'Your Application');
+
+										$m->to($user->email, $user->name)->subject('New Password!');
+								});
+
+    					}else{
+    						return  response()->json(['message' => 'Users not passsed', 'code' => 'error']);
+    					}
+				}
+
+
+
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'resetPassword']);
+
+		}else{
+			return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+		}
+
+		
+	}
 }

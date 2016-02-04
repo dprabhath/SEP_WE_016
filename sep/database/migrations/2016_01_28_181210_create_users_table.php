@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration {
 			$table->string('tp');
 			$table->string('pic');
 			$table->string('level');
+			$table->boolean('active');
 			
 		});
 	}

@@ -59,7 +59,9 @@
 <!--nav class="top1 navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;" style="border-radius:0px;background:rgba(0,0,0,0.7);border:none;"-->
   <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 
-
+  	<script type="text/javascript">
+  		$.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+  	</script>
 
 	@yield('head')
 	
@@ -93,7 +95,7 @@
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/1.png" alt=""/>
+								<img src="{{ url('/') }}/images/1.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 								<span class="label label-info">NEW</span>
@@ -101,7 +103,7 @@
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/2.png" alt=""/>
+								<img src="{{ url('/') }}/images/2.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 								<span class="label label-info">NEW</span>
@@ -109,28 +111,28 @@
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/3.png" alt=""/>
+								<img src="{{ url('/') }}/images/3.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 							</a>
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/4.png" alt=""/>
+								<img src="{{ url('/') }}/images/4.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 							</a>
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/5.png" alt=""/>
+								<img src="{{ url('/') }}/images/5.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 							</a>
 						</li>
 						<li class="avatar">
 							<a href="#">
-								<img src="images/pic1.png" alt=""/>
+								<img src="{{ url('/') }}/images/pic1.png" alt=""/>
 								<div>New message</div>
 								<small>1 minute ago</small>
 							</a>
@@ -141,7 +143,7 @@
 	        		</ul>
 	      		</li>
 			    <li class="dropdown">
-	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/1.png"><span class="badge">9</span></a>
+	        		<a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="{{ url('/') }}/images/1.png"><span class="badge">9</span></a>
 	        		<ul class="dropdown-menu">
 						<li class="dropdown-menu-header text-center">
 							<strong>Account</strong>
@@ -182,6 +184,17 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Users<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+                                <li>
+                                    <a href="usermanage">Manage</a>
+                                </li>
+                                <li>
+                                    <a href="#">New</a>
+                                </li>
+                            </ul>
+						</li>
                         @yield('navigation')
                     </ul>
                 </div>

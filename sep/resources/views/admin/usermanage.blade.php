@@ -1,144 +1,267 @@
 @extends('admintemplate/template_admin')
 
 @section('head')
+<style type="text/css">
+	#wait{
+
+		display:    none;
+		position:   fixed;
+		z-index:    10000000;
+		top:        0;
+		left:       0;
+		height:     100%;
+		width:      100%;
+		background: rgba( 255, 255, 255, .8 ) 
+		url('resources/common/gif/ajax-loader.gif') 
+		50% 50% 
+		no-repeat;
+	}
+
+</style>
+<script type="text/javascript">
+	const token = "{{ csrf_token() }}";
+/****************************** send json requets to the server ******************************/
+	function jsend(dataString){
+		$('#wait').show();
+		var datas;
+		$.ajax({
+			type:"POST",
+			url : "{{ url('/') }}/usermanage",
+			data:dataString,
+			success : function(data){
+				document.getElementById("re").innerHTML=data['code']; 
+				returnofjsend(data);
+				
+			},
+			error: function(jqXHR, textStatus, errorThrown) 
+			{
+				Lobibox.notify("error", {
+					title: 'Erro',
+					msg: 'An erro occurd',
+					sound: '../resources/common/sounds/sound4'
+				});
+				
+			}
+
+		},"json");
+
+		
+	}
+
+
+	function loadtable(type){
+	 
+		if(type=="1"){
+			
+			var d = {"_token": token ,"task": "loadtableRegisterd"};
+			 
+			jsend(d);
+			
+			
+		}
+	}
+/*************************************** Getting Json requets from the server ****************************/
+	function returnofjsend(data){
+		var htmls="";
+		$('#wait').hide();
+		if(data['code']=="error"){
+			Lobibox.notify("warning", {
+					title: 'warning',
+					msg: data['message'],
+					sound: '../resources/common/sounds/sound4'
+				});
+			return false;
+		}
+		if(data['task'] == "loadtableRegisterd"){
+			/*************************  Registerd Users table display ******************************************/
+			var users = data['users'];
+			for(var i = 0; i < users.length; i++){
+
+
+				htmls+= "<tr class='unread checked'>";
+				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
+				htmls+="<td>"+users[i]['email']+"</td>"
+				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
+				htmls+="<td>"+users[i]['created_at']+"</td></tr>";
+
+
+				/*
+					to get all the users
+				$.each( users[i], function( key, value ) {
+  						alert( key + ": " + value );
+				});
+				*/
+
+			}
+			document.getElementById("users_table_registered").innerHTML=htmls; 
+			//alert(users[0]['name']);
+		}else if(data['task'] == "resetPassword"){
+
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Password Reseted",
+					sound: '../resources/common/sounds/sound4'
+				});
+		}
+		
+	}
+/************************* Document Ready Functions *************************************/
+	$(document).ready(function(){
+
+		loadtable("1");
+		//alert("asdas");
+
+		$('#users_table_registered').on('click','button',function(){
+			//alert("asdas");
+			alert($(this).attr( "value" ));
+			alert($('.checkbox').attr( "value" ));
+
+		});
+/********************************* select all users function ****************************/
+		$('#selectall').click(function(){
+
+			if($(this).prop('checked')==true){
+				
+				$('.inside').prop('checked', true);
+			}else{
+				$('.inside').prop('checked', false);
+			}
+
+			
+			return true;
+
+		});
+/********************************** Password reset Function *********************************/
+		$('#resetpass').click(function(){
+
+			var ids=[];
+			var i=0;
+
+			$(".inside").each(function(){
+    				if ($(this).prop('checked')==true){ 
+       					 ids[i]=$(this).attr( "value" );
+       					 i++;
+    				}
+
+			});
+			if(i===0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Please Select at least on users',
+					sound: '../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			var requets = {"_token": token ,"task": "resetPassword","users":ids};
+			jsend(requets);
+
+		});
+		
+
+
+		
+
+		
+
+
+
+	});
+
+</script>
+
 @stop
 
 
 @section('navigation')
-<li>
-	<a href="usermanage"><i class="fa fa-users fa-fw nav_icon"></i>User Manage</a>
-</li>
+
 @stop
 
 @section('body')
 <div class="graphs">
-	     <div class="xs">
-<div class="col-md-4">
-		<div class="list-group list-group-alternate"> 
-			<a href="#home" class="list-group-item"><i class="ti ti-email"></i> Profile </a> 
-			<a href="#menu1" class="list-group-item"><span class="badge badge-warning">4.5/5</span>Rating </a> 
-			<a href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Posts created </a>
-			<a href="#menu1" class="list-group-item"><span class="badge badge-warning">100</span>Contributions </a> 
-			<a href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Messages </a> 
-			<a href="#menu1" class="list-group-item"><span class="badge badge-danger">30</span>Notifications </a> 
-		</div>
-</div>
-<div class="col-md-8 inbox_right">
-	<form action="#" method="GET">
-		<div class="input-group">
-			<input type="text" name="search" class="form-control1 input-search" placeholder="Search...">
-			<span class="input-group-btn">
-				<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
-			</span>
-		</div><!-- Input Group -->
-	</form>
-	<div class="mailbox-content">
-		<div class="mail-toolbar clearfix">
-			<div class="float-left">
-				<div class="btn btn_1 btn-default mrg5R">
-					<i class="fa fa-refresh"> </i>
-				</div>
-				<div class="dropdown">
-					<a href="#" title="" class="btn btn-default" data-toggle="dropdown" aria-expanded="false">
-						<i class="fa fa-cog icon_8"></i>
-						<i class="fa fa-chevron-down icon_8"></i>
-						<div class="ripple-wrapper"></div></a>
-						<ul class="dropdown-menu float-right">
-							<li>
-								<a href="#" title="">
-									<i class="fa fa-pencil-square-o icon_9"></i>
-									Edit
-								</a>
-							</li>
-							<li>
-								<a href="#" title="">
-									<i class="fa fa-calendar icon_9"></i>
-									Schedule
-								</a>
-							</li>
-							<li>
-								<a href="#" title="">
-									<i class="fa fa-download icon_9"></i>
-									Download
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#" class="font-red" title="">
-									<i class="fa fa-times" icon_9=""></i>
-									Delete
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="clearfix"> </div>
-				</div>
-				<div class="float-right">
+	<div class="xs">
 
+		<div class="col-md-12 inbox_right">
 
-					<span class="text-muted m-r-sm">Showing 20 of 346 </span>
-					<div class="btn-group m-r-sm mail-hidden-options" style="display: inline-block;">
-						<div class="btn-group">
-							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-folder"></i> <span class="caret"></span></a>
-							<ul class="dropdown-menu dropdown-menu-right" role="menu">
-								<li><a href="#">Social</a></li>
-								<li><a href="#">Forums</a></li>
-								<li><a href="#">Updates</a></li>
-								<li class="divider"></li>
-								<li><a href="#">Spam</a></li>
-								<li><a href="#">Trash</a></li>
-								<li class="divider"></li>
-								<li><a href="#">New</a></li>
-							</ul>
+			<form action="#" method="GET">
+				<div class="input-group">
+					<input type="text" name="search" class="form-control1 input-search" placeholder="Search...">
+					<span class="input-group-btn">
+						<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+					</span>
+				</div><!-- Input Group -->
+			</form>
+			<div class="mailbox-content">
+
+				<div class="mail-toolbar clearfix">
+					<div class="float-left">
+						<div class="btn btn_1  mrg5R">
+							<input type="checkbox" id="selectall" class="checkbox">
 						</div>
-						<div class="btn-group">
-							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-tags"></i> <span class="caret"></span></a>
-							<ul class="dropdown-menu dropdown-menu-right" role="menu">
-								<li><a href="#">Work</a></li>
-								<li><a href="#">Family</a></li>
-								<li><a href="#">Social</a></li>
-								<li class="divider"></li>
-								<li><a href="#">Primary</a></li>
-								<li><a href="#">Promotions</a></li>
-								<li><a href="#">Forums</a></li>
-							</ul>
+						<div class="btn btn_1 btn-default mrg5R">
+							<i class="fa fa-refresh"> </i>
+						</div>
+						<div class="dropdown">
+							<a href="#" title="" class="btn btn-default" data-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-cog icon_8"></i>
+								<i class="fa fa-chevron-down icon_8"></i>
+								<div class="ripple-wrapper"></div></a>
+								<ul class="dropdown-menu float-right">
+									<li>
+										<a href="#" title="" id="resetpass">
+											<i class="fa fa-pencil-square-o icon_9"></i>
+											Reset Password
+										</a>
+									</li>
+									<li>
+										<a href="#" title="">
+											<i class="fa fa-calendar icon_9"></i>
+											Deactivate
+										</a>
+									</li>
+
+								</ul>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+						<div class="float-right">
+
+
+							<span class="text-muted m-r-sm">Showing 1 of 1 </span>
+							<div class="btn-group m-r-sm mail-hidden-options" style="display: inline-block;">
+								<div class="btn-group">
+									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-folder"></i> <span class="caret"></span></a>
+									<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										<li><a href="#">Registered Users</a></li>
+										<li class="divider"></li>
+										<li><a href="#">Blocked Users</a></li>
+
+									</ul>
+								</div>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+							</div>
+
+
 						</div>
 					</div>
-					<div class="btn-group">
-						<a class="btn btn-default"><i class="fa fa-angle-left"></i></a>
-						<a class="btn btn-default"><i class="fa fa-angle-right"></i></a>
-					</div>
-
-
+					<table class="table">
+						<tbody id="users_table_registered">
+							
+							
+						</tbody>
+					</table>
 				</div>
+
 			</div>
-			<table class="table">
-				<tbody>
-					<tr class="unread checked">
-						<td class="hidden-xs">
-							<input type="checkbox" class="checkbox">
-						</td>
-						<td class="hidden-xs">
-							<i class="fa fa-star icon-state-warning"></i>
-						</td>
-						<td class="hidden-xs">
-							Google
-						</td>
-						<td>
-							Nullam quis risus eget urna mollis ornare vel eu leo
-						</td>
-						<td>
-						</td>
-						<td>
-							12 march
-						</td>
-					</tr>
-
-				</tbody>
-			</table>
+			<div class="clearfix"> </div>
 		</div>
 	</div>
-	<div class="clearfix"> </div>
-</div>
-</div>
-@stop
+	<div id="re">
+
+	</div>
+	<div id="wait">
+
+	</div>
+	@stop
