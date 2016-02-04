@@ -151,6 +151,19 @@ $('#changeNic').click(function(){
 	}
 
 });
+$('#changeName').click(function(){
+
+	if($('[name="name"]').val()!=''){
+		postdata("nameForm");
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "Check the Name",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+
+});
 /****************After modle confirm click***************************************/
 $('#confirm_input_send').click(function(){
 	if($('#confirm_input').val()==$('[name="nic"]').val() && $('#confirm_input_send').attr("hi")=="nic"){
@@ -176,6 +189,7 @@ $('#input_email').dblclick(function(){
 });
 $('#input_tpno').dblclick(function(){
 	$('#input_tpno input').removeAttr( "disabled" );
+	$('#changeTpno').removeAttr("disabled");
 	$('#input_tpno input').focus();
 
 });
@@ -189,6 +203,12 @@ $('#input_nic').dblclick(function(){
 	$('#input_nic input').removeAttr( "disabled" );
 	$('#changeNic').removeAttr("disabled");
 	$('#input_nic input').focus();
+
+});
+$('#input_name').dblclick(function(){
+	$('#input_name input').removeAttr( "disabled" );
+	$('#changeName').removeAttr("disabled");
+	$('#input_name input').focus();
 
 });
 
@@ -285,7 +305,7 @@ $("form#pictureForm").submit(function(e){
 		<div class="tab-content" style="margin:0px;">
 			<div id="home" class="tab-pane fade in active r3_counter_box">
 
-				<h3>{{$user->name}}</h3>
+				
 				<!--form class="form-horizontal"-->
 				{!! Form::open(['id' => 'pictureForm','class'=>'form-horizontal','files' => true]) !!}
 
@@ -324,7 +344,7 @@ $("form#pictureForm").submit(function(e){
 							</span>
 
 
-							<input type="email" disabled class="form-control1" id="focusedinput" placeholder="" value={{$user->email}}>
+							<input type="email" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$user->email}}">
 
 						</div>
 					</div>
@@ -347,7 +367,7 @@ $("form#pictureForm").submit(function(e){
 								<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
 							</span>
 							{!! Form::hidden('formname','passwordForm') !!}
-							<input  type="password" name="password" disabled class="form-control1" id="focusedinput" placeholder="" value={{$user->password}}>
+							<input  type="password" name="password" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$user->password}}">
 
 						</div>
 					</div>
@@ -365,6 +385,31 @@ $("form#pictureForm").submit(function(e){
 
 				{!! Form::close() !!}
 
+					{!! Form::open(['id' => 'nameForm','class'=>'form-horizontal']) !!}
+				<div class="form-group">
+					<label for="focusedinput" class="col-sm-2 control-label">Name</label>
+					<div class="col-sm-8">
+						<div class="input-group" id="input_name">							
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+							</span>
+
+							{!! Form::hidden('formname','nameForm') !!}
+							<input type="text" name="name" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$user->name}}">
+
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<p class="help-block">
+
+							<button style="padding-bottom:0px;" disabled id="changeName" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+						</p>
+					</div>
+				</div>
+
+				{!! Form::close() !!}
+
+
 				{!! Form::open(['id' => 'tpnoForm','class'=>'form-horizontal']) !!}
 				<div class="form-group">
 					<label class="col-sm-2 control-label">TP No</label>
@@ -373,7 +418,7 @@ $("form#pictureForm").submit(function(e){
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-phone" aria-hidden="true" ></span>
 							</span>
-							<input  type="text" disabled class="form-control1" placeholder="" value={{$user->tp}} >
+							<input  type="text" disabled class="form-control1" placeholder="" value="{{$user->tp}}" >
 						</div>
 					</div>
 					<div class="col-sm-2">
@@ -399,7 +444,7 @@ $("form#pictureForm").submit(function(e){
 							</span>
 
 							{!! Form::hidden('formname','nicForm') !!}
-							<input type="text" name="nic" disabled class="form-control1" id="focusedinput" placeholder="" value={{$user->nic}}>
+							<input type="text" name="nic" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$user->nic}}">
 
 						</div>
 					</div>
@@ -413,6 +458,7 @@ $("form#pictureForm").submit(function(e){
 
 				{!! Form::close() !!}
 
+			
 
 			</div>
 			<div id="menu1" class="tab-pane fade r3_counter_box">

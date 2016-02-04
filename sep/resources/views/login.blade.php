@@ -144,24 +144,24 @@
 		}
 		#wait{
 			
-    		display:    none;
-    		position:   fixed;
-    		z-index:    10000000;
-    		top:        0;
-    		left:       0;
-   			 height:     100%;
-    		width:      100%;
-    		background: rgba( 255, 255, 255, .8 ) 
-                url('resources/common/gif/ajax-loader.gif') 
-                50% 50% 
-                no-repeat;
+			display:    none;
+			position:   fixed;
+			z-index:    10000000;
+			top:        0;
+			left:       0;
+			height:     100%;
+			width:      100%;
+			background: rgba( 255, 255, 255, .8 ) 
+			url('resources/common/gif/ajax-loader.gif') 
+			50% 50% 
+			no-repeat;
 		}
 	</style>
 	<script>
 		$(document).ready(function(){
 			function isEmail(email) {
-  				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  				return regex.test(email);
+				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+				return regex.test(email);
 			}
 			function isPhone(phone){
 				var regex = /^[0-9]{10}$/;
@@ -181,17 +181,17 @@
 					$( "#passrecover" ).submit();
 				}else{
 					Lobibox.notify("warning", {
-            				title: 'Not Found',
-    						msg: 'Check your email/phone number',
-    						sound: '../resources/common/sounds/sound5'
-							});
+						title: 'Not Found',
+						msg: 'Check your email/phone number',
+						sound: '../resources/common/sounds/sound5'
+					});
 				}
 				
 				//$.post('', $('#passrecover').serialize());
 			});
 			$("#passrecover").submit(function(e)
 			{
-				 $('#wait').show();
+				$('#wait').show();
 
 				var postData = $(this).serializeArray();
 				var formURL = $(this).attr("action");
@@ -203,47 +203,47 @@
 					success:function(data, textStatus, jqXHR) 
 					{
             		//data: return data from server
-            			if(data=="ok"){
-            				Lobibox.notify("success", {
+            		if(data=="ok"){
+            			Lobibox.notify("success", {
             				title: 'Sent',
-    						msg: 'Check your inbox for your new password',
-    						sound: '../resources/common/sounds/sound2'
-							});
-							$('#modclose').click();
-            			}else if(data=="notfound"){
-            				Lobibox.notify("warning", {
+            				msg: 'Check your inbox for your new password',
+            				sound: '../resources/common/sounds/sound2'
+            			});
+            			$('#modclose').click();
+            		}else if(data=="notfound"){
+            			Lobibox.notify("warning", {
             				title: 'Not Found',
-    						msg: 'Check your email/phone number',
-    						sound: '../resources/common/sounds/sound5'
-							});
-            			}else{
-            				Lobibox.notify("error", {
-            				title: 'Erro',
-    						msg: 'An erro occurd contact server administrator',
-    						sound: '../resources/common/sounds/sound4'
-							}); 
-            			}
-            			 $('#wait').hide();
-            			 
-            			
-        			},
-        			error: function(jqXHR, textStatus, errorThrown) 
-       		 		{
+            				msg: 'Check your email/phone number',
+            				sound: '../resources/common/sounds/sound5'
+            			});
+            		}else{
             			Lobibox.notify("error", {
             				title: 'Erro',
-    						msg: 'An erro occurd',
-    						sound: '../resources/common/sounds/sound4'
-						});
-						$('#wait').hide(); 
-        			}
-    			});
+            				msg: 'An erro occurd contact server administrator',
+            				sound: '../resources/common/sounds/sound4'
+            			}); 
+            		}
+            		$('#wait').hide();
+
+
+            	},
+            	error: function(jqXHR, textStatus, errorThrown) 
+            	{
+            		Lobibox.notify("error", {
+            			title: 'Erro',
+            			msg: 'An erro occurd',
+            			sound: '../resources/common/sounds/sound4'
+            		});
+            		$('#wait').hide(); 
+            	}
+            });
    				e.preventDefault(); //STOP default action
     			//e.unbind(); //unbind. to stop multiple form submit.
-			});
+    		});
 
-		});
-		
-	</script>
+});
+
+</script>
 </head>
 
 <body class="bodybg">
@@ -271,8 +271,8 @@
 							</div>
 
 						</div>
-						<div class="container-fluid" align="center">
-							<label class="col-sm-6">
+						<div class="container-fluid" >
+							<div class="col-sm-6" align="center" style="padding-left:0px;margin-left:0px;">
 
 
 								<button type="button" class="btn btn-link" id="myBtn1" style="color:white;">
@@ -280,8 +280,8 @@
 								</button>
 
 
-							</label>
-							<div class="form-group col-sm-6">
+							</div>
+							<div class="col-sm-6" align="center">
 								<button  type="submit" class="btn btn-primary btn-lg btn-block" >
 									Login
 								</button>
@@ -297,19 +297,23 @@
 							<h2></h2>
 						</div>
 
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon warning_1 btn-success" style="color:white;">g+</span>
-								<button type="button" class="form-control1 btn-success warning_1" id="pwd" style="color:white;" >Google +</button>
+						<div class="row">
+							<div class="col-md-2 col-sm-2 col-xs-2" style="padding-right:0px;margin-right:0px;">
+								Or Sign in with:
 							</div>
+							<div class="col-md-2 col-sm-2 col-xs-2" style="padding-right:0px;margin-right:0px;">
+								<i class="icon_4">G</i>
+							</div>
+							<div class="col-md-1 col-sm-1 col-xs-1" style="padding-left:0px;margin-left:0px;">
+							<i class="icon_4 icon_5">F</i>
+							</div>
+							
+
+							
+							
 						</div>
 
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon btn-warning warning_11">f</span>
-								<button type="button" class="form-control1 btn-warning warning_11" id="pwd" style="color:white;padding-right:100px;">FaceBook</button>
-							</div>
-						</div>
+
 
 
 

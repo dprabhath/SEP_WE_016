@@ -54,6 +54,21 @@ class UsrProfileController extends Controller {
 		
 		//return $value;
 	}
+	public function regex($value,$type){
+		if($type=="NIC"){
+			if(preg_match("/^[0-9]{9}[v]{1}$/", $value)){
+				return true;
+			}
+		}elseif($type=="TP"){
+			if(preg_match("/^[0-9]{10}$/", $value)){
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
 	public function inputs(){
 		$user = user::where('id',Session::get('userid'))->first();
 			if(is_null($user)){
@@ -87,7 +102,7 @@ class UsrProfileController extends Controller {
         	
 		}elseif(Request::get('formname')=="nicForm"){
 			$nic = Request::get('nic');
-			if(preg_match("/^[0-9]{9}[v]{1}$/", $nic)){
+			if($this->regex($nic,"NIC")){
 				$user->nic=$nic;
 				$user->save();
 				return response()->json(['message'=>'NIC updated success!','code'=>'success']);
@@ -98,13 +113,24 @@ class UsrProfileController extends Controller {
 		}elseif(Request::get('formname')=="passwordForm"){
 			$password = Request::get('password');
 			if($password!=''){
-				$user->password=$password;
+				$user->password=\Hash::make($password);
 				$user->save();
 				return response()->json(['message'=>'Passowrd updated success!','code'=>'success']);
 			}else{
 				return response()->json(['message'=>'Check your Passowrd!','code'=>'warning']);
 			}
 
+		}elseif (Request::get('formname')=="nameForm") {
+			# code...
+			$name = Request::get('name');
+			if($name!=''){
+				$user->name = $name;
+				$user->save();
+				return response()->json(['message'=>'Name updated success!','code'=>'success']);
+			}else{
+				return response()->json(['message'=>'Check your Name!','code'=>'warning']);
+			}
+			
 		}
 	}
 

@@ -155,7 +155,7 @@ min-height:70px !important;
 		<div id="header" align="left">
 		<div class="container-fluid" style="min-height:30px;background:rgb(0,0,0);border:none;"></div>
 			<nav class="navbar navbar-default" style="border-radius:0px;background:rgba(255,255,255,1);border:none;">
-				<div class="container-fluid" >
+				<div class="container-fluid">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 							<span class="icon-bar"></span>
