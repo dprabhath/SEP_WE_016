@@ -56,7 +56,7 @@ class RegisterdUserManagment extends Controller {
 	}
 	public function inputs(){
 		if(Request::get('task')=="loadtableRegisterd"){
-			$user = user::all();
+			$user = user::where('active','1')->get();
 			return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd']);
 		}elseif (Request::get('task')=="resetPassword") {
 			
@@ -90,6 +90,45 @@ class RegisterdUserManagment extends Controller {
 
 			return  response()->json(['code' => 'success' , 'task' => 'resetPassword']);
 
+		}elseif (Request::get('task')=="loadtableBlocked") {
+			$user = user::where('active',0)->get();
+			return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked']);
+		}elseif (Request::get('task')=="DeactivateUsers") {
+			$ids = Request::get('users');
+			if(!is_null($ids)){
+
+
+				foreach ($ids as &$value) {
+    					$user = user::find($value);
+    					$user->active = 0;
+    					$user->save();
+				}
+
+
+
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'DeactivateUsers']);
+		}elseif (Request::get('task')=="ActivateUsers") {
+			$ids = Request::get('users');
+			if(!is_null($ids)){
+
+
+				foreach ($ids as &$value) {
+    					$user = user::find($value);
+    					$user->active = 1;
+    					$user->save();
+				}
+
+
+
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'ActivateUsers']);
 		}else{
 			return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
 		}

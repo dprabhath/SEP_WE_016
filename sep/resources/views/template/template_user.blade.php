@@ -61,7 +61,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 }
 .navbar-brand>img {
   height: 100%;
-  padding: 15px; /* firefox bug fix */
+  padding: 8px; /* firefox bug fix */
   width: auto;
 
 }
