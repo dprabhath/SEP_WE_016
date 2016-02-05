@@ -31,6 +31,11 @@ Route::post('doctors', 'DoctorController@sortfilter');
 Route::get('login', 'loginController@index');
 Route::post('login','loginController@inputs');
 
+Route::get('rate','rateController@index');
+
+
+
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

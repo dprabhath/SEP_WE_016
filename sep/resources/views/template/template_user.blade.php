@@ -202,8 +202,8 @@ min-height:70px !important;
 				@yield('body')
 			</div><!-- #content -->
 
-			<div id="footer" align="left">
-			adasdasd
+			<div id="footer" align="center">
+			All Rights Reserved 2016. XiCigny (Pvt) Ltd
 				@yield('footer')
 			</div><!-- #footer -->
 
