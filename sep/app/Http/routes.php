@@ -15,6 +15,9 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('new-ticket', 'newticketController@index');
+Route::post('new-ticket', 'newticketController@inputs');
+
 Route::get('usermanage', 'RegisterdUserManagment@index');
 Route::post('usermanage', 'RegisterdUserManagment@inputs');
 
