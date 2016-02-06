@@ -2,6 +2,174 @@
 	
 @section('head')
 
+	<script type="text/javascript">
+	    function ChangeColor(tableRow, highLight)
+	    {
+		    if (highLight)
+		    {
+		      tableRow.style.backgroundColor = '#dcfac9';
+		    }
+		    else
+		    {
+		      tableRow.style.backgroundColor = 'white';
+		    }
+	  	}
+
+		function NavigateTo(theUrl)
+		{
+			document.location.href = theUrl;
+		}
+	</script>
+
+	<script type="text/javascript">
+
+		var TableIDvalue = "indextable";
+		var TableLastSortedColumn = -1;
+
+		function SortTable() 
+		{
+			var sortColumn = parseInt(arguments[0]);
+			var type = arguments.length > 1 ? arguments[1] : 'T';
+			var dateformat = arguments.length > 2 ? arguments[2] : '';
+			var table = document.getElementById(TableIDvalue);
+			var tbody = table.getElementsByTagName("tbody")[0];
+			var rows = tbody.getElementsByTagName("tr");
+			var arrayOfRows = new Array();
+			type = type.toUpperCase();
+			dateformat = dateformat.toLowerCase();
+
+			for(var i=0, len=rows.length; i<len; i++) 
+			{
+				arrayOfRows[i] = new Object;
+				arrayOfRows[i].oldIndex = i;
+				var celltext = rows[i].getElementsByTagName("td")[sortColumn].innerHTML.replace(/<[^>]*>/g,"");
+				if( type=='D' ) 
+				{ 
+					arrayOfRows[i].value = GetDateSortingKey(dateformat,celltext); 
+				}
+				else 
+				{
+					var re = type=="N" ? /[^\.\-\+\d]/g : /[^a-zA-Z0-9]/g;
+					arrayOfRows[i].value = celltext.replace(re,"").substr(0,25).toLowerCase();
+				}
+			}
+			if (sortColumn == TableLastSortedColumn) 
+			{ 
+				arrayOfRows.reverse(); 
+			}
+			else 
+			{
+				TableLastSortedColumn = sortColumn;
+				switch(type) {
+					case "N" : arrayOfRows.sort(CompareRowOfNumbers); break;
+					case "D" : arrayOfRows.sort(CompareRowOfNumbers); break;
+					default  : arrayOfRows.sort(CompareRowOfText);
+					}
+			}
+			var newTableBody = document.createElement("tbody");
+			for(var i=0, len=arrayOfRows.length; i<len; i++) 
+			{
+				newTableBody.appendChild(rows[arrayOfRows[i].oldIndex].cloneNode(true));
+			}
+			table.replaceChild(newTableBody,tbody);
+		} 
+
+		function CompareRowOfText(a,b) 
+		{
+			var aval = a.value;
+			var bval = b.value;
+			return( aval == bval ? 0 : (aval > bval ? 1 : -1) );
+		} 
+
+		function CompareRowOfNumbers(a,b) 
+		{
+			var aval = /\d/.test(a.value) ? parseFloat(a.value) : 0;
+			var bval = /\d/.test(b.value) ? parseFloat(b.value) : 0;
+			return( aval == bval ? 0 : (aval > bval ? 1 : -1) );
+		} 
+
+		function GetDateSortingKey(format,text) 
+		{
+			if( format.length < 1 ) 
+			{ 
+				return ""; 
+			}
+
+			format = format.toLowerCase();
+			text = text.toLowerCase();
+			text = text.replace(/^[^a-z0-9]*/,"",text);
+			text = text.replace(/[^a-z0-9]*$/,"",text);
+
+			if( text.length < 1 ) 
+			{ 
+				return ""; 
+			}
+
+			text = text.replace(/[^a-z0-9]+/g,",",text);
+			var date = text.split(",");
+
+			if( date.length < 3 ) 
+			{ 
+				return ""; 
+			}
+
+			var d=0, m=0, y=0;
+			for( var i=0; i<3; i++ ) 
+			{
+				var ts = format.substr(i,1);
+				if( ts == "d" ) 
+				{ 
+					d = date[i]; 
+				}
+				else if( ts == "m" ) 
+				{ 
+					m = date[i]; 
+				}
+				else if( ts == "y" ) 
+				{ 
+					y = date[i]; 
+				}
+			}
+
+			if( d < 10 ) 
+			{ 
+				d = "0" + d; 
+			}
+
+			if( /[a-z]/.test(m) ) 
+			{
+				m = m.substr(0,3);
+				switch(m) {
+					case "jan" : m = 1; break;
+					case "feb" : m = 2; break;
+					case "mar" : m = 3; break;
+					case "apr" : m = 4; break;
+					case "may" : m = 5; break;
+					case "jun" : m = 6; break;
+					case "jul" : m = 7; break;
+					case "aug" : m = 8; break;
+					case "sep" : m = 9; break;
+					case "oct" : m = 10; break;
+					case "nov" : m = 11; break;
+					case "dec" : m = 12; break;
+					default    : m = 0;
+					}
+			}
+			if( m < 10 ) 
+			{ 
+				m = "0" + m; 
+			}
+			y = parseInt(y);
+			if( y < 100 ) 
+				{ 
+					y = parseInt(y) + 2000; 
+				}
+			return "" + String(y) + "" + String(m) + "" + String(d) + "";
+		} 
+	</script>
+
+
+
     
 @stop
 
@@ -12,100 +180,38 @@
 @section('body')
 
 
+<div class="panel-body1">
+   <table id="indextable" class="table table-striped">
+     <thead>
+        <tr>
+          <th> <a href="javascript:SortTable(0,'T');"> First Name </a> </th>
+          <th> <a href="javascript:SortTable(1,'T');"> Last Name </a> </th>
+          <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
+          <th> <a href="javascript:SortTable(3,'T');"> Hospital </a> </th>
+          <th>User Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+      	
+        	@foreach ($doctors as $doctor)
+        	
+        		<tr onmouseover="ChangeColor(this, true);" 
+        		    onmouseout="ChangeColor(this, false);" 
+        		    onclick="NavigateTo('doctors/{{ $doctor->id }}')" style="cursor: pointer;">
 
-        <div id="content" align="left"  style="padding-right:0px;">
-            <div class="row">
-                
+		          	<td> {!! $doctor->first_name !!} </td>
+		          	<td> {!! $doctor->last_name !!} </td>
+		          	<td> {!! $doctor->specialization !!} </td>
+		          	<td> Hospital </td>
+		          	<td> {!! $doctor->rating !!} </td>
 
-
-                <div class="col-md-3 stats-info" style="margin-left:0px;">
-                 {!! Form::open() !!}
-                    <div class="panel-heading">
-                        <h4 class="panel-title">Sort</h4>
-                        <div class="panel-body">
-                                    <div class="radio block">
-                                        {!! Form::radio('sorttype', 'rating', 'true') !!}
-                                        <label>  Rating</label>
-                                    </div>
-                                    <div class="radio block">
-                                        {!! Form::radio('sorttype', 'first_name') !!}
-                                        <label>  First Name</label>
-                                    </div>
-                                    <div class="radio block">
-                                        {!! Form::radio('sorttype', 'last_name') !!}
-                                        <label>  Last Name</label>
-                                    </div>
-                        </div>
-                         <h4 class="panel-title">Filter</h4>   
-                        <div class="panel-body">                    
-                            <ul class="list-unstyled">
-                                <li>By Specialization</li>
-                                    <div class="radio block">
-                                         {!! Form::radio('spec', 'all', 'true') !!}
-                                        <label> All</label>
-                                    </div>
-                                    <div class="radio block">
-                                         {!! Form::radio('spec', 'spec1') !!}
-                                        <label> Specialization 1</label>
-                                    </div>
-                                    <div class="radio block">
-                                         {!! Form::radio('spec', 'spec2') !!}
-                                        <label> Specialization 2</label>
-                                    </div>
-                                    <div class="radio block">
-                                         {!! Form::radio('spec', 'spec3') !!}
-                                        <label> Specialization 3</label>
-                                    </div>
-                                    <div class="radio block">
-                                         {!! Form::radio('spec', 'spec4') !!}
-                                        <label> Specialization 4</label>
-                                    </div>
-                                <li>By Location</li>
-                                   <div class="radio block">
-                                         {!! Form::radio('location', 'all', 'true') !!}
-                                        <label> All</label>
-                                   </div>
-                                   <div class="radio block">
-                                         {!! Form::radio('location', 'loc1') !!}
-                                        <label> Location 1</label>
-                                   </div>
-                                    <div class="radio block">
-                                         {!! Form::radio('location', 'loc2') !!}
-                                        <label> Location 2</label>
-                                   </div>
-                                   <div class="radio block">
-                                         {!! Form::radio('location', 'loc3') !!}
-                                        <label> Location 3</label>
-                                   </div>
-
-                            </ul>
-                            {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}
-                           
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
-                
-                </div>
-
-                <div class="col-md-9" >
-                    <div class="tab-content" style="margin:0px;">
-                        <div id="home" class="tab-pane fade in active r3_counter_box">
-                            <div class="list-group list-group-alternate"> 
-                    
-                                @foreach ($doctors as $doctor)
-                                    <a href="doctors/{{ $doctor->id }}" class="list-group-item">
-                                        <span class="badge badge-info">{!! $doctor->rating !!}</span> 
-                                        {!! $doctor->first_name !!} {!! $doctor->last_name !!} 
-                                    </a> 
-                                @endforeach   
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>      
-        </div><!-- #content -->
+	          	</tr>  
+       		
+	        @endforeach 
+	        
+      </tbody>
+    </table>
+    </div>
 
 @stop
 

@@ -49,6 +49,11 @@ class DoctorController extends Controller {
 		return View::make('doctor.show')->with('doctor', $doctor);
 	}
 
+	public function newdoctor()
+	{
+		return View::make('doctor.newdoctor');
+	}
+
 	public function edit($id)
 	{
 		$doctor = Doctor::findOrFail($id);

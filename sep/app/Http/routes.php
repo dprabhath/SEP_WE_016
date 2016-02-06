@@ -29,6 +29,7 @@ Route::get('doctors/edit/{id}', 'DoctorController@edit');
 Route::post('doctors/edit/{id}', 'DoctorController@update');
 Route::get('doctors/{id}', 'DoctorController@show');
 Route::post('doctors', 'DoctorController@sortfilter');
+Route::get('newdoctor', 'DoctorController@newdoctor');
 
 
 Route::get('login', 'loginController@index');
