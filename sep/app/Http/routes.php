@@ -27,8 +27,11 @@ Route::post('profile', 'UsrProfileController@inputs');
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');
 Route::post('doctors/edit/{id}', 'DoctorController@update');
+Route::get('newdoctor', 'DoctorController@newdoctor');
+Route::post('newdoctor', 'DoctorController@insertNew');
 Route::get('doctors/{id}', 'DoctorController@show');
 Route::post('doctors', 'DoctorController@sortfilter');
+Route::get('pending', 'DoctorController@pendingdoctor');
 
 
 Route::get('login', 'loginController@index');
