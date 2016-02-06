@@ -12,7 +12,7 @@
 		height:     100%;
 		width:      100%;
 		background: rgba( 255, 255, 255, .8 ) 
-		url('resources/common/gif/ajax-loader.gif') 
+		url('{{ url('/') }}/resources/common/gif/ajax-loader.gif') 
 		50% 50% 
 		no-repeat;
 
@@ -29,10 +29,10 @@
 		var datas;
 		$.ajax({
 			type:"POST",
-			url : "{{ url('/') }}/usermanage",
+			url : "{{ url('/') }}/admin/usermanage",
 			data:dataString,
 			success : function(data){
-				document.getElementById("re").innerHTML=data['code']; 
+				//document.getElementById("re").innerHTML=data['code']; 
 				returnofjsend(data);
 				
 			},
@@ -41,7 +41,7 @@
 				Lobibox.notify("error", {
 					title: 'Erro',
 					msg: 'An erro occurd',
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 				
 			}
@@ -75,7 +75,7 @@
 			Lobibox.notify("warning", {
 					title: 'warning',
 					msg: data['message'],
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 			return false;
 		}
@@ -88,10 +88,12 @@
 
 
 			$('#ActivateUsers').css("display","none");
-			$('#DeleteUsers').css("display","none");
+			//$('#DeleteUsers').css("display","none");
 			$('#DeActivateUsers').css("display","block");
 			
 			var users = data['users'];
+			var tot = "Showing "+users.length+" of "+data['total'];
+			$('#user_count').html(tot);
 			for(var i = 0; i < users.length; i++){
 
 
@@ -99,8 +101,12 @@
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
 				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
-				htmls+="<td>"+users[i]['created_at']+"</td></tr>";
-
+				htmls+="<td>"+users[i]['created_at']+"</td>";
+				if(users[i]['level']==100){
+					htmls+="<td>Admin</td></tr>";
+				}else{
+					htmls+="<td>User</td></tr>";
+				}
 
 				/*
 					to get all the users
@@ -116,18 +122,28 @@
 		}else if(data['task'] == "loadtableBlocked"){
 /******************** Blocked User's Display ********************************************************************/
 			$('#ActivateUsers').css("display","block");
-			$('#DeleteUsers').css("display","block");
+			//$('#DeleteUsers').css("display","block");
 			$('#DeActivateUsers').css("display","none");
-
+			
 			var users = data['users'];
+			var tot = "Showing "+users.length+" of "+data['total'];
+			$('#user_count').html(tot);
 			for(var i = 0; i < users.length; i++){
 
+				
 
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
 				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
-				htmls+="<td>"+users[i]['created_at']+"</td></tr>";
+				htmls+="<td>"+users[i]['created_at']+"</td>";
+
+				if(users[i]['level']==100){
+					htmls+="<td>Admin</td></tr>";
+				}else{
+					htmls+="<td>User</td></tr>";
+				}
+				
 
 
 				/*
@@ -145,7 +161,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Password Reseted",
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 		}else if(data['task'] == "DeactivateUsers"){
 
@@ -153,7 +169,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Deactivated success",
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 		}else if(data['task'] == "ActivateUsers"){
 
@@ -161,7 +177,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Activated success",
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 		}
 		
@@ -205,7 +221,7 @@
 				Lobibox.notify("warning", {
 					title: 'warning',
 					msg: 'Something went Wrong',
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -243,8 +259,8 @@
 			if(i===0){
 				Lobibox.notify("warning", {
 					title: 'warning',
-					msg: 'Please Select at least on users',
-					sound: '../resources/common/sounds/sound4'
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -282,8 +298,8 @@
 			if(i===0){
 				Lobibox.notify("warning", {
 					title: 'warning',
-					msg: 'Please Select at least on users',
-					sound: '../resources/common/sounds/sound4'
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -309,8 +325,8 @@
 			if(i===0){
 				Lobibox.notify("warning", {
 					title: 'warning',
-					msg: 'Please Select at least on users',
-					sound: '../resources/common/sounds/sound4'
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -319,7 +335,22 @@
 
 			
 		});
-/********************************* Refresh Users Table **************************************************/
+/********************************* Search **************************************************/
+		$('form#search').submit(function(e){
+			
+			var strings = $('[name=searchBox]').val();
+			
+			var tasktype = 1;
+			if(showing_table ==1){
+				tasktype = 1;
+			}else{
+				tasktype = 2;
+			}
+			var requets = {"_token": token ,"task": "search","searchString":strings,"tasktype":tasktype};
+			e.preventDefault();
+			jsend(requets);
+
+		});
 
 		
 	});
@@ -339,9 +370,9 @@
 
 		<div class="col-md-12 inbox_right">
 
-			<form action="#" method="GET">
+			<form id="search">
 				<div class="input-group">
-					<input type="text" name="search" class="form-control1 input-search" placeholder="Search...">
+					<input type="text" name="searchBox" class="form-control1 input-search" placeholder="Search...">
 					<span class="input-group-btn">
 						<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
 					</span>
@@ -385,13 +416,7 @@
 										</a>
 
 									</li>
-									<li id="DeleteUsers">
-										<a href="#" title="">
-											<i class="fa fa-calendar icon_9"></i>
-											Delete
-										</a>
-										
-									</li>
+									
 
 								</ul>
 							</div>
@@ -400,7 +425,7 @@
 						<div class="float-right">
 
 
-							<span class="text-muted m-r-sm">Showing 1 of 1 </span>
+							<span id="user_count" class="text-muted m-r-sm"> </span>
 							<div class="btn-group m-r-sm mail-hidden-options" style="display: inline-block;">
 								<div class="btn-group">
 									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-folder"></i> <span class="caret"></span></a>

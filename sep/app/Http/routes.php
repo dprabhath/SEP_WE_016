@@ -11,15 +11,15 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
 Route::get('new-ticket', 'newticketController@index');
 Route::post('new-ticket', 'newticketController@inputs');
 
-Route::get('usermanage', 'RegisterdUserManagment@index');
-Route::post('usermanage', 'RegisterdUserManagment@inputs');
+Route::get('admin/usermanage', 'RegisterdUserManagment@index');
+Route::post('admin/usermanage', 'RegisterdUserManagment@inputs');
 
 Route::get('profile', 'UsrProfileController@index');
 Route::post('profile', 'UsrProfileController@inputs');
@@ -33,6 +33,7 @@ Route::post('doctors', 'DoctorController@sortfilter');
 
 Route::get('login', 'loginController@index');
 Route::post('login','loginController@inputs');
+Route::get('signout','loginController@signout');
 
 Route::get('rate','rateController@index');
 

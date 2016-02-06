@@ -4,6 +4,7 @@ use App\user;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
+use Illuminate\Support\Facades\Redirect;
 //use Illuminate\http\Request;
 use Request;
 class loginController extends Controller {
@@ -38,10 +39,50 @@ class loginController extends Controller {
 	{
 		//$users = user::all();
 		//return $users;
-		Session::put('userid', 1);
+		//Session::put('userid', 1);
+		$user = user::where('id',Session::get('userid'))->first();
+		if(is_null($user)){
+				return view('login');
+		}else{
+				return Redirect::to('home');
+		}
 		return view('login');
 	}
-	
+
+
+	/**
+	*	Regular expressions testng function
+	*	Input parameters are $value: The testing value
+	*						 $type : What is the filter that we want to you use, For and example
+	*								 If we want to test for and Email, parameter should be EMAIL
+	*   @param EMAIL(used for check email addresses, TP(used for check the Telephone numbers)
+	*	@return true,false
+	**/
+	public function regex($value,$type){
+		if($type=="EMAIL"){
+			if(preg_match("/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/", $value)){
+				return true;
+			}
+		}elseif($type=="TP"){
+			if(preg_match("/^[0-9]{10}$/", $value)){
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+
+	/**
+	* Take All JSON Post Requset and process them
+	*  Tasks
+	*	 1. Reset Passwords
+	*	 2. Login
+	*	 3. Send Emails when Password is resetted
+	*
+	* @return Response, Views
+	**/
 	public function inputs()
 	{
 
@@ -50,9 +91,9 @@ class loginController extends Controller {
 
 			$email = Request::get('email');
 			$user=null;
-			if(preg_match("/^[0-9]{10}$/", $email)){
+			if($this->regex($email,"TP")){
 				$user = user::where('tp',$email)->first();
-			}elseif (preg_match("/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/", $email)) {
+			}elseif ($this->regex($email,"EMAIL")) {
 				# code...
 				$user = user::where('email',$email)->first();
 			}else{
@@ -67,7 +108,7 @@ class loginController extends Controller {
 				return "notfound";
 			}else{
 				$pass = Str::random(10);
-				$user->password = $pass;
+				$user->password = md5($pass);
 				if($user->save()){
 /*
 				Mail::raw($pass, function ($m) use ($user) {
@@ -90,8 +131,38 @@ class loginController extends Controller {
 
 				}
 			}
+
+
+		}elseif(Request::get('formname')=="loginFrom"){
+			$email = Request::get('email_login');
+			$password = md5(Request::get('password_login'));
+
+			$user=null;
+			if ($this->regex($email,"EMAIL")) {
+				# code...
+				$user = user::where('email',$email)->where('password','=',$password)->where('active','=',1)->first();
+			}
+
+			if(is_null($user)){
+				return view('login')->with('fail',1);
+			}else{
+				
+				Session::put('userid', $user->id);
+				return Redirect::to('home');
+
+			}
+		}else{
+			return view('login');
 		}
 
+		return view('login');
+	}
 
+	/**
+	* Initiate the logout of the user
+	**/
+	public function signout(){
+		Session::flush();
+		return Redirect::to('home');
 	}
 }

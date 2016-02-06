@@ -68,6 +68,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', end
 
 @media (max-width: 768px) {
     /* For mobile phones: */
+    .custom_profile_pic {
+   position: relative;
+    top: -5px;
+    float: left;
+    left: -5px;
+    width:35px;
+    max-width:35px;
+}
     
 }
 @media (min-width: 768px) {
@@ -91,17 +99,18 @@ min-height:70px !important;
   height: 65px; /* firefox bug fix */
 
 }
-
-}
-
 .custom_profile_pic {
    position: relative;
-    top: -5px;
+    top: -13px;
     float: left;
     left: -5px;
-    width:32px;
-    max-width:32px;
+    width:45px;
+    max-width:45px;
 }
+
+}
+
+
 #wrapper {
 	width:1000px;
 	min-height:100%;
@@ -153,7 +162,13 @@ min-height:70px !important;
 	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
 		
 		<div id="header" align="left">
-		<div class="container-fluid" style="min-height:30px;background:rgb(0,0,0);border:none;"></div>
+		<div class="container-fluid" style="min-height:30px;background:rgb(0,0,0);border:none;height:30px;">
+			<div class="row" style="height:30px;">
+				<div class="col-md-4 col-sm-4" style="color:white;font-size: 12px;padding-top:5px;">
+					Contact-No : 0774117218
+				</div>
+			</div>
+		</div>
 			<nav class="navbar navbar-default" style="border-radius:0px;background:rgba(255,255,255,1);border:none;">
 				<div class="container-fluid">
 					<div class="navbar-header">
@@ -162,14 +177,13 @@ min-height:70px !important;
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span> 
 						</button>
-						<a class="navbar-brand" href="#" ><img src="{{ url('/') }}/resources/common/picutres/m_logo_primary_rwd.png" style="max-height:100%;width:auto;"></a>
+						<a class="navbar-brand" href="home" ><img src="{{ url('/') }}/resources/common/picutres/m_logo_primary_rwd.png" style="max-height:100%;width:auto;"></a>
 					</div>
 					<div class="collapse navbar-collapse" id="myNavbar">
 						<ul class="nav navbar-nav navbar-right">
-							<li class="active"><a href="#">Home</a></li>
-							<li><a href="#">Page 1</a></li>
-							<li><a href="#">Page 2</a></li> 
-							<li><a href="#">Page 3</a></li> 
+							<!--li class="active"><a href="home">Home</a></li>
+							<li><a href="#">Page 1</a></li-->
+							
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
@@ -185,10 +199,22 @@ min-height:70px !important;
 									<b class="caret"></b></a>
 									<!--img src="http://placehold.it/60x60" class="profile-image img-circle custom_profile_pic"> Username <b class="caret"></b></a-->
 									<ul class="dropdown-menu">
-										<li><a href="#"><span class="glyphicon glyphicon-user"></span> Username</a></li>
-										<li><a href="#"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+									@if(! empty($user))
+										<li><a href="profile"><span class="glyphicon glyphicon-user"></span> 
+										
+										{{$user->email}}
+
+										</a></li>
+										<li><a href="new-ticket"><span class="glyphicon glyphicon-envelope"></span> New Ticket</a></li>
+										@if($user->level==100)
 										<li class="divider"></li>
-										<li><a href="index.php"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
+										<li><a href="admin/usermanage"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+										@endif
+										<li class="divider"></li>
+										<li><a href="signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
+									@else
+											<li><a href="login"><span class="glyphicon glyphicon-log-out"></span> Sign-in</a></li>
+									@endif
 									</ul>
 								</li>
 							</ul>
@@ -202,7 +228,7 @@ min-height:70px !important;
 				@yield('body')
 			</div><!-- #content -->
 
-			<div id="footer" align="center">
+			<div id="footer" align="center" style="padding-top:20px;">
 			All Rights Reserved 2016. XiCigny (Pvt) Ltd
 				@yield('footer')
 			</div><!-- #footer -->

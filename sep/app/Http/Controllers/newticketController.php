@@ -43,17 +43,24 @@ class newticketController extends Controller {
 	public function index()
 	{
 		$user = user::where('id',Session::get('userid'))->first();
-			if(is_null($user)){
-				return Redirect::to('login');
-			}else{
-				return view('new-ticket')->with('user',$user);
-			}
+		if(is_null($user)){
+			return Redirect::to('login');
+		}else{
+			return view('new-ticket')->with('user',$user);
+		}
 		//return view('new-ticket');
 	}
 
 	
-
-	
+	/**
+	*This function will create new tickets
+	*
+	* Take Post Requsets and save them in the database
+	* Task
+	*	1. Create new tickets
+	*
+	* @return View
+	**/
 	public function inputs(){
 
 		$user = user::where('id',Session::get('userid'))->first();

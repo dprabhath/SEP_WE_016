@@ -158,7 +158,25 @@
 		}
 	</style>
 	<script>
+	
+$( window ).load(function() {
+
+	
+  @if(!empty($fail) && $fail == 1)
+				
+				Lobibox.notify("error", {
+					title: 'Check again',
+					msg: 'Check your email and password',
+					sound: '../resources/common/sounds/sound5'
+				});
+	@endif
+});
+		
 		$(document).ready(function(){
+
+			
+			
+
 			function isEmail(email) {
 				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 				return regex.test(email);
@@ -175,9 +193,9 @@
 				//alert("click Detected");
 				var email = $('[name=email]').val();
 				
-				if(isEmail(email))
+				if(isEmail(email)){
 					$( "#passrecover" ).submit();
-				else if(isPhone(email)){
+				}else if(isPhone(email)){
 					$( "#passrecover" ).submit();
 				}else{
 					Lobibox.notify("warning", {
@@ -189,6 +207,25 @@
 				
 				//$.post('', $('#passrecover').serialize());
 			});
+
+			$("#login_form").submit(function(e){
+
+				var email = $('[name=email_login]').val();
+				var password = $('[name=password_login]').val();
+				if(isEmail(email) && password!=""){
+
+				}else{
+					Lobibox.notify("warning", {
+						title: 'Check again',
+						msg: 'Check your email/phone number',
+						sound: '../resources/common/sounds/sound5'
+					});
+					e.preventDefault();
+					
+				}
+
+			});
+
 			$("#passrecover").submit(function(e)
 			{
 				$('#wait').show();
@@ -241,6 +278,7 @@
     			//e.unbind(); //unbind. to stop multiple form submit.
     		});
 
+
 });
 
 </script>
@@ -257,121 +295,126 @@
 			<div class="col-md-4" >
 				<div class="well" id="login_well" style="background:rgba(0,0,0,0.5);color:white;border: none;">
 
-					<form role="form" method="POST">
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span  class="glyphicon glyphicon-envelope"></span></span>
-								<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number">
-							</div>
+					{!! Form::open(['role'=>'form','id' => 'login_form','style' => 'padding-top:20px;']) !!}
+					<input type="hidden" name="formname" value="loginFrom"/>
+					<div class="form-group">
+						<div class="input-group">
+							<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span  class="glyphicon glyphicon-envelope"></span></span>
+							<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" name="email_login" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number">
 						</div>
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span class="glyphicon glyphicon-lock"></span></span>
-								<input type="password " class="form-control1 transparent" id="pwd" placeholder="Password" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;">
-							</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+							<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span class="glyphicon glyphicon-lock"></span></span>
+							<input type="password" name="password_login" class="form-control1 transparent" id="pwd" placeholder="Password" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;">
+						</div>
+
+					</div>
+					<div class="row" >
+						<div class="col-sm-2">
+						</div>
+						<div class="col-sm-8" align="center">
+							<button  type="submit" class="btn btn-primary btn-lg btn-block" >
+								Login
+							</button>
+						</div>
+						<div class="col-sm-2">
+						</div>
+					</div>
+
+
+
+
+					<div class="row" style="padding-top:20px;">
+						<div class="col-md-2 col-sm-2 col-xs-2">
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2" align="center" style="padding-right:0px;margin-right:0px;">
+							<i class="icon_4">G</i>
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3" align="center" style="padding-left:0px;margin-left:0px;">
+							<i class="icon_4 icon_5">F</i>
+						</div>
+
+
+
+
+					</div>
+
+					<div class="row" style="padding-top:40px;">
+						<div class="col-sm-6" align="center" style="padding-left:0px;margin-left:0px;">
+
+
+							<button type="button" class="btn btn-link" id="myBtn1" style="color:white;">
+								Lost Your Password?
+							</button>
+
 
 						</div>
-						<div class="container-fluid" >
-							<div class="col-sm-6" align="center" style="padding-left:0px;margin-left:0px;">
 
-
-								<button type="button" class="btn btn-link" id="myBtn1" style="color:white;">
-									Lost Your Password?
-								</button>
-
-
-							</div>
-							<div class="col-sm-6" align="center">
-								<button  type="submit" class="btn btn-primary btn-lg btn-block" >
-									Login
-								</button>
-							</div>
-						</div>
-						<div class="form-group col-sm-12" align="center">
-							<button type="button" class="btn btn-link" id="myBtn" style="color:white;margin-bottom:0px;padding-bottom:0px;">
+						<div class="form-group col-sm-6" align="center">
+							<button type="button" class="btn btn-link" id="new_reg" style="color:white;margin-bottom:0px;padding-bottom:0px;">
 								New ? Register here
 							</button>
 						</div>
-
-						<div class="container-fluid" align="center">
-							<h2></h2>
-						</div>
-
-						<div class="row">
-							<div class="col-md-2 col-sm-2 col-xs-2" style="padding-right:0px;margin-right:0px;">
-								Or Sign in with:
-							</div>
-							<div class="col-md-2 col-sm-2 col-xs-2" style="padding-right:0px;margin-right:0px;">
-								<i class="icon_4">G</i>
-							</div>
-							<div class="col-md-1 col-sm-1 col-xs-1" style="padding-left:0px;margin-left:0px;">
-							<i class="icon_4 icon_5">F</i>
-							</div>
-							
-
-							
-							
-						</div>
-
-
-
-
-
-
-
-						{!! Form::close() !!}
-
 					</div>
 
-				</div>
-				<div class="col-md-4">
-				</div>
-			</div>
-		</div>
-	</body>
 
 
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
 
-			<!-- Modal content-->
-			<div class="modal-content" style="color:black !important;">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Reset Your Account Password</h4>
-				</div>
-				<div class="modal-body">
-					<p>Enter your Email Here we will email you an link to reset the password.</p>
-
-					{!! Form::open(['role'=>'form','id' => 'passrecover']) !!}
-					<!-- form name -->
-					<input type="hidden" name="formname" value="reset"/>
-
-
-					<div class="form-group  has-warning has-feedback">
-
-						<label for="email">Email address/Phone Number:</label>
-						<br>
-
-						<div class="input-group">
-
-							<input type="text" class="form-control1" name="email" id="email" id="inputWarning2" aria-describedby="inputWarning2Status">
-
-						</div>
-					</div>
-					<button type="button" class="btn btn-primary btn-lg btn-block" id="sendReset">Send Rest Link</button>
 
 					{!! Form::close() !!}
-				</div>
-				<div class="modal-footer">
-					<button type="button" id="modclose" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
 
+				</div>
+
+			</div>
+			<div class="col-md-4">
+			</div>
 		</div>
 	</div>
-	<div id="wait">
-		
-	</div>
+</body>
 
-	</html>
+
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content" style="color:black !important;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Reset Your Account Password</h4>
+			</div>
+			<div class="modal-body">
+				<p>Enter your Email Here we will email you an link to reset the password.</p>
+
+				{!! Form::open(['role'=>'form','id' => 'passrecover']) !!}
+				<!-- form name -->
+				<input type="hidden" name="formname" value="reset"/>
+
+
+				<div class="form-group  has-warning has-feedback">
+
+					<label for="email">Email address/Phone Number:</label>
+					<br>
+
+					<div class="input-group">
+
+						<input type="text" class="form-control1" name="email" id="email" id="inputWarning2" aria-describedby="inputWarning2Status">
+
+					</div>
+				</div>
+				<button type="button" class="btn btn-primary btn-lg btn-block" id="sendReset">Send Rest Link</button>
+
+				{!! Form::close() !!}
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="modclose" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div id="wait">
+
+</div>
+
+</html>

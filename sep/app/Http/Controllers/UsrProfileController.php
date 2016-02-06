@@ -54,6 +54,15 @@ class UsrProfileController extends Controller {
 		
 		//return $value;
 	}
+
+	/**
+	*	Regular expressions testng function
+	*	Input parameters are $value: The testing value
+	*						 $type : What is the filter that we want to you use, For and example
+	*								 If we want to test for and Email, parameter should be EMAIL
+	*   @param  NIC(used for check National Identitiy card no, TP(used for check the Telephone numbers)
+	*	@return true,false
+	**/
 	public function regex($value,$type){
 		if($type=="NIC"){
 			if(preg_match("/^[0-9]{9}[v]{1}$/", $value)){
@@ -69,10 +78,19 @@ class UsrProfileController extends Controller {
 
 	}
 
+	/**
+	* Get all the JSON POST requests and process them
+	* Tasks
+	* 1. Upload the pictures and change the profile picture
+	* 2. Change NIC
+	* 3. Change Password
+	* 4. Change Name
+	* @return JSON Response
+	**/
 	public function inputs(){
 		$user = user::where('id',Session::get('userid'))->first();
 			if(is_null($user)){
-				return response()->json(['message'=>'pak you hacker']);
+				return response()->json(['message'=>'hacker']);
 			}
 		//return  response()->json(['message' => 'File size is too large', 'code' => 'warning']);
 		$user = user::where('id',Session::get('userid'))->first();
@@ -113,7 +131,7 @@ class UsrProfileController extends Controller {
 		}elseif(Request::get('formname')=="passwordForm"){
 			$password = Request::get('password');
 			if($password!=''){
-				$user->password=\Hash::make($password);
+				$user->password=md5($password);
 				$user->save();
 				return response()->json(['message'=>'Passowrd updated success!','code'=>'success']);
 			}else{
