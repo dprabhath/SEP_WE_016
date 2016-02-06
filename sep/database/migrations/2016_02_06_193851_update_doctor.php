@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Doctors extends Migration {
+class UpdateDoctor extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,11 +13,6 @@ class Doctors extends Migration {
 	public function up()
 	{
 		Schema::dropIfExists('doctors');
-
-		Schema::table('doctors', function ($table) 
-		{
-    		
-		});
 
 		Schema::create('doctors', function(Blueprint $table)
 		{
@@ -35,6 +30,7 @@ class Doctors extends Migration {
 			$table->float('rating');
 			$table->string('imagepath');
 		});
+		
 	}
 
 	/**

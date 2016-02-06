@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Doctors extends Migration {
+class CreatePendingdoctorsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,14 +12,9 @@ class Doctors extends Migration {
 	 */
 	public function up()
 	{
-		Schema::dropIfExists('doctors');
-
-		Schema::table('doctors', function ($table) 
-		{
-    		
-		});
-
-		Schema::create('doctors', function(Blueprint $table)
+		Schema::dropIfExists('pendingdoctor');
+		
+		Schema::create('pendingdoctor', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('first_name');
@@ -33,7 +28,8 @@ class Doctors extends Migration {
 			$table->string('email');
 			$table->string('address');
 			$table->float('rating');
-			$table->string('imagepath');
+			$table->string('user');
+			$table->timestamps();
 		});
 	}
 
@@ -44,7 +40,7 @@ class Doctors extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::drop('pendingdoctor');
 	}
 
 }

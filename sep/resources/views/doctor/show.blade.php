@@ -20,7 +20,7 @@
                 
                 <div class="row" style="padding-top:30px">
                     <div class="col-sm-3" style="padding-bottom:20px">
-                        <img class="img-circle big-profile-pic p-t-10" alt="" src="http://placehold.it/300x200"  width="200" height="200">
+                        <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/{!! $doctor->imagepath !!}"  width="200" height="200">
 
                     </div>
                     <div class="col-sm-9">

@@ -1,7 +1,25 @@
 @extends('template/template_user')
 	
 @section('head')
-
+    <script type="text/javascript">
+    function validateForm() 
+    {
+        var spec = document.getElementById("spec").value;
+        var fname = document.getElementById("fname").value;
+        var lname = document.getElementById("lname").value;
+        
+    
+        if ((spec == null || spec == "") || (fname == null || fname == "") || (lname == null || lname == "")) 
+        {
+           alert("Fields marked with * must be filled.");
+           return false;
+        }
+        else
+        {
+            return true;
+        }       
+    }
+</script>
 @stop
 
 @section('navbar')
@@ -20,7 +38,8 @@
                         
                         <div class="tab-pane active" id="horizontal-form">
                              {!! Form::open(array('class' => 'form-horizontal', 
-                                                  'files' => true, 'name' => 'editForm')) !!}
+                                                  'files' => true, 'name' => 'editForm', 
+                                                  'onsubmit' => 'return validateForm()')) !!}
 
                                 <div class="form-group">
                                     <label style="padding-left:60px"> Fields marked with * must be filled. </label>
@@ -60,37 +79,37 @@
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Professional Qualifications :</label>
                                     <div class="col-sm-8">
-                                       {!! Form::textarea('notes', null,  [ 'class' => 'form-control1', 'style' => 'height:100px', 'id' => 'profqual']) !!}
+                                       {!! Form::textarea('profqual', null,  [ 'class' => 'form-control1', 'style' => 'height:100px', 'id' => 'profqual']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Educational Qualifications :</label>
                                     <div class="col-sm-8">
-                                       {!! Form::textarea('notes', null,  [ 'class' => 'form-control1','style' => 'height:100px', 'id' => 'eduqual']) !!}
+                                       {!! Form::textarea('eduqual', null,  [ 'class' => 'form-control1','style' => 'height:100px', 'id' => 'eduqual']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Hospital : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'id' => 'hospital']) !!}
+                                        {!! Form::text('hospital', null,  [ 'class' => 'form-control1', 'id' => 'hospital']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Telephone : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'id' => 'phone']) !!}
+                                        {!! Form::text('phone', null,  [ 'class' => 'form-control1', 'id' => 'phone']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Email : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1','id' => 'email']) !!}
+                                        {!! Form::text('email', null,  [ 'class' => 'form-control1','id' => 'email']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Address : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1','id' => 'address']) !!}
+                                        {!! Form::text('address', null,  [ 'class' => 'form-control1','id' => 'address']) !!}
                                     </div>
                                 </div>
                              

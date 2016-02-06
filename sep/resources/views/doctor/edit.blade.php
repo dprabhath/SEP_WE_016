@@ -12,9 +12,30 @@
         var phone = document.getElementById("phone").value;
         var email = document.getElementById("email").value;
         var address = document.getElementById("address").value;
+        var image = document.getElementById("image").value;
+
+        var path = image.split("\\");
+
+        var filetype = path[path.length - 1].split(".");
 
         var isFilled = true;
 
+        if (filetype[filetype.length - 1] == null || filetype[filetype.length - 1] == "") 
+        {
+           
+        }
+        else
+        {
+            if ((filetype[filetype.length - 1] == "png") || (filetype[filetype.length - 1] == "PNG")|| (filetype[filetype.length - 1] == "jpg"))
+            {
+                return true;
+            }
+            else
+            {
+                alert(filetype[filetype.length - 1] + " is not a supported image format.")
+                return false;
+            }
+        }
         if (notes == null || notes == "") 
         {
            
@@ -100,8 +121,9 @@
         </div>
             <div class="tab-content">
                         <div  class="row" style="margin:auto; width:30%; padding-top:30px; padding-bottom:30px;">
-                            <img class="img-circle big-profile-pic p-t-10" alt="" src="http://placehold.it/300x200"  width="200" height="200">
+                            <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/{!! $doctor->imagepath !!}"  width="200" height="200">
                         </div>
+
                         <div class="tab-pane active" id="horizontal-form">
                              {!! Form::open(array('class' => 'form-horizontal', 
                                                   'files' => true, 'name' => 'editForm', 
@@ -109,7 +131,7 @@
                                 <div class="form-group">
                                  <label for="focusedinput" class="col-sm-2 control-label"> Profile Picture : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::file('image'); !!}
+                                        {!! Form::file('image', ['id' => 'image']); !!}
                                     </div>
                                    
                                 </div>
@@ -130,37 +152,37 @@
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Professional Qualifications :</label>
                                     <div class="col-sm-8">
-                                       {!! Form::textarea('notes', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->profqual", 'style' => 'height:100px', 'id' => 'profqual']) !!}
+                                       {!! Form::textarea('profqual', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->profqual", 'style' => 'height:100px', 'id' => 'profqual']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Educational Qualifications :</label>
                                     <div class="col-sm-8">
-                                       {!! Form::textarea('notes', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->eduqual", 'style' => 'height:100px', 'id' => 'eduqual']) !!}
+                                       {!! Form::textarea('eduqual', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->eduqual", 'style' => 'height:100px', 'id' => 'eduqual']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Hospital : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->hospital", 'id' => 'hospital']) !!}
+                                        {!! Form::text('hospital', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->hospital", 'id' => 'hospital']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Telephone : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->phone", 'id' => 'phone']) !!}
+                                        {!! Form::text('phone', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->phone", 'id' => 'phone']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Email : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->email", 'id' => 'email']) !!}
+                                        {!! Form::text('email', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->email", 'id' => 'email']) !!}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="focusedinput" class="col-sm-2 control-label"> Address : </label>
                                     <div class="col-sm-8">
-                                        {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->address", 'id' => 'address']) !!}
+                                        {!! Form::text('address', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->address", 'id' => 'address']) !!}
                                     </div>
                                 </div>
                              
@@ -171,7 +193,6 @@
             <div class="col-sm-8 col-sm-offset-2">
                  {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
                 <button class="btn-default btn">Cancel</button>
-                <button class="btn-inverse btn">Reset</button>
                 {!! Form::close() !!}
             </div>
         </div>
