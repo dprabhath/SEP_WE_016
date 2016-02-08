@@ -20,6 +20,11 @@ class rateController extends Controller {
 		//return view('rate.index')->with('doctors', $doctors);
 
 		return view('rate.index');
+
+
+
+
+
 		//return $doctors;
 
 	}
