@@ -86,9 +86,9 @@ class DoctorController extends Controller {
 			$file = \Input::file('image');
 			$format = explode('.', $file->getClientOriginalName());
 
-			$file->move('uploads/profile_pics', $id . '.' . $format[sizeof($format) - 1]);
+			$file->move('uploads/profile_pics/doctors', $id . '.' . $format[sizeof($format) - 1]);
 
-			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/' . $id . '.' . $format[sizeof($format) - 1]]);
+			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/doctors/' . $id . '.' . $format[sizeof($format) - 1]]);
 		}
 		if($specialization != null && $specialization != "")
 		{
