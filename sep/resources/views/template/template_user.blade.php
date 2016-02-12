@@ -44,14 +44,14 @@ body {
 	padding:0;
 	height:100%;
 
-	background: rgba(212,228,239,1);
-background: -moz-linear-gradient(left, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
-background: -webkit-gradient(left top, right top, color-stop(0%, rgba(212,228,239,1)), color-stop(100%, rgba(134,174,204,1)));
-background: -webkit-linear-gradient(left, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
-background: -o-linear-gradient(left, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
-background: -ms-linear-gradient(left, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
-background: linear-gradient(to right, rgba(212,228,239,1) 0%, rgba(134,174,204,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#86aecc', GradientType=1 );
+background: rgba(180,204,47,1);
+background: -moz-linear-gradient(left, rgba(180,204,47,1) 0%, rgba(180,204,47,1) 0%, rgba(132,204,18,1) 62%, rgba(102,204,0,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(180,204,47,1)), color-stop(0%, rgba(180,204,47,1)), color-stop(62%, rgba(132,204,18,1)), color-stop(100%, rgba(102,204,0,1)));
+background: -webkit-linear-gradient(left, rgba(180,204,47,1) 0%, rgba(180,204,47,1) 0%, rgba(132,204,18,1) 62%, rgba(102,204,0,1) 100%);
+background: -o-linear-gradient(left, rgba(180,204,47,1) 0%, rgba(180,204,47,1) 0%, rgba(132,204,18,1) 62%, rgba(102,204,0,1) 100%);
+background: -ms-linear-gradient(left, rgba(180,204,47,1) 0%, rgba(180,204,47,1) 0%, rgba(132,204,18,1) 62%, rgba(102,204,0,1) 100%);
+background: linear-gradient(to right, rgba(180,204,47,1) 0%, rgba(180,204,47,1) 0%, rgba(132,204,18,1) 62%, rgba(102,204,0,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4cc2f', endColorstr='#66cc00', GradientType=1 );
 
 }
 
@@ -115,7 +115,7 @@ min-height:70px !important;
 	width:1000px;
 	min-height:100%;
 	position:relative;
-	background-color: rgba(255,255,255,0.5) !important;
+	background-color: rgba(255,255,255,0.4) !important;
 	padding:0px;
 }
 #header {

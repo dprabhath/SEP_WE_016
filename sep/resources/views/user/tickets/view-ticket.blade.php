@@ -53,7 +53,27 @@
 	}
 </style>
 
+<script type="text/javascript">
+	
 
+$(document).ready(function(){
+	$('#selectall').click(function(){
+
+			if($(this).prop('checked')==true){
+				
+				$('.inside').prop('checked', true);
+			}else{
+				$('.inside').prop('checked', false);
+			}
+
+			
+			return true;
+
+		});
+
+});
+
+</script>
 
 @stop
 @section('navbar')
@@ -143,19 +163,19 @@
     </thead>
     <tbody>
       <tr>
-        <td><input type="checkbox" id="selectall" class="checkbox"></td>
+        <td><input type="checkbox" id="selectall" class="checkbox inside"></td>
         <td>Doe</td>
         <td>john@example.com</td>
         <td>john@example.com</td>
       </tr>
       <tr>
-        <td><input type="checkbox" id="selectall" class="checkbox"></td>
+        <td><input type="checkbox" id="selectall" class="checkbox inside"></td>
         <td>Moe</td>
         <td>mary@example.com</td>
         <td>john@example.com</td>
       </tr>
       <tr>
-        <td><input type="checkbox" id="selectall" class="checkbox"></td>
+        <td><input type="checkbox" id="selectall" class="checkbox inside"></td>
         <td>Dooley</td>
         <td>july@example.com</td>
         <td>john@example.com</td>
