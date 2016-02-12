@@ -30,7 +30,7 @@ class RegisterdUserManagment extends Controller {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('auth');
+		$this->middleware('loginCheck');
 	}
 
 	/**
@@ -40,13 +40,11 @@ class RegisterdUserManagment extends Controller {
 	 */
 	public function index()
 	{
-		$user = user::where('id',Session::get('userid'))->first();
-		if(is_null($user)){
-			return Redirect::to('login');
-		}else{
-			return view('admin/usermanage');
-		}
-		//return view('admin/usermanage');
+		$user = $user = Session::get('user');
+		
+		return view('admin/usermanage');
+		
+		//eturn view('admin/usermanage');
 	}
 	/**
 	*
@@ -63,9 +61,9 @@ class RegisterdUserManagment extends Controller {
 	**/
 	public function inputs(){
 
-		$user = user::where('id',Session::get('userid'))->first();
+		$user = Session::get('user');
 		if(is_null($user)){
-			return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			return  response()->json(['message' => ':3', 'code' => 'error']);
 		}
 
 		if(Request::get('task')=="loadtableRegisterd"){

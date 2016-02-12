@@ -149,8 +149,14 @@ class loginController extends Controller {
 				
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
-				return Redirect::to('home');
-
+				if(is_null(Session::get('url'))){
+					return Redirect::to('home');
+				}else{
+					//return Session::get('url');
+					return Redirect::to(Session::get('url'));
+					//die();
+				}
+				
 			}
 		}else{
 			return view('login');

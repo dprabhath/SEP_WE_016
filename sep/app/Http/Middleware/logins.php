@@ -18,7 +18,8 @@ class logins {
 	public function handle($request, Closure $next)
 	{
 
-		
+		$url = $request->path();
+		Session::put('url',$url);
 		
 		if(is_null(Session::get('userid'))){
 			return Redirect::to('login');
