@@ -32,7 +32,7 @@ class newticketController extends Controller {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('auth');
+		$this->middleware('loginCheck');
 	}
 
 	/**
@@ -42,12 +42,10 @@ class newticketController extends Controller {
 	 */
 	public function index()
 	{
-		$user = user::where('id',Session::get('userid'))->first();
-		if(is_null($user)){
-			return Redirect::to('login');
-		}else{
-			return view('new-ticket')->with('user',$user);
-		}
+		$user = Session::get('user');
+		
+		return view('new-ticket')->with('user',$user);
+		
 		//return view('new-ticket');
 	}
 
@@ -63,7 +61,7 @@ class newticketController extends Controller {
 	**/
 	public function inputs(){
 
-		$user = user::where('id',Session::get('userid'))->first();
+		$user =Session::get('user');
 		if(is_null($user)){
 			return Redirect::to('login');
 		}

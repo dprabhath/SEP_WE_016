@@ -30,7 +30,7 @@ class UsrProfileController extends Controller {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('auth');
+		$this->middleware('loginCheck');
 		
 	}
 
@@ -41,15 +41,15 @@ class UsrProfileController extends Controller {
 	 */
 	public function index()
 	{
-			$user = user::where('id',Session::get('userid'))->first();
+			/*$user = user::where('id',Session::get('userid'))->first();
 			if(is_null($user)){
 				return Redirect::to('login');
 			}else{
 				return view('userprofile')->with('user',$user);
 			}
+			*/
 			
-			
-		
+		return view('userprofile')->with('user',Session::get('user'));
 		
 		
 		//return $value;
@@ -88,12 +88,12 @@ class UsrProfileController extends Controller {
 	* @return JSON Response
 	**/
 	public function inputs(){
-		$user = user::where('id',Session::get('userid'))->first();
+		$user = Session::get('user');
 			if(is_null($user)){
 				return response()->json(['message'=>'hacker']);
 			}
 		//return  response()->json(['message' => 'File size is too large', 'code' => 'warning']);
-		$user = user::where('id',Session::get('userid'))->first();
+		//$user = Session::get('user');
 		if(Request::get('formname')=="picture"){
 			if(Input::file('pic')->isValid()){
 

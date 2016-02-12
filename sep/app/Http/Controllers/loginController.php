@@ -148,6 +148,7 @@ class loginController extends Controller {
 			}else{
 				
 				Session::put('userid', $user->id);
+				Session::put('user',$user);
 				return Redirect::to('home');
 
 			}

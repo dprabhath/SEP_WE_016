@@ -40,11 +40,11 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-		$user = user::where('id',Session::get('userid'))->first();
-		if(is_null($user)){
+		
+		if(is_null(Session::get('user'))){
 				return view('home');
 		}else{
-				return view('home')->with('user',$user);
+				return view('home')->with('user',Session::get('user'));
 		}
 		return view('home');
 	}
