@@ -205,7 +205,11 @@ min-height:70px !important;
 										{{$user->email}}
 
 										</a></li>
-										<li><a href="new-ticket"><span class="glyphicon glyphicon-envelope"></span> New Ticket</a></li>
+										<li class="dropdown-header"></li>
+										<li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Tickets</li>
+										
+										<li><a href="new-ticket"> New Ticket</a></li>
+										<li><a href="view-ticket"> View Ticket</a></li>
 										@if($user->level==100)
 										<li class="divider"></li>
 										<li><a href="admin/usermanage"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>

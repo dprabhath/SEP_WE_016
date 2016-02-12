@@ -18,6 +18,9 @@ Route::get('home', 'HomeController@index');
 Route::get('new-ticket', 'users\newticketController@index');
 Route::post('new-ticket', 'users\newticketController@inputs');
 
+Route::get('view-ticket', 'users\viewticketController@index');
+Route::post('view-ticket', 'users\viewticketController@inputs');
+
 Route::get('admin/usermanage', 'admin\RegisterdUserManagment@index');
 Route::post('admin/usermanage', 'admin\RegisterdUserManagment@inputs');
 

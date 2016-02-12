@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class newticketController extends Controller {
+class viewticketController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ class newticketController extends Controller {
 	{
 		$user = Session::get('user');
 		
-		return view('user.tickets.new-ticket')->with('user',$user);
+		return view('user.tickets.view-ticket')->with('user',$user);
 		
 		//return view('new-ticket');
 	}
@@ -61,33 +61,7 @@ class newticketController extends Controller {
 	**/
 	public function inputs(){
 
-		$user =Session::get('user');
-		if(is_null($user)){
-			return Redirect::to('login');
-		}
-
-		if(Request::get('options')=="custom"){
-			$heading = Request::get('heading');
-		}else{
-			$heading = Request::get('options');
-		}
-
 		
-
-
-		$ticket = new tickets;
-		$ticket->userid = Session::get('userid');
-		$ticket->subject = $heading;
-		$ticket->opened=1;
-		$ticket->save();
-
-
-		$ticketMsg = new tickets_messages;
-		$ticketMsg->user_id = Session::get('userid');
-		$ticketMsg->message = Request::get('txtarea');
-		$ticketMsg->ticket_id = $ticket->id;
-		$ticketMsg->save();
-		return view('user.tickets.new-ticket')->with('user',$user)->with('created',1);
 		//return 1;
 	}
 }
