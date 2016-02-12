@@ -15,14 +15,14 @@ Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('new-ticket', 'newticketController@index');
-Route::post('new-ticket', 'newticketController@inputs');
+Route::get('new-ticket', 'users\newticketController@index');
+Route::post('new-ticket', 'users\newticketController@inputs');
 
-Route::get('admin/usermanage', 'RegisterdUserManagment@index');
-Route::post('admin/usermanage', 'RegisterdUserManagment@inputs');
+Route::get('admin/usermanage', 'admin\RegisterdUserManagment@index');
+Route::post('admin/usermanage', 'admin\RegisterdUserManagment@inputs');
 
-Route::get('profile', 'UsrProfileController@index');
-Route::post('profile', 'UsrProfileController@inputs');
+Route::get('profile', 'users\UsrProfileController@index');
+Route::post('profile', 'users\UsrProfileController@inputs');
 
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');

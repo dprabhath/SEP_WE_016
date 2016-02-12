@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\admin;
 use App\user;
 use Mail;
 use Illuminate\Support\Str;
