@@ -61,6 +61,40 @@ class viewticketController extends Controller {
 	**/
 	public function inputs(){
 
+		//$user = Session::get('user');
+		if(Request::get('task')=="loadtableopendtickets"){
+			$tickets = tickets::where('userid',Session::get('userid'))->where('opened',1)->skip(0)->take(20)->get();
+			$count = tickets::where('userid',Session::get('userid'))->where('opened',1)->count();
+			
+			$last_messages = array();
+
+			for($x=0; $x < sizeof($tickets); $x++){
+				$tickets_messages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
+				$last_messages[] = $tickets_messages;
+				//array_push($last_messages,$tickets_messages);
+
+			}
+
+			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $last_messages]);
+
+		}elseif (Request::get('task')=="loadtableclosedtickets") {
+			$tickets = tickets::where('userid',Session::get('userid'))->where('opened',0)->skip(0)->take(20)->get();
+			$count = tickets::where('userid',Session::get('userid'))->where('opened',0)->count();
+			
+			$last_messages = array();
+
+			for($x=0; $x < sizeof($tickets); $x++){
+				$tickets_messages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
+				$last_messages[] = $tickets_messages;
+				//array_push($last_messages,$tickets_messages);
+
+			}
+
+			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $last_messages]);
+		}
+
+
+		return  response()->json(['message'=>'Invalid Request','code' => 'error']);
 		
 		//return 1;
 	}

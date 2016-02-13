@@ -87,7 +87,8 @@ class newticketController extends Controller {
 		$ticketMsg->message = Request::get('txtarea');
 		$ticketMsg->ticket_id = $ticket->id;
 		$ticketMsg->save();
-		return view('user.tickets.new-ticket')->with('user',$user)->with('created',1);
+		//return view('user.tickets.new-ticket')->with('user',$user)->with('created',1);
+		 return redirect('view-ticket');
 		//return 1;
 	}
 }
