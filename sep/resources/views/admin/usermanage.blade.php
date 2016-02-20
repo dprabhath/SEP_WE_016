@@ -161,7 +161,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Password Reseted",
-					sound: '../../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound2'
 				});
 		}else if(data['task'] == "DeactivateUsers"){
 
@@ -169,7 +169,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Deactivated success",
-					sound: '../../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound2'
 				});
 		}else if(data['task'] == "ActivateUsers"){
 
@@ -177,7 +177,7 @@
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Activated success",
-					sound: '../../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound2'
 				});
 		}
 		
@@ -467,4 +467,5 @@
 	<div id="wait">
 
 	</div>
+
 	@stop

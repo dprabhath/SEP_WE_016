@@ -91,7 +91,64 @@ class viewticketController extends Controller {
 			}
 
 			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $last_messages]);
+		}elseif (Request::get('task')=="closeTicket") {
+
+			$ids = Request::get('tickets');
+			if(!is_null($ids)){
+
+
+				foreach ($ids as &$value) {
+					$ticket = tickets::find($value);
+					if(is_null($ticket)){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+
+					if($ticket->userid != Session::get('userid')){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+
+
+					$ticket->opened = 0;
+					$ticket->save();
+				}
+
+
+
+			}else{
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'closeTicket']);
+		}elseif (Request::get('task')=="openTicket") {
+
+			$ids = Request::get('tickets');
+			if(!is_null($ids)){
+
+
+				foreach ($ids as &$value) {
+					$ticket = tickets::find($value);
+					if(is_null($ticket)){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+
+					if($ticket->userid != Session::get('userid')){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+
+
+					$ticket->opened = 1;
+					$ticket->save();
+				}
+
+
+
+			}else{
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'openTicket']);
 		}
+
 
 
 		return  response()->json(['message'=>'Invalid Request','code' => 'error']);

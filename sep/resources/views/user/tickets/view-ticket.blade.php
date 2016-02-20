@@ -154,6 +154,28 @@
 			}
 			showing_table = 2;
 			document.getElementById("content_table").innerHTML=htmls;
+		}else if(data['task']=="closeTicket"){
+			if(showing_table==2){
+				loadtable("2");
+			}else{
+				loadtable("1");
+			}
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Tickets closed",
+					sound: '../../resources/common/sounds/sound2'
+				});
+		}else if(data['task']=="openTicket"){
+			if(showing_table==2){
+				loadtable("2");
+			}else{
+				loadtable("1");
+			}
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Tickets Opened",
+					sound: '../../resources/common/sounds/sound2'
+				});
 		}
 
 	}
@@ -179,12 +201,20 @@
 
 
 		$('#content_table').on('click','.close_ticket_anchor',function(e){
-			alert($(this).attr('href'));
+			///alert($(this).attr('href'));
 			e.preventDefault();
+			var ids=[];
+			ids[0] = $(this).attr('href');
+			var requets = {"_token": token ,"task": "closeTicket","tickets":ids};
+			jsend(requets);
 		});
 		$('#content_table').on('click','.open_ticket_anchor',function(e){
-			alert($(this).attr('href'));
+			//alert($(this).attr('href'));
 			e.preventDefault();
+			var ids=[];
+			ids[0] = $(this).attr('href');
+			var requets = {"_token": token ,"task": "openTicket","tickets":ids};
+			jsend(requets);
 		});
 		$('#dropdown_menu_opened').click(function(e){
 			if(showing_table==2){
@@ -205,14 +235,60 @@
 				loadtable("1");
 			}
 		});
+		
+
+
+		/************************************ Close tickets/Open Tickets *******************************/
 		$('#action_close_ticket').click(function(e){
-			alert("asd");
 			e.preventDefault();
+				var ids=[];
+			var i=0;
+
+			$(".inside").each(function(){
+    				if ($(this).prop('checked')==true){ 
+       					 ids[i]=$(this).attr( "value" );
+       					 i++;
+    				}
+
+			});
+			if(i==0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			var requets = {"_token": token ,"task": "closeTicket","tickets":ids};
+			jsend(requets);
+
+		
 		});
 		$('#action_open_ticket').click(function(e){
-			alert("Opened");
 			e.preventDefault();
+				var ids=[];
+			var i=0;
+
+			$(".inside").each(function(){
+    				if ($(this).prop('checked')==true){ 
+       					 ids[i]=$(this).attr( "value" );
+       					 i++;
+    				}
+
+			});
+			if(i==0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			var requets = {"_token": token ,"task": "openTicket","tickets":ids};
+			jsend(requets);
+
 		});
+		
 
 	});
 
