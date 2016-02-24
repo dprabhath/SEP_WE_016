@@ -129,7 +129,7 @@
 				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
 				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
 				htmls+="<td style='width:20%;'>"+ last_messages[i]['created_at'] +"</td>";
-				htmls+="<td style='width:10%;'><a class='open_ticket_anchor' href='"+tickets[i]['id']+"'>Open</a></td>";
+				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
 				htmls+="<td style='width:10%;''><a class='close_ticket_anchor' href='"+ tickets[i]['id'] +"'>Colse</a></td></tr>";
 
 			}
@@ -148,8 +148,8 @@
 				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
 				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
 				htmls+="<td style='width:15%;'>"+ last_messages[i]['created_at'] +"</td>";
-				htmls+="<td style='width:10%;'><a class='open_ticket_anchor' href='"+tickets[i]['id']+"'>Open</a></td>";
-				htmls+="<td style='width:10%;''><a class='close_ticket_anchor' href='"+ tickets[i]['id'] +"'>Colse</a></td></tr>";
+				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
+				htmls+="<td style='width:10%;''><a class='open_ticket_anchor' href='"+ tickets[i]['id'] +"'>Open</a></td></tr>";
 
 			}
 			showing_table = 2;
@@ -161,10 +161,10 @@
 				loadtable("1");
 			}
 			Lobibox.notify("success", {
-					title: 'success',
-					msg: "Tickets closed",
-					sound: '../../resources/common/sounds/sound2'
-				});
+				title: 'success',
+				msg: "Tickets closed",
+				sound: '../../resources/common/sounds/sound2'
+			});
 		}else if(data['task']=="openTicket"){
 			if(showing_table==2){
 				loadtable("2");
@@ -172,10 +172,10 @@
 				loadtable("1");
 			}
 			Lobibox.notify("success", {
-					title: 'success',
-					msg: "Tickets Opened",
-					sound: '../../resources/common/sounds/sound2'
-				});
+				title: 'success',
+				msg: "Tickets Opened",
+				sound: '../../resources/common/sounds/sound2'
+			});
 		}
 
 	}
@@ -216,6 +216,19 @@
 			var requets = {"_token": token ,"task": "openTicket","tickets":ids};
 			jsend(requets);
 		});
+		$('#content_table').on('click','.view_ticket_anchor',function(e){
+			//alert($(this).attr('href'));
+			e.preventDefault();
+			var ids;
+			ids = $(this).attr('href');
+			//var requets = {"_token": token ,"task": "viewTicket","ticket":ids};
+			//jsend(requets);
+			$('<form action="{{ url('/') }}/view-ticket" method="POST">' + 
+				'<input type="hidden" name="_token" value="' + token + '">' +
+				'<input type="hidden" name="ticket" value="' + ids + '">' +
+				'<input type="hidden" name="task" value="viewTicket">' +
+				'</form>').submit();
+		});
 		$('#dropdown_menu_opened').click(function(e){
 			if(showing_table==2){
 				loadtable("1");
@@ -241,14 +254,14 @@
 		/************************************ Close tickets/Open Tickets *******************************/
 		$('#action_close_ticket').click(function(e){
 			e.preventDefault();
-				var ids=[];
+			var ids=[];
 			var i=0;
 
 			$(".inside").each(function(){
-    				if ($(this).prop('checked')==true){ 
-       					 ids[i]=$(this).attr( "value" );
-       					 i++;
-    				}
+				if ($(this).prop('checked')==true){ 
+					ids[i]=$(this).attr( "value" );
+					i++;
+				}
 
 			});
 			if(i==0){
@@ -262,18 +275,18 @@
 			var requets = {"_token": token ,"task": "closeTicket","tickets":ids};
 			jsend(requets);
 
-		
+			
 		});
 		$('#action_open_ticket').click(function(e){
 			e.preventDefault();
-				var ids=[];
+			var ids=[];
 			var i=0;
 
 			$(".inside").each(function(){
-    				if ($(this).prop('checked')==true){ 
-       					 ids[i]=$(this).attr( "value" );
-       					 i++;
-    				}
+				if ($(this).prop('checked')==true){ 
+					ids[i]=$(this).attr( "value" );
+					i++;
+				}
 
 			});
 			if(i==0){
@@ -304,10 +317,10 @@
 
 		</div>
 		<div class="col-sm-4">
-		<div class="input-group" style="border-radius:0px !important;">
-      <input type="text" class="form-control" placeholder="&#xf002;" style="font-family: 'FontAwesome';border-radius:0px !important;">
-    
-    </div>
+			<div class="input-group" style="border-radius:0px !important;">
+				<input type="text" class="form-control" placeholder="&#xf002;" style="font-family: 'FontAwesome';border-radius:0px !important;">
+				
+			</div>
 		</div>
 		
 	</div>

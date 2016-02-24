@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class viewticketController extends Controller {
+class ticketController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -147,6 +147,53 @@ class viewticketController extends Controller {
 			}
 
 			return  response()->json(['code' => 'success' , 'task' => 'openTicket']);
+		}elseif (Request::get('task')=="viewTicket") {
+			$user = Session::get('user');
+			$ids = Request::get('ticket');
+			
+			if(!is_null($ids)){
+
+				$ticket = tickets::find($ids);
+				if(is_null($ticket)){
+					abort(404);
+				}
+				if($ticket->userid != Session::get('userid')  && $user->level < 10){
+					abort(404);
+				}
+				$tickets_messages = tickets_messages::where('ticket_id',$ticket->id)->orderBy('id', 'asc')->get();
+				return view('user.tickets.reply')->with('user',$user)->with('messages', $tickets_messages)->with('ticket',$ticket);
+
+
+
+			}else{
+				abort(404);
+			}
+
+			//return  response()->json(['code' => 'success' , 'task' => 'openTicket']);
+		}elseif (Request::get('task')=="replyTickets") {
+			$user = Session::get('user');
+			$message = Request::get('text');
+			$ticket_id = Request::get('ticket_id');
+
+			if(!is_null(trim($message)) && !is_null($ticket_id)){
+				$ticket = tickets::find($ticket_id);
+
+				if(is_null($ticket)){
+					return  response()->json(['message'=>'Invalid Request','code' => 'error']);
+				}
+				if(($ticket->userid != Session::get('userid') && $user->level < 10) || $ticket->opened == 0){
+					return  response()->json(['message'=>'Invalid Request','code' => 'error']);
+				}
+
+				$ticketMsg = new tickets_messages;
+				$ticketMsg->user_id = Session::get('userid');
+				$ticketMsg->message = $message;
+				$ticketMsg->ticket_id = $ticket->id;
+				$ticketMsg->save();
+				return  response()->json(['code' => 'success' , 'task' => 'replyTickets','msg' => $ticketMsg]);
+			}else{
+				return  response()->json(['message'=>'Invalid Request','code' => 'error']);
+			}
 		}
 
 
