@@ -101,7 +101,7 @@
 					processData: false
 				});
 e.preventDefault();
-e.unbind();
+//e.unbind();
 return false;
 });
 $('#'+name).submit();
@@ -260,6 +260,7 @@ $("form#pictureForm").submit(function(e){
 					sound: '../resources/common/sounds/sound4'
 				}); 
 			}
+			
 			$('#wait').hide();
 		},
 		error: function(data){
@@ -275,7 +276,7 @@ $("form#pictureForm").submit(function(e){
 		processData: false
 	});
 	e.preventDefault();
-	e.unbind();
+	//e.unbind();
 	return false;
 });
 
@@ -351,7 +352,7 @@ $("form#pictureForm").submit(function(e){
 					<div class="col-sm-2">
 						<p class="help-block">
 
-							<button style="padding-bottom:0px;" disabled id="changeEmail" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+							<!--button style="padding-bottom:0px;" disabled id="changeEmail" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button-->
 						</p>
 					</div>
 				</div>

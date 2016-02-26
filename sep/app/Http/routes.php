@@ -25,6 +25,9 @@ Route::post('view-ticket', 'users\ticketController@inputs');
 Route::get('admin/usermanage', 'admin\RegisterdUserManagment@index');
 Route::post('admin/usermanage', 'admin\RegisterdUserManagment@inputs');
 
+Route::get('admin/view-ticket', 'admin\ticketControllerAdmin@index');
+Route::post('admin/view-ticket', 'admin\ticketControllerAdmin@inputs');
+
 Route::get('profile', 'users\UsrProfileController@index');
 Route::post('profile', 'users\UsrProfileController@inputs');
 

@@ -30,7 +30,7 @@ class RegisterdUserManagment extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('loginCheck');
+		$this->middleware('AdminloginCheck');
 	}
 
 	/**
@@ -42,7 +42,7 @@ class RegisterdUserManagment extends Controller {
 	{
 		$user = $user = Session::get('user');
 		
-		return view('admin/usermanage');
+		return view('admin/usermanage')->with('user',$user);
 		
 		//eturn view('admin/usermanage');
 	}

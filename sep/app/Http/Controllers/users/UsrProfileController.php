@@ -78,6 +78,10 @@ class UsrProfileController extends Controller {
 
 	}
 
+	public function updateSession(){
+		$user = user::where('id',Session::get('userid'))->first();
+		Session::put('user',$user);
+	}
 	/**
 	* Get all the JSON POST requests and process them
 	* Tasks
@@ -109,12 +113,15 @@ class UsrProfileController extends Controller {
 					$destinationPath = base_path() . '/../public/uploads/profile_pics';
 					$fullpath = 'uploads/profile_pics/'.Session::get('userid').'.'.$image->getClientOriginalExtension();
         			if(!$image->move($destinationPath, Session::get('userid').'.'.$image->getClientOriginalExtension())) {
-            			return  response()->json(['message' => 'Error saving the file.', 'code' => 'error']);
+            			return  response()->json(['message' => 'Error saving the file', 'code' => 'error']);
         			}
 
         			$user->pic=$fullpath;
         			$user->save();
-				return response()->json(['message' => 'Profile picture updated!','filename'=>$fullpath,'code' => 'success']);;
+        			$this->updateSession();
+				return response()->json(['message' => 'Profile picture updated!','filename'=>$fullpath,'code' => 'success']);
+			}else{
+				return  response()->json(['message' => 'Upload an different image', 'code' => 'error']);
 			}
 			
         	
@@ -123,6 +130,7 @@ class UsrProfileController extends Controller {
 			if($this->regex($nic,"NIC")){
 				$user->nic=$nic;
 				$user->save();
+				$this->updateSession();
 				return response()->json(['message'=>'NIC updated success!','code'=>'success']);
 			}else{
 				return response()->json(['message'=>'Check your NIC!','code'=>'warning']);
@@ -133,6 +141,7 @@ class UsrProfileController extends Controller {
 			if($password!=''){
 				$user->password=md5($password);
 				$user->save();
+				$this->updateSession();
 				return response()->json(['message'=>'Passowrd updated success!','code'=>'success']);
 			}else{
 				return response()->json(['message'=>'Check your Passowrd!','code'=>'warning']);
@@ -144,6 +153,7 @@ class UsrProfileController extends Controller {
 			if($name!=''){
 				$user->name = $name;
 				$user->save();
+				$this->updateSession();
 				return response()->json(['message'=>'Name updated success!','code'=>'success']);
 			}else{
 				return response()->json(['message'=>'Check your Name!','code'=>'warning']);

@@ -1,7 +1,6 @@
-@extends('template/template_user')
+@extends('admintemplate/template_admin')
 
 @section('head')
-
 <style type="text/css">
 	.reply-user{
 		border-radius: 12px 12px 12px 12px;
@@ -82,17 +81,10 @@
 			var M = data['msg'];
 			var htmlMsg = "";
 			htmlMsg+= "<div style='padding:10px;'>";
-			htmlMsg+= "<div class='media reply-user' style='padding:10px;'>";
-			htmlMsg+= "<div class='media-left'>";
+			htmlMsg+= "<div class='media reply-staff' style='padding:10px;'>";
+			htmlMsg+= "<div class='media-right pull-right'>";
 			htmlMsg+= "<a href='#'>";
-			@if(! empty($$user) && $$user->pic!='')
-
-			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src={{$user->pic}} alt='...'>";
-
-			@else
-			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src={{ url('/') }}/uploads/profile_pics/emp.png alt='...'>";
-			@endif
-			
+			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='{{ url('/') }}../uploads/profile_pics/staff.jpg' alt='...'>";
 			htmlMsg+= "</a></div>";
 			htmlMsg+= "<div class='media-body'>";
 			htmlMsg+= "<p> "+M['message']+" </p>";
@@ -139,8 +131,12 @@
 
 </script>
 @stop
-@section('navbar')
+
+
+@section('navigation')
+
 @stop
+
 @section('body')
 <div class="container-fluid" style="background:#fff;padding-top:10px;">
 	<div class="row">
@@ -168,22 +164,21 @@
 
 	@foreach ($messages as $message)
 
-		@if($message->user_id == $user->id)
+		@if( $message->user_id != $ticket_owner->id )
 
 			<div style="padding:10px;">
 				<div class="media reply-user" style="padding:10px;">
 					<div class="media-left">
 						<a href="#">
-							<img height="48" width="48" class="media-object img-circle" 
-							
-									@if(! empty($user) && $user->pic!='')
+						<img height="48" width="48" class="media-object img-circle"
+									@if(! empty($ticket_owner) && $ticket_owner->pic!='')
 
-										src="{{$user->pic}}"
+										src="../{{$ticket_owner->pic}}"
 
 									@else
-									src="{{ url('/') }}/uploads/profile_pics/emp.png"
+									src="{{ url('/') }}../uploads/profile_pics/emp.png"
 									@endif
-							alt="...">
+							  alt="...">
 						</a>
 					</div>
 				<div class="media-body">
@@ -201,7 +196,7 @@
 				<div class="media reply-staff" style="padding:10px;">
 					<div class="media-right pull-right">
 						<a href="#">
-							<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/staff.jpg" alt="...">
+							<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}../uploads/profile_pics/staff.jpg" alt="...">
 						</a>
 					</div>
 				<div class="media-body">
@@ -241,6 +236,4 @@
 <div id="wait">
   
 </div>
-@stop
-@section('footer')
 @stop

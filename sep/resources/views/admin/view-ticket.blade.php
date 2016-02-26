@@ -1,4 +1,4 @@
-@extends('template/template_user')
+@extends('admintemplate/template_admin')
 
 @section('head')
 <style type="text/css">
@@ -18,57 +18,24 @@
 
 
 	}
-
-	#dbox{
-		background-color:#fff;
-		padding:10px;
-		height:40px;
-		border-width:1px;
-		border-style:solid;
-		border-bottom-color:#ddd;
-		border-right-color:#ddd;
-		border-top-color:#ddd;
-		border-left-color:#ddd;
-		border-radius:3px;
-		-moz-border-radius:3px;
-		-webkit-border-radius:3px;
-
-
-	}
-	#dboxpadding{
-		background-color:#fff;
-		padding:10px;
-		height:40px;
-		border-width:1px;
-		border-style:solid;
-		border-bottom-color:#ddd;
-		border-right-color:#ddd;
-		border-top-color:#ddd;
-		border-left-color:#ddd;
-		border-radius:3px;
-		-moz-border-radius:3px;
-		-webkit-border-radius:3px;
-
-
-	}
 	td {
 		max-width: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-</style>
 
+</style>
 <script type="text/javascript">
 	const token = "{{ csrf_token() }}";
 	var showing_table = 1;
-	/****************************** send json requets to the server ******************************/
+/****************************** send json requets to the server ******************************/
 	function jsend(dataString){
 		$('#wait').show();
 		var datas;
 		$.ajax({
 			type:"POST",
-			url : "{{ url('/') }}/view-ticket",
+			url : "{{ url('/') }}/admin/view-ticket",
 			data:dataString,
 			success : function(data){
 				//document.getElementById("re").innerHTML=data['code']; 
@@ -80,7 +47,7 @@
 				Lobibox.notify("error", {
 					title: 'Erro',
 					msg: 'An erro occurd',
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 				
 			}
@@ -89,7 +56,7 @@
 
 		
 	}
-	/**************************************** Load Table Types *********************************/
+		/**************************************** Load Table Types *********************************/
 	function loadtable(type){
 
 		if(type=="1"){
@@ -217,19 +184,17 @@
 			jsend(requets);
 		});
 		$('#content_table').on('click','.view_ticket_anchor',function(e){
-			alert($(this).attr('href'));
-			
+			//alert($(this).attr('href'));
+			e.preventDefault();
 			var ids;
 			ids = $(this).attr('href');
 			//var requets = {"_token": token ,"task": "viewTicket","ticket":ids};
 			//jsend(requets);
-			$('<form action="{{ url('/') }}/view-ticket" method="POST">' + 
+			$('<form action="{{ url('/') }}/admin/view-ticket" method="POST">' + 
 				'<input type="hidden" name="_token" value="' + token + '">' +
 				'<input type="hidden" name="ticket" value="' + ids + '">' +
 				'<input type="hidden" name="task" value="viewTicket">' +
 				'</form>').submit();
-
-			e.preventDefault();
 		});
 		$('#dropdown_menu_opened').click(function(e){
 			if(showing_table==2){
@@ -306,130 +271,108 @@
 		
 
 	});
-
 </script>
+@stop
+
+
+@section('navigation')
 
 @stop
-@section('navbar')
-@stop
+
 @section('body')
-<div class="row">
-	<div class="container-fluid">
-		<div class="col-sm-8">
+<div class="graphs">
+	<div class="xs">
 
-		</div>
-		<div class="col-sm-4">
-			<div class="input-group" style="border-radius:0px !important;">
-				<input type="text" class="form-control" placeholder="&#xf002;" style="font-family: 'FontAwesome';border-radius:0px !important;">
-				
-			</div>
-		</div>
-		
-	</div>
-</div>
-<div class="container-fluid" style="background:#fff;padding-top:50px;">
+		<div class="col-md-12 inbox_right">
 
-	<div class="row">
-		<div class="col-xs-12" style="padding:4px;">
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="container" style="max-width:100%;">
-						<div id="dbox" style="float:left;padding-right:15px;border-color: #fff;">
+			<form id="search">
+				<div class="input-group">
+					<input type="text" name="searchBox" class="form-control1 input-search" placeholder="Search...">
+					<span class="input-group-btn">
+						<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+					</span>
+				</div><!-- Input Group -->
+			</form>
+			<div class="mailbox-content">
+
+				<div class="mail-toolbar clearfix"  >
+					<div class="float-left" >
+						<div class="btn btn_1  mrg5R">
 							<input type="checkbox" id="selectall" class="checkbox">
 						</div>
-						<div id="dbox" style="float:left;border-color: #fff;padding:5px;">
+						<div class="btn  btn-default mrg5R refresh_button"   style="position:relative;float:left;">
+							
+							<i style=""  class="fa fa-refresh"> </i>
+							
+							
 						</div>
-						<div id="dbox" style="float:left;" class="refresh_button">
-							<span class="glyphicon glyphicon glyphicon-refresh" aria-hidden="true"></span>
+						<div class="dropdown mrg5R" style="position:relative;float:left;">
+							<a href="#" title="" class="btn btn-default" data-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-cog icon_8"></i>
+								<i class="fa fa-chevron-down icon_8"></i>
+								<div class="ripple-wrapper"></div></a>
+								<ul class="dropdown-menu float-right">
+									<li>
+										<a href="#" title="" id="action_close_ticket">
+											<i class="fa fa-pencil-square-o icon_9"></i>
+											Close
+										</a>
+									</li>
+									<li id="action_open_ticket">
+										<a href="#" title="">
+											<i class="fa fa-calendar icon_9"></i>
+											Open
+										</a>
+									</li>
+									
+									
+
+								</ul>
+							</div>
+							<div class="clearfix"> </div>
 						</div>
-						<div id="dbox" style="float:left;border-color: #fff;padding:2px;">
+						<div class="float-right">
+
+
+							<span id="user_count" class="text-muted m-r-sm"> </span>
+							<div class="btn-group m-r-sm mail-hidden-options" style="display: inline-block;">
+								<div class="btn-group">
+									<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-folder"></i> <span class="caret"></span></a>
+									<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										<li id="dropdown_menu_opened"><a  href="#">Opend tickets</a></li>
+										
+										<li id="dropdown_menu_closed"><a  href="#">Closed Tickets</a></li>
+
+									
+
+									</ul>
+								</div>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+							</div>
+
+
 						</div>
-
-						<div id="dbox" class="dropdown" style="float:left;padding:0px;padding-top:10px;">
-
-							<a href="#" style="padding:10px;margin:0px;border:0px solid black;padding-bottom:5px;padding-top:8px;color:black;" data-toggle="dropdown"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-								<span class="caret"></span>
-							</a>
-
-							<ul class="dropdown-menu">
-								<li id="action_close_ticket"><a href="#">Close</a></li>
-								<li id="action_open_ticket"><a href="#">Open</a></li>
-								
-							</ul>
-						</div>
-
-
-
-
-
-
-
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
-							<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
-						</div>
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
-							<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
-						</div>
-						<div id="dbox" style="float:right;border-color: #fff;padding:7px;">
-						</div>
-
-
-						<div id="dbox" class="dropdown" style="float:right;padding:0px;padding-top:10px;">
-
-							<a href="#" style="padding:10px;margin:0px;border:0px solid black;padding-bottom:5px;padding-top:8px;color:black;" data-toggle="dropdown"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-								<span class="caret"></span>
-							</a>
-
-							<ul class="dropdown-menu">
-								<li><a id="dropdown_menu_opened" href="#">Opened</a></li>
-								<li><a id="dropdown_menu_closed" href="#">Closed</a></li>
-							</ul>
-						</div>
-
-						<div id="dbox" style="float:right;border-color: #fff;padding:7px;">
-						</div>
-						<div id="dbox" class="showtotal" style="float:right;font-size: 12px;padding-top:12px;color:grey;border-color: #fff;">
-							Showing 0 of 0
-						</div>
-						
 					</div>
+					<table class="table">
+						<tbody id="content_table">
+							
+							
+						</tbody>
+					</table>
 				</div>
+
 			</div>
+			<div class="clearfix"> </div>
 		</div>
 	</div>
-	<div class="row" style="max-width:100%;">
-		<div class="container-fluid" style="max-width:100%;">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th></th>
-						<th>Subject</th>
-						<th>Mesasge</th>
-						<th>Last Updated Time</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="content_table">
+	<div id="re">
 
-
-				</tbody>
-			</table>
-		</div>
-		
 	</div>
-</div>
-<div id="re">
+	<div id="wait">
 
-</div>
-<div id="wait">
+	</div>
 
-</div>
-{!! Form::open() !!}
-
-<input type="text" name="task" value="">
-<input type="submit">
-{!! Form::close() !!}
-@stop
-@section('footer')
-@stop
+	@stop
