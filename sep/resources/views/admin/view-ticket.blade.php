@@ -127,7 +127,7 @@
 			document.getElementById("content_table").innerHTML=htmls;
 		}else if(data['task']=="loadtableAvailabletickets"){
 			var tickets = data['tickets'];
-			var tot = "Showing Closed Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Available Tickets "+tickets.length+" of "+data['total'];
 			var last_messages = data['msgs'];
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
