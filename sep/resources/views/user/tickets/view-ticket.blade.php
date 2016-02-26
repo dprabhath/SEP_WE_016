@@ -217,7 +217,7 @@
 			jsend(requets);
 		});
 		$('#content_table').on('click','.view_ticket_anchor',function(e){
-			alert($(this).attr('href'));
+			//alert($(this).attr('href'));
 			
 			var ids;
 			ids = $(this).attr('href');

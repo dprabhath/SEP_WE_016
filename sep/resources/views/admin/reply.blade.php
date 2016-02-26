@@ -37,7 +37,7 @@
 		var datas;
 		$.ajax({
 			type:"POST",
-			url : "{{ url('/') }}/view-ticket",
+			url : "{{ url('/') }}/admin/view-ticket",
 			data:dataString,
 			success : function(data){
 				//document.getElementById("re").innerHTML=data['code']; 
@@ -49,7 +49,7 @@
 				Lobibox.notify("error", {
 					title: 'Erro',
 					msg: 'An erro occurd',
-					sound: '../resources/common/sounds/sound4'
+					sound: '../../resources/common/sounds/sound4'
 				});
 				
 			}
@@ -58,7 +58,7 @@
 
 		
 	}
-		/*************************************** Getting Json requets from the server ****************************/
+	/*************************************** Getting Json requets from the server ****************************/
 	function returnofjsend(data){
 		var htmls="";
 		$('#wait').hide();
@@ -66,7 +66,7 @@
 			Lobibox.notify("warning", {
 				title: 'warning',
 				msg: data['message'],
-				sound: '../resources/common/sounds/sound4'
+				sound: '../../resources/common/sounds/sound4'
 			});
 			return false;
 		}
@@ -81,10 +81,18 @@
 			var M = data['msg'];
 			var htmlMsg = "";
 			htmlMsg+= "<div style='padding:10px;'>";
-			htmlMsg+= "<div class='media reply-staff' style='padding:10px;'>";
-			htmlMsg+= "<div class='media-right pull-right'>";
+			htmlMsg+= "<div class='media reply-user' style='padding:10px;'>";
+			htmlMsg+= "<div class='media-left'>";
 			htmlMsg+= "<a href='#'>";
+			@if(! empty($user) && $user->pic!='')
+
+
+			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='../{{$user->pic}}' alt='...'>";
+			@else
+
 			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='{{ url('/') }}../uploads/profile_pics/staff.jpg' alt='...'>";
+			@endif
+			
 			htmlMsg+= "</a></div>";
 			htmlMsg+= "<div class='media-body'>";
 			htmlMsg+= "<p> "+M['message']+" </p>";
@@ -113,9 +121,9 @@
 			document.getElementById("replyText").value="";
 			if(text==""){
 				Lobibox.notify("warning", {
-				title: 'warning',
-				msg: "You havent typed anything",
-				sound: '../resources/common/sounds/sound4'
+					title: 'warning',
+					msg: "You havent typed anything",
+					sound: '../../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -150,6 +158,7 @@
 				<abbr title="Phone">Status:</abbr> Closed <br>
 				@endif
 
+				<abbr title="User">UserName: </abbr> {{$ticket_owner->email}}<br>
 				<abbr title="Phone">Opend Date:</abbr> {{ $ticket->created_at }} <br>
 				<?php
 
@@ -162,78 +171,85 @@
 	</div>
 	<div id="messageWindow" class="row" style="overflow-y:scroll; height:70vh;padding:10px;background-color: #d5dade;">
 
-	@foreach ($messages as $message)
+		@foreach ($messages as $message)
 
-		@if( $message->user_id != $ticket_owner->id )
+		@if( $message->user_id == $ticket_owner->id )
 
-			<div style="padding:10px;">
-				<div class="media reply-user" style="padding:10px;">
-					<div class="media-left">
-						<a href="#">
+		<div style="padding:10px;">
+			<div class="media reply-staff" style="padding:10px;">
+				<div class="media-right pull-right">
+					<a href="#">
 						<img height="48" width="48" class="media-object img-circle"
-									@if(! empty($ticket_owner) && $ticket_owner->pic!='')
+						@if(! empty($ticket_owner) && $ticket_owner->pic!='')
 
-										src="../{{$ticket_owner->pic}}"
+						src="../{{$ticket_owner->pic}}"
 
-									@else
-									src="{{ url('/') }}../uploads/profile_pics/emp.png"
-									@endif
-							  alt="...">
-						</a>
-					</div>
+						@else
+						src="{{ url('/') }}../uploads/profile_pics/emp.png"
+						@endif
+						alt="...">
+					</a>
+				</div>
 				<div class="media-body">
 					
 					<p> {{$message->message}} </p>
-						<p style="padding-top:20px;">Time {{$message->created_at}} </p>
-					</div>
+					<p style="padding-top:20px;">Time {{$message->created_at}} </p>
 				</div>
 			</div>
+		</div>
 
 
 		@else
-    		
-			<div style="padding:10px;">
-				<div class="media reply-staff" style="padding:10px;">
-					<div class="media-right pull-right">
-						<a href="#">
-							<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}../uploads/profile_pics/staff.jpg" alt="...">
-						</a>
-					</div>
+
+		<div style="padding:10px;">
+			<div class="media reply-user" style="padding:10px;">
+				<div class="media-left">
+					<a href="#">
+						@if(! empty($user) && $user->pic!='')
+
+						<img height="48" width="48" class="media-object img-circle" src="../{{$user->pic}}" alt="...">
+
+						@else
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}../uploads/profile_pics/staff.jpg" alt="...">
+						@endif
+
+					</a>
+				</div>
 				<div class="media-body">
 					
 					<p> {{$message->message}} </p>
-						<p style="padding-top:20px;">Time {{$message->created_at}} </p>
-					</div>
+					<p style="padding-top:20px;">Time {{$message->created_at}} </p>
 				</div>
 			</div>
+		</div>
 
 		@endif
 
 
 
 
-	@endforeach
+		@endforeach
 
-					</div>
-					@if($ticket->opened==1)
-					<div class="row" style="padding:20px;">
-						<form id="reply_form">
-							<div class="form-group">
-								<label for="exampleInputEmail1">Reply:</label>
-								<textarea id="replyText" class="form-control" rows="4" style="border:1px solid black !important;border-radius:0px !important;background-color:rgba(0,0,0,0.1) !important;"></textarea>
-							</div>
-							<button type="submit" class="btn btn-default">Reply</button>
-							<button type="reset" class="btn btn-default">Reset</button>
-						</form>
-					</div>
-					@else
-					<div class="row" style="padding:50px;">
+	</div>
+	@if($ticket->opened==1)
+	<div class="row" style="padding:20px;">
+		<form id="reply_form">
+			<div class="form-group">
+				<label for="exampleInputEmail1">Reply:</label>
+				<textarea id="replyText" class="form-control" rows="4" style="border:1px solid black !important;border-radius:0px !important;background-color:rgba(0,0,0,0.1) !important;"></textarea>
+			</div>
+			<button type="submit" class="btn btn-default">Reply</button>
+			<button type="reset" class="btn btn-default">Reset</button>
+		</form>
+	</div>
+	@else
+	<div class="row" style="padding:50px;">
 
-					</div>
-					@endif
-				</div>
+	</div>
+	@endif
+</div>
 
 <div id="wait">
-  
+
 </div>
 @stop

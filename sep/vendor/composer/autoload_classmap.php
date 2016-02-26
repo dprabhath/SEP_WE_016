@@ -6,11 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateAdminUserTicketsTable' => $baseDir . '/database/migrations/2016_02_26_223246_create_admin_user_tickets_table.php',
     'CreateDoctorsTable' => $baseDir . '/database/migrations/2016_01_29_180748_create_doctors_table.php',
+    'CreatePendingDoctorsTable' => $baseDir . '/database/migrations/2016_02_06_204428_create_pending_doctors_table.php',
     'CreateTicketsMessagesTable' => $baseDir . '/database/migrations/2016_02_05_143128_create_tickets_messages_table.php',
     'CreateTicketsTable' => $baseDir . '/database/migrations/2016_02_05_142535_create_tickets_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2016_01_28_181210_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
+    'Doctors' => $baseDir . '/database/migrations/2016_02_05_123837_Doctors.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/File/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/File/Iterator/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/File/Iterator/Factory.php',
@@ -426,4 +429,5 @@ return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/Text/Template.php',
+    'UpdateDoctor' => $baseDir . '/database/migrations/2016_02_06_193851_update_doctor.php',
 );

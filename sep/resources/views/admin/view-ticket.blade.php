@@ -70,6 +70,10 @@
 			var d = {"_token": token ,"task": "loadtableclosedtickets"};
 
 			jsend(d);
+		}else if(type=="3"){
+			var d = {"_token": token ,"task": "loadtableAvailabletickets"};
+
+			jsend(d);
 		}
 	}
 	/*************************************** Getting Json requets from the server ****************************/
@@ -89,7 +93,7 @@
 			var tickets = data['tickets'];
 			var tot = "Showing Opened Tickets "+tickets.length+" of "+data['total'];
 			var last_messages = data['msgs'];
-			$('.showtotal').html(tot);
+			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
 				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
@@ -108,7 +112,7 @@
 			var tickets = data['tickets'];
 			var tot = "Showing Closed Tickets "+tickets.length+" of "+data['total'];
 			var last_messages = data['msgs'];
-			$('.showtotal').html(tot);
+			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
 				htmls+="<td style='width:10%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
@@ -121,9 +125,29 @@
 			}
 			showing_table = 2;
 			document.getElementById("content_table").innerHTML=htmls;
+		}else if(data['task']=="loadtableAvailabletickets"){
+			var tickets = data['tickets'];
+			var tot = "Showing Closed Tickets "+tickets.length+" of "+data['total'];
+			var last_messages = data['msgs'];
+			$('#user_count').html(tot);
+			for(var i = 0; i < tickets.length; i++){
+				htmls+="<tr>";
+				htmls+="<td style='width:10%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
+				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
+				htmls+="<td style='width:15%;'>"+ last_messages[i]['created_at'] +"</td>";
+				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
+				//htmls+="<td style='width:10%;''><a class='open_ticket_anchor' href='"+ tickets[i]['id'] +"'>Open</a></td></tr>";
+				htmls+="</tr>";
+
+			}
+			showing_table = 3;
+			document.getElementById("content_table").innerHTML=htmls;
 		}else if(data['task']=="closeTicket"){
 			if(showing_table==2){
 				loadtable("2");
+			}else if(showing_table==3){
+				loadtable("3");
 			}else{
 				loadtable("1");
 			}
@@ -135,6 +159,8 @@
 		}else if(data['task']=="openTicket"){
 			if(showing_table==2){
 				loadtable("2");
+			}else if(showing_table==3){
+				loadtable("3");
 			}else{
 				loadtable("1");
 			}
@@ -197,14 +223,20 @@
 				'</form>').submit();
 		});
 		$('#dropdown_menu_opened').click(function(e){
-			if(showing_table==2){
+			if(showing_table==2 || showing_table==3){
 				loadtable("1");
 			}
 			e.preventDefault();
 		});
 		$('#dropdown_menu_closed').click(function(e){
-			if(showing_table==1){
+			if(showing_table==1 || showing_table==3){
 				loadtable("2");
+			}
+			e.preventDefault();
+		});
+		$('#dropdown_menu_available').click(function(e){
+			if(showing_table==1 || showing_table==2){
+				loadtable("3");
 			}
 			e.preventDefault();
 		});
@@ -343,6 +375,8 @@
 										
 										<li id="dropdown_menu_closed"><a  href="#">Closed Tickets</a></li>
 
+										<li id="dropdown_menu_available"><a  href="#">Available Tickets</a></li>
+
 									
 
 									</ul>
@@ -374,5 +408,13 @@
 	<div id="wait">
 
 	</div>
-
+{!! Form::open() !!}
+<!--input type="text" name="ticket_id" value="">
+<input type="text" name="task" value="">
+<div class="form-group">
+								<label for="exampleInputEmail1">Reply:</label>
+								<textarea id="replyText" class="form-control" rows="4" style="border:1px solid black !important;border-radius:0px !important;background-color:rgba(0,0,0,0.1) !important;"></textarea>
+							</div>
+<input type="submit"-->
+{!! Form::close() !!}
 	@stop

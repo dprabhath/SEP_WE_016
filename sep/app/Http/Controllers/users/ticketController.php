@@ -2,6 +2,7 @@
 use App\user;
 use App\tickets;
 use App\tickets_messages;
+use App\adminUserTickets;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -151,6 +152,8 @@ class ticketController extends Controller {
 			$user = Session::get('user');
 			$ids = Request::get('ticket');
 			
+			
+
 			if(!is_null($ids)){
 
 				$ticket = tickets::find($ids);
@@ -160,8 +163,14 @@ class ticketController extends Controller {
 				if($ticket->userid != Session::get('userid')  && $user->level < 10){
 					abort(404);
 				}
+				$admin = adminUserTickets::where('ticketid',$ticket->id)->first();
+				$staff = null;
+				if(!is_null($admin)){
+					$staff = user::find($admin->adminid);
+				}
+				
 				$tickets_messages = tickets_messages::where('ticket_id',$ticket->id)->orderBy('id', 'asc')->get();
-				return view('user.tickets.reply')->with('user',$user)->with('messages', $tickets_messages)->with('ticket',$ticket);
+				return view('user.tickets.reply')->with('user',$user)->with('messages', $tickets_messages)->with('ticket',$ticket)->with('staff',$staff);
 
 
 

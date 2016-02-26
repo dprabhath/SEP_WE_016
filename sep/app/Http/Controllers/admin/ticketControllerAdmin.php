@@ -2,6 +2,7 @@
 use App\user;
 use App\tickets;
 use App\tickets_messages;
+use App\adminUserTickets;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -61,10 +62,18 @@ class ticketControllerAdmin extends Controller {
 	**/
 	public function inputs(){
 
-		//$user = Session::get('user');
+		$user = Session::get('user');
 		if(Request::get('task')=="loadtableopendtickets"){
-			$tickets = tickets::where('opened',1)->skip(0)->take(20)->get();
-			$count = tickets::where('opened',1)->count();
+
+			$lists = adminUserTickets::where('adminid',$user->id)->lists('ticketid');
+			$tickets = tickets::whereIn('id', $lists)->where('opened',1)->skip(0)->take(20)->get();
+
+
+			$count = tickets::whereIn('id', $lists)->where('opened',1)->count();
+
+
+			//$tickets = tickets::where('opened',1)->skip(0)->take(20)->get();
+			//$count = tickets::where('opened',1)->count();
 			
 			$last_messages = array();
 
@@ -77,9 +86,31 @@ class ticketControllerAdmin extends Controller {
 
 			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $last_messages]);
 
+		}elseif (Request::get('task')=="loadtableAvailabletickets") {
+
+			$lists = adminUserTickets::lists('ticketid');
+			$tickets = tickets::whereNotIn('id', $lists)->where('opened',1)->skip(0)->take(20)->get();
+
+
+			$count = tickets::whereNotIn('id', $lists)->where('opened',1)->count();
+			
+			$last_messages = array();
+
+			for($x=0; $x < sizeof($tickets); $x++){
+				$tickets_messages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
+				$last_messages[] = $tickets_messages;
+				//array_push($last_messages,$tickets_messages);
+
+			}
+
+			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableAvailabletickets', 'total' =>$count, 'msgs' => $last_messages]);
 		}elseif (Request::get('task')=="loadtableclosedtickets") {
-			$tickets = tickets::where('opened',0)->skip(0)->take(20)->get();
-			$count = tickets::where('opened',0)->count();
+
+			$lists = adminUserTickets::where('adminid',$user->id)->lists('ticketid');
+			$tickets = tickets::whereIn('id', $lists)->where('opened',0)->skip(0)->take(20)->get();
+
+
+			$count = tickets::whereIn('id', $lists)->where('opened',0)->count();
 			
 			$last_messages = array();
 
@@ -144,8 +175,9 @@ class ticketControllerAdmin extends Controller {
 
 			return  response()->json(['code' => 'success' , 'task' => 'openTicket']);
 		}elseif (Request::get('task')=="viewTicket") {
-			$user = Session::get('user');
+			//$user = Session::get('user');
 			$ids = Request::get('ticket');
+			
 			
 			if(!is_null($ids)){
 				$ticket_owner;
@@ -167,10 +199,25 @@ class ticketControllerAdmin extends Controller {
 
 			//return  response()->json(['code' => 'success' , 'task' => 'openTicket']);
 		}elseif (Request::get('task')=="replyTickets") {
-			$user = Session::get('user');
+			//$user = Session::get('user');
+
 			$message = Request::get('text');
 			$ticket_id = Request::get('ticket_id');
+			$count = adminUserTickets::where('ticketid',$ticket_id)->count();
 
+			if($count==0){
+				$adminUT = new adminUserTickets;
+				$adminUT->ticketid = $ticket_id;
+				$adminUT->adminid = $user->id;
+				$adminUT->save();
+			}else{
+				$count = adminUserTickets::where('adminid',$user->id)->where('ticketid',$ticket_id)->count();
+				if($count==0){
+					return response()->json(['message'=>'Invalid Request','code' => 'error']);
+				}
+			}
+
+			
 			if(!is_null(trim($message)) && !is_null($ticket_id)){
 				$ticket = tickets::find($ticket_id);
 

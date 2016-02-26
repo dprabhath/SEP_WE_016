@@ -154,6 +154,13 @@
 				<abbr title="Phone">Status:</abbr> Closed <br>
 				@endif
 
+
+				@if(!empty($staff))
+				<abbr title="Staff">Handled by:</abbr> {{$staff->name}} <br>
+				@else
+				<abbr title="Staff">Handled by:</abbr> None <br>
+				@endif
+
 				<abbr title="Phone">Opend Date:</abbr> {{ $ticket->created_at }} <br>
 				<?php
 
@@ -201,7 +208,14 @@
 				<div class="media reply-staff" style="padding:10px;">
 					<div class="media-right pull-right">
 						<a href="#">
-							<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/staff.jpg" alt="...">
+						@if(! empty($staff) && $staff->pic!='')
+
+						<img height="48" width="48" class="media-object img-circle" src="{{$staff->pic}}" alt="...">
+
+						@else
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/staff.jpg" alt="...">
+						@endif
+							
 						</a>
 					</div>
 				<div class="media-body">

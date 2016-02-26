@@ -61,7 +61,7 @@
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2">
 						
-					{!! Form::submit('Save', array('class' => 'btn-success btn')) !!}
+					{!! Form::submit('Submit', array('class' => 'btn-default btn')) !!}
 						<input type="reset" class="btn-inverse btn" value="Reset">
 					</div>
 				</div>
