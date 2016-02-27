@@ -45,7 +45,7 @@ class ticketController extends Controller {
 	{
 		$user = Session::get('user');
 		
-		return view('user.tickets.view-ticket')->with('user',$user);
+		return view('user.tickets.viewTicket')->with('user',$user);
 		
 		//return view('new-ticket');
 	}
@@ -67,31 +67,31 @@ class ticketController extends Controller {
 			$tickets = tickets::where('userid',Session::get('userid'))->where('opened',1)->skip(0)->take(20)->get();
 			$count = tickets::where('userid',Session::get('userid'))->where('opened',1)->count();
 			
-			$last_messages = array();
+			$lastMessages = array();
 
 			for($x=0; $x < sizeof($tickets); $x++){
-				$tickets_messages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
-				$last_messages[] = $tickets_messages;
-				//array_push($last_messages,$tickets_messages);
+				$ticketsMessages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
+				$lastMessages[] = $ticketsMessages;
+				//array_push($lastMessages,$ticketsMessages);
 
 			}
 
-			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $last_messages]);
+			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $lastMessages]);
 
 		}elseif (Request::get('task')=="loadtableclosedtickets") {
 			$tickets = tickets::where('userid',Session::get('userid'))->where('opened',0)->skip(0)->take(20)->get();
 			$count = tickets::where('userid',Session::get('userid'))->where('opened',0)->count();
 			
-			$last_messages = array();
+			$lastMessages = array();
 
 			for($x=0; $x < sizeof($tickets); $x++){
-				$tickets_messages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
-				$last_messages[] = $tickets_messages;
-				//array_push($last_messages,$tickets_messages);
+				$ticketsMessages = tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
+				$lastMessages[] = $ticketsMessages;
+				//array_push($lastMessages,$ticketsMessages);
 
 			}
 
-			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $last_messages]);
+			return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $lastMessages]);
 		}elseif (Request::get('task')=="closeTicket") {
 
 			$ids = Request::get('tickets');
@@ -169,8 +169,8 @@ class ticketController extends Controller {
 					$staff = user::find($admin->adminid);
 				}
 				
-				$tickets_messages = tickets_messages::where('ticket_id',$ticket->id)->orderBy('id', 'asc')->get();
-				return view('user.tickets.reply')->with('user',$user)->with('messages', $tickets_messages)->with('ticket',$ticket)->with('staff',$staff);
+				$ticketsMessages = tickets_messages::where('ticket_id',$ticket->id)->orderBy('id', 'asc')->get();
+				return view('user.tickets.reply')->with('user',$user)->with('messages', $ticketsMessages)->with('ticket',$ticket)->with('staff',$staff);
 
 
 

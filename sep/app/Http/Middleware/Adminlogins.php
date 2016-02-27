@@ -6,7 +6,7 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 use Closure;
 use Request;
-class Adminlogins {
+class adminLogins {
 
 	/**
 	 * Handle an incoming request.
@@ -26,12 +26,24 @@ class Adminlogins {
 		}else{
 
 			$user = Session::get('user');
-			if($user->level<10){
-				Session::flush();
-				return Redirect::to('login');
+			if($url=="admin/usermanage"){
+
+				if($user->level<10){
+					Session::flush();
+					return Redirect::to('login');
+				}else{
+					return $next($request);
+				}
+
 			}else{
-				return $next($request);
+				if($user->level<5){
+					Session::flush();
+					return Redirect::to('login');
+				}else{
+					return $next($request);
+				}
 			}
+			
 			
 		}
 

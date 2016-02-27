@@ -353,7 +353,7 @@ $( window ).load(function() {
 
 						<div class="form-group col-sm-6" align="center">
 							<button type="button" class="btn btn-link" id="new_reg" style="color:white;margin-bottom:0px;padding-bottom:0px;">
-								New ? Register here
+								<a href="register" style="color:white;">New ? Register here</a>
 							</button>
 						</div>
 					</div>

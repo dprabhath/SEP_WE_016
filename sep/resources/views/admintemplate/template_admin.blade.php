@@ -151,7 +151,7 @@
 									@else
 										<img src="{{ url('/') }}../uploads/profile_pics/emp.png">
 									@endif
-	        		<span class="badge">9</span></a>
+	        		<!--span class="badge">9</span--></a>
 	        		<ul class="dropdown-menu">
 						<li class="dropdown-menu-header text-center">
 							<strong>Account</strong>
@@ -184,6 +184,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        @if($user->level>9)
                         <li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Users<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
@@ -195,6 +196,7 @@
                                 </li>
                             </ul>
 						</li>
+						@endif
 						<li>
 							<a href="view-ticket"><i class="fa fa-users fa-fw nav_icon"></i>Tickets</a>
 						</li>

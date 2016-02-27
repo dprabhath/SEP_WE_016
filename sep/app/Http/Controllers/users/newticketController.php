@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class newticketController extends Controller {
+class newTicketController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ class newticketController extends Controller {
 	{
 		$user = Session::get('user');
 		
-		return view('user.tickets.new-ticket')->with('user',$user);
+		return view('user.tickets.newTicket')->with('user',$user);
 		
 		//return view('new-ticket');
 	}

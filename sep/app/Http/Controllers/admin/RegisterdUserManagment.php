@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class RegisterdUserManagment extends Controller {
+class registerdUserManagment extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ class RegisterdUserManagment extends Controller {
 	{
 		$user = $user = Session::get('user');
 		
-		return view('admin/usermanage')->with('user',$user);
+		return view('admin/userManage')->with('user',$user);
 		
 		//eturn view('admin/usermanage');
 	}

@@ -145,6 +145,7 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+		 Arcanedev\NoCaptcha\NoCaptchaServiceProvider::class,
 
 	],
 
@@ -195,6 +196,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
+		'Captcha' => Arcanedev\NoCaptcha\Facades\NoCaptcha::class,
 
 	],
 

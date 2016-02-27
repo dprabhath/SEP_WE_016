@@ -15,21 +15,21 @@ Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('new-ticket', 'users\newticketController@index');
-Route::post('new-ticket', 'users\newticketController@inputs');
+Route::get('new-ticket', 'users\newTicketController@index');
+Route::post('new-ticket', 'users\newTicketController@inputs');
 
 Route::get('view-ticket', 'users\ticketController@index');
 Route::post('view-ticket', 'users\ticketController@inputs');
 
 
-Route::get('admin/usermanage', 'admin\RegisterdUserManagment@index');
-Route::post('admin/usermanage', 'admin\RegisterdUserManagment@inputs');
+Route::get('admin/usermanage', 'admin\registerdUserManagment@index');
+Route::post('admin/usermanage', 'admin\registerdUserManagment@inputs');
 
 Route::get('admin/view-ticket', 'admin\ticketControllerAdmin@index');
 Route::post('admin/view-ticket', 'admin\ticketControllerAdmin@inputs');
 
-Route::get('profile', 'users\UsrProfileController@index');
-Route::post('profile', 'users\UsrProfileController@inputs');
+Route::get('profile', 'users\userProfileController@index');
+Route::post('profile', 'users\userProfileController@inputs');
 
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');
@@ -40,7 +40,8 @@ Route::get('doctors/{id}', 'DoctorController@show');
 Route::post('doctors', 'DoctorController@sortfilter');
 Route::get('pending', 'DoctorController@pendingdoctor');
 
-
+Route::get('register', 'registrationController@index');
+Route::post('register','registrationController@inputs');
 Route::get('login', 'loginController@index');
 Route::post('login','loginController@inputs');
 Route::get('signout','loginController@signout');

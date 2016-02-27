@@ -210,9 +210,9 @@ min-height:70px !important;
 										
 										<li><a href="new-ticket"> New Ticket</a></li>
 										<li><a href="view-ticket"> View Ticket</a></li>
-										@if($user->level==10)
+										@if($user->level>4)
 										<li class="divider"></li>
-										<li><a href="admin/usermanage"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+										<li><a href="admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
 										@endif
 										<li class="divider"></li>
 										<li><a href="signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
