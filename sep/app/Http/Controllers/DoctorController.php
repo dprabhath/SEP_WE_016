@@ -115,8 +115,7 @@ class DoctorController extends Controller {
 		$phone = Request::get('phone');
 		$address = Request::get('address');
 
-		if(\Input::hasFile('image'))
-		{
+		if(\Input::hasFile('image')) {
 			$file = \Input::file('image');
 			$format = explode('.', $file->getClientOriginalName());
 
@@ -124,36 +123,28 @@ class DoctorController extends Controller {
 
 			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/doctors/' . $id . '.' . $format[sizeof($format) - 1]]);
 		}
-		if($specialization != null && $specialization != "")
-		{
+		if($specialization != null && $specialization != "") {
 			Doctor::where('id', $id)->update(['specialization' => $specialization]);
 		}
-		if($notes != null && $notes != "")
-		{
+		if($notes != null && $notes != "") {
 			Doctor::where('id', $id)->update(['notes' => $notes]);
 		}
-		if($profqual != null && $profqual != "")
-		{
+		if($profqual != null && $profqual != "") {
 			Doctor::where('id', $id)->update(['profqual' => $profqual]);
 		}
-		if($eduqual != null && $eduqual != "")
-		{
+		if($eduqual != null && $eduqual != "") {
 			Doctor::where('id', $id)->update(['eduqual' => $eduqual]);
 		}
-		if($hospital != null && $hospital != "")
-		{
+		if($hospital != null && $hospital != "") {
 			Doctor::where('id', $id)->update(['hospital' => $hospital]);
 		}
-		if($email != null && $email != "")
-		{
+		if($email != null && $email != "") {
 			Doctor::where('id', $id)->update(['email' => $email]);
 		}
-		if($phone != null && $phone != "")
-		{
+		if($phone != null && $phone != "") {
 			Doctor::where('id', $id)->update(['phone' => $phone]);
 		}
-		if($address != null && $address != "")
-		{
+		if($address != null && $address != "") {
 			Doctor::where('id', $id)->update(['address' => $address]);
 		}
 
@@ -172,15 +163,13 @@ class DoctorController extends Controller {
 		$typeApprove = Request::get('approve');
 		$ids = Request::get('pendingid');
 
-		if(Request::get('approve'))
-		{
+		if(Request::get('approve')) {
 			foreach ($ids as $key => $value) 
 			{
 				$this->insertNewPending($value);
 			}
 		}
-		else if(Request::get('delete'))
-		{
+		else if(Request::get('delete')) {
 			foreach ($ids as $key => $value) 
 			{
 				$this->deletePending($value);
@@ -266,6 +255,7 @@ class DoctorController extends Controller {
 		$pendingDoctor->address = Request::get('address');
 		$pendingDoctor->email = Request::get('email');
 		$pendingDoctor->phone = Request::get('phone');
+		$pendingDoctor->user = Session::get('user')->name;
 
 		$pendingDoctor->save();
 

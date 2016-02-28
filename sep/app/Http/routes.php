@@ -46,7 +46,7 @@ Route::get('treatments', 'TreatmentController@index');
 Route::get('pendingtreatments/{id}', 'TreatmentController@showPendingTreatment');
 Route::get('pendingtreatments', 'TreatmentController@pendingTreatment');
 Route::post('pendingtreatments', 'TreatmentController@pendingAction');
-Route::get('treatments/new', 'TreatmentController@newtreatment');
+Route::get('treatments/new', 'TreatmentController@newTreatment');
 Route::get('treatments/{id}', 'TreatmentController@show');
 Route::get('treatments/edit/{id}', 'TreatmentController@edit');
 Route::post('treatments/new', 'TreatmentController@insertNew');

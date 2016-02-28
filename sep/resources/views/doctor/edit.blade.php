@@ -20,14 +20,11 @@
 
         var isFilled = true;
 
-        if (filetype[filetype.length - 1] == null || filetype[filetype.length - 1] == "") 
-        {
+        if (filetype[filetype.length - 1] == null || filetype[filetype.length - 1] == "") {
            
         }
-        else
-        {
-            if ((filetype[filetype.length - 1] == "png") || (filetype[filetype.length - 1] == "PNG")|| (filetype[filetype.length - 1] == "jpg"))
-            {
+        else {
+            if ((filetype[filetype.length - 1] == "png") || (filetype[filetype.length - 1] == "PNG")|| (filetype[filetype.length - 1] == "jpg")) {
                 return true;
             }
             else
@@ -36,68 +33,52 @@
                 return false;
             }
         }
-        if (notes == null || notes == "") 
-        {
+        if (notes == null || notes == "") {
            
         }
-        else
-        {
+        else {
             return true;
         }
-        if (spec == null || spec == "") 
-        {
+        if (spec == null || spec == "") {
             
         }
-        else
-        {
+        else {
             return true;
         }
-        if (prof == null || prof == "") 
-        {
+        if (prof == null || prof == "") {
          
         }
-        else
-        {
+        else {
             return true;
         }
-        if (edu == null || edu == "") 
-        {
+        if (edu == null || edu == "") {
           
         }
-        else
-        {
+        else {
             return true;
         }
-        if (hospital == null || hospital == "") 
-        {
+        if (hospital == null || hospital == "") {
             
         }
-        else
-        {
+        else {
             return true;
         }
-        if (phone == null || phone == "") 
-        {
+        if (phone == null || phone == "") {
           
         }
-        else
-        {
+        else {
             return true;
         }
-        if (email == null || email == "") 
-        {
+        if (email == null || email == "") {
            
         }
-        else
-        {
+        else  {
             return true;
         }
-        if (address == null || address == "") 
-        {
+        if (address == null || address == "") {
           
         }
-        else
-        {
+        else {
             return true;       
         }
         

@@ -207,44 +207,44 @@
        <div class="xs">
         <h3>Approval-Pending Physicians</h3>
             <table id="indextable" class="table table-striped">
-     <thead>
-        <tr>
-          <th> {!! Form::checkbox('chk[]', 'check', false, ['onChange' => 'checkAll(this)']) !!}   </th>
-          <th> <a href="javascript:SortTable(1,'T');"> Name </a> </th>
-          <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
-          <th> <a href="javascript:SortTable(3,'T');"> Added By </a> </th>
-          <th> <a href="javascript:SortTable(4,'T');"> Date </a> </th>
-        </tr>
-      </thead>
-      <tbody>
-            <?php $count = 0 ?>
+               <thead>
+                  <tr>
+                    <th> {!! Form::checkbox('chk[]', 'check', false, ['onChange' => 'checkAll(this)']) !!}   </th>
+                    <th> <a href="javascript:SortTable(1,'T');"> Name </a> </th>
+                    <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
+                    <th> <a href="javascript:SortTable(3,'T');"> Added By </a> </th>
+                    <th> <a href="javascript:SortTable(4,'T');"> Date </a> </th>
+                  </tr>
+                </thead>
+                <tbody>
+                      <?php $count = 0 ?>
 
-            {!! Form::open(array('url' => 'pending')) !!}
-            @foreach ($doctors as $doctor)
-            
-                <tr onmouseover="ChangeColor(this, true);" 
-                    onmouseout="ChangeColor(this, false);" 
-                    >
+                      {!! Form::open(array('url' => 'pending')) !!}
+                      @foreach ($doctors as $doctor)
+                      
+                          <tr onmouseover="ChangeColor(this, true);" 
+                              onmouseout="ChangeColor(this, false);" 
+                              >
 
-                    <td> {!! Form::checkbox("pendingid[$count]", $doctor->id, false) !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->first_name !!} {!! $doctor->last_name !!}</td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->specialization !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->user !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->created_at !!} </td>
+                              <td> {!! Form::checkbox("pendingid[$count]", $doctor->id, false) !!} </td>
+                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->first_name !!} {!! $doctor->last_name !!}</td>
+                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->specialization !!} </td>
+                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->user !!} </td>
+                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->created_at !!} </td>
 
-                    <div id="doccont" class="collapse">{!! $doctor->first_name !!}</div>
+                              <div id="doccont" class="collapse">{!! $doctor->first_name !!}</div>
 
-                    <?php $count++ ?>
+                              <?php $count++ ?>
 
-                </tr>  
-            @endforeach 
-                <tr>
-                  
-                   
-                </tr>
-                
-      </tbody>
-    </table>
+                          </tr>  
+                      @endforeach 
+                          <tr>
+                            
+                             
+                          </tr>
+                          
+                </tbody>
+            </table>
                     <input class="btn btn_5 btn-lg btn-info" type="submit" value="Approve" name="approve">
                     <input class="btn btn_5 btn-lg btn-info" type="submit" value="Delete" name="delete">
                     {!! Form::close() !!}  

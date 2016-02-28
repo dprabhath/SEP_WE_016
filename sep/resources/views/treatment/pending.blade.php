@@ -211,9 +211,9 @@
         <tr>
           <th> {!! Form::checkbox('chk[]', 'check', false, ['onChange' => 'checkAll(this)']) !!}   </th>
           <th> <a href="javascript:SortTable(1,'T');"> Name </a> </th>
-          <th> <a href="javascript:SortTable(2,'T');"> Description </a> </th>
-          <th> <a href="javascript:SortTable(3,'T');"> Added By </a> </th>
-          <th> <a href="javascript:SortTable(4,'T');"> Date </a> </th>
+         
+          <th> <a href="javascript:SortTable(2,'T');"> Added By </a> </th>
+          <th> <a href="javascript:SortTable(3,'T');"> Date </a> </th>
         </tr>
       </thead>
       <tbody>
@@ -228,7 +228,7 @@
 
                     <td> {!! Form::checkbox("pendingid[$count]", $treatment->id, false) !!} </td>
                     <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->name !!} </td>
-                    <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->specialization !!} </td>
+
                     <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->user !!} </td>
                     <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->created_at !!} </td>
 

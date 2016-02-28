@@ -52,7 +52,7 @@ class TreatmentController extends Controller {
 	 *
 	 * @return newtreatment view
 	 */
-	public function newtreatment()
+	public function newTreatment()
 	{
 		$user = Session::get('user');
 		return View::make('treatment.new')->with('user',$user)->with('message', '');
@@ -93,15 +93,13 @@ class TreatmentController extends Controller {
 		$typeApprove = Request::get('approve');
 		$ids = Request::get('pendingid');
 
-		if(Request::get('approve'))
-		{
+		if(Request::get('approve')) {
 			foreach ($ids as $key => $value) 
 			{
 				$this->insertNewPending($value);
 			}
 		}
-		else if(Request::get('delete'))
-		{
+		else if(Request::get('delete')) {
 			foreach ($ids as $key => $value) 
 			{
 				$this->deletePending($value);
@@ -151,12 +149,13 @@ class TreatmentController extends Controller {
 	public function insertNew()
 	{
 		$input = Request::all();
+		$user = Session::get('user');
 
 		$pendingTreatment = new pendingTreatment;
 
 		$pendingTreatment->name = Request::get('name');
 		$pendingTreatment->description = Request::get('desc');
-		$pendingTreatment->user = Session::get('user');
+		$pendingTreatment->user = $user->name;
 
 		$pendingTreatment->save();
 
