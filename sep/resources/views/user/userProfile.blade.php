@@ -187,12 +187,14 @@ $('#input_email').dblclick(function(){
 	$('#input_email input').focus();
 
 });
+/*
 $('#input_tpno').dblclick(function(){
 	$('#input_tpno input').removeAttr( "disabled" );
 	$('#changeTpno').removeAttr("disabled");
 	$('#input_tpno input').focus();
 
 });
+*/
 $('#input_password').dblclick(function(){
 	$('#input_password input').removeAttr( "disabled" );
 	$('#changePassword').removeAttr("disabled");
@@ -425,7 +427,7 @@ $("form#pictureForm").submit(function(e){
 					<div class="col-sm-2">
 						<p class="help-block">
 
-							<button style="padding-bottom:0px;" disabled id="changeTpno" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+							<!--button style="padding-bottom:0px;" disabled id="changeTpno" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button-->
 						</p>
 					</div>
 				</div>

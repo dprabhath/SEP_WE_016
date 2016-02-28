@@ -5,18 +5,21 @@ use Mail;
 use Illuminate\Support\Str;
 use Session;
 use Illuminate\Support\Facades\Redirect;
+use Arcanedev\NoCaptcha\NoCaptcha;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 //use Illuminate\http\Request;
 use Request;
-class registrationController extends Controller {
+class RegistrationController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
-	| Home Controller
+	| User Registration Controller
 	|--------------------------------------------------------------------------
 	|
-	| This controller renders your application's "dashboard" for users that
-	| are authenticated. Of course, you are free to change or remove the
-	| controller as you wish. It is just here to get your app started!
+	| @author Michika Iranga Perera
+	|
+	| This class will handled the Users Registraion process
 	|
 	*/
 
@@ -29,7 +32,6 @@ class registrationController extends Controller {
 	{
 		//$this->middleware('auth');
 	}
-
 	/**
 	 * Show the application dashboard to the user.
 	 *
@@ -42,13 +44,11 @@ class registrationController extends Controller {
 		//Session::put('userid', 1);
 		$user = user::where('id',Session::get('userid'))->first();
 		if(is_null($user)){
-				return view('registration');
+			return view('registration');
 		}else{
 			return Redirect::to('home');
 		}
 	}
-
-
 	/**
 	*	Regular expressions testng function
 	*	Input parameters are $value: The testing value
@@ -57,12 +57,13 @@ class registrationController extends Controller {
 	*   @param EMAIL(used for check email addresses, TP(used for check the Telephone numbers)
 	*	@return true,false
 	**/
-	public function regex($value,$type){
-		if($type=="EMAIL"){
+	public function regex($value,$type)
+	{
+		if( $type=="EMAIL" ){
 			if(preg_match("/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/", $value)){
 				return true;
 			}
-		}elseif($type=="TP"){
+		}elseif( $type=="TP" ){
 			if(preg_match("/^[0-9]{9}$/", $value)){
 				return true;
 			}
@@ -71,38 +72,107 @@ class registrationController extends Controller {
 		return false;
 
 	}
-
-
+	/**
+	*	This function will verify the email address for the new Registration
+	*	@param string $email email
+	*	@return Json Response
+	*/
+	private function checkEmail($email)
+	{
+		if( !is_null($email) ){
+			if( $this->regex($email,"EMAIL") ){
+				$checkUser=user::where('email',$email)->count();
+				if( $checkUser==0 ){
+					return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'checkEmail']);
+				}else{
+					return  response()->json(['message' => 'Email already Registerd', 'code' => 'error' ,'task' => 'checkEmail']);
+				}
+			}
+		}
+		return  response()->json(['message' => 'Email Verification failed', 'code' => 'error' ,'task' => 'checkEmail']);
+	}
+	/**
+	*	This function will verify the phone number for the new Registration
+	*	@param string $phone phone
+	*	@return Json Response
+	*/
+	private function checkPhone($phone)
+	{
+		if( !is_null($phone) ){
+			if( $this->regex($phone,"TP") ){
+				$phone="+94".$phone;
+				$checkUser=user::where('tp',$phone)->count();
+				if($checkUser==0){
+					return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'checkPhone']);
+				}else{
+					return  response()->json(['message' => 'Phone Number already Registerd', 'code' => 'error' ,'task' => 'checkPhone']);
+				}
+			}
+		}
+		return  response()->json(['message' => 'Phone Number Verification failed', 'code' => 'error' ,'task' => 'checkPhone']);
+	}
 	/**
 	* Take All JSON Post Requset and process them
 	*  Tasks
-	*	 1. Reset Passwords
-	*	 2. Login
-	*	 3. Send Emails when Password is resetted
+	*	 1. 
 	*
 	* @return Response, Views
 	**/
 	public function inputs()
 	{
-
-
-		if(Request::get('task')=="checkEmail")
-		{
-			$email = Request::get('email');
-			if(!is_null($email)){
-				if($this->regex($email,"EMAIL")){
-					$checkUser = user::where('email',$email)->count();
-					if($checkUser==0){
-						return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'checkEmail']);
-					}else{
-						return  response()->json(['message' => 'Email already Registerd', 'code' => 'error' ,'task' => 'checkEmail']);
-					}
-				}
+		if( Request::get('task')=="checkEmail" ){
+			$email=Request::get('email');
+			return $this->checkEmail($email);
+		}elseif( Request::get('task')=="checkPhone" ){
+			$phone="";
+			$phone=Request::get('phone');
+			return $this->checkPhone($phone);
+		}elseif( Request::get('task')=="submit" ){
+			/**
+			*
+			* Handled the main Registraion form submission
+			*
+			*/
+			$phone=Request::get('txtPhone');
+			$email=Request::get('txtEmail');
+			$password=Request::get('txtPassword');
+			$nic=Request::get('txtNIC');
+			if( is_null($phone) || is_null($email) || is_null($password) ){
+				return view('registration')->with('email',$email)->with('phone',$phone)->with('nic',$nic);
 			}
-			return  response()->json(['message' => 'Email Verification failed', 'code' => 'error' ,'task' => 'checkEmail']);
+			$phoneVerify=json_decode($this->checkPhone($phone)->getContent(),true);
+			$emailVerify=json_decode($this->checkEmail($email)->getContent(),true);
+			if( $phoneVerify['code']=="error" || $emailVerify['code']=="error" ){
+				return view('registration')->with('email',$email)->with('phone',$phone)->with('nic',$nic);
+			}
+			$inputs=Input::all();
+			$rules=[
+    			// Other validation rules...
+			'g-recaptcha-response' => 'required|captcha',
+			];
+			$messages=[
+			'g-recaptcha-response.required' => 'You Must Fill the Captcha',
+			'g-recaptcha-response.captcha'  => 'Captcha Error',
+			];
+			$validator=Validator::make($inputs, $rules, $messages);
+			if ( $validator->fails() ) {
+				$errors=$validator->messages();
+				return view('registration')->with('email',$email)->with('phone',$phone)->with('nic',$nic)->with('captcha','Captcha Erro');
+			}
+			$newUser=new user;
+			$newUser->email=$email;
+			if( !is_null($nic) ){
+				$newUser->nic=$nic;
+			}
+			$newUser->password=md5($password);
+			$phone = "+94".$phone;
+			$newUser->tp=$phone;
+			$newUser->level="1";
+			$newUser->active=1;
+			$newUser->verified=0;
+			$newUser->save();
+			Session::put('loginMsg','user_created');
+			return Redirect::to('login');
 		}
 	}
-
-	
-	
 }

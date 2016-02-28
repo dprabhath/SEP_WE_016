@@ -174,7 +174,13 @@ $( window ).load(function() {
 		
 		$(document).ready(function(){
 
-			
+			@if(!empty($msg))
+				Lobibox.notify("success", {
+            				title: 'Account',
+            				msg: 'Account Created',
+            				sound: '../resources/common/sounds/sound2'
+            	});
+			@endif
 			
 
 			function isEmail(email) {

@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class newTicketController extends Controller {
+class NewTicketController extends Controller 
+{
 
 	/*
 	|--------------------------------------------------------------------------
-	| Home Controller
+	| New Ticket Controller
 	|--------------------------------------------------------------------------
 	|
-	| This controller renders your application's "dashboard" for users that
-	| are authenticated. Of course, you are free to change or remove the
-	| controller as you wish. It is just here to get your app started!
+	| @author Michika Iranga Perera
+	| 
+	| This controller will open a new tickets
 	|
 	*/
 
@@ -34,22 +35,16 @@ class newTicketController extends Controller {
 	{
 		$this->middleware('loginCheck');
 	}
-
 	/**
 	 * Show the application dashboard to the user.
 	 *
-	 * @return Response
+	 * @return view
 	 */
 	public function index()
 	{
-		$user = Session::get('user');
-		
+		$user=Session::get('user');
 		return view('user.tickets.newTicket')->with('user',$user);
-		
-		//return view('new-ticket');
 	}
-
-	
 	/**
 	*This function will create new tickets
 	*
@@ -59,36 +54,29 @@ class newTicketController extends Controller {
 	*
 	* @return View
 	**/
-	public function inputs(){
-
-		$user =Session::get('user');
-		if(is_null($user)){
+	public function inputs()
+	{
+		$user=Session::get('user');
+		if( is_null($user) ){
 			return Redirect::to('login');
 		}
-
-		if(Request::get('options')=="custom"){
-			$heading = Request::get('heading');
+		if( Request::get('options')=="custom" ){
+			$heading=Request::get('heading');
 		}else{
-			$heading = Request::get('options');
+			$heading=Request::get('options');
 		}
-
-		
-
-
-		$ticket = new tickets;
+		$ticket=new tickets;
 		$ticket->userid = Session::get('userid');
 		$ticket->subject = $heading;
 		$ticket->opened=1;
 		$ticket->save();
-
-
-		$ticketMsg = new tickets_messages;
+		$ticketMsg=new tickets_messages;
 		$ticketMsg->user_id = Session::get('userid');
 		$ticketMsg->message = Request::get('txtarea');
 		$ticketMsg->ticket_id = $ticket->id;
 		$ticketMsg->save();
 		//return view('user.tickets.new-ticket')->with('user',$user)->with('created',1);
-		 return redirect('view-ticket');
+		return redirect('view-ticket');
 		//return 1;
 	}
 }

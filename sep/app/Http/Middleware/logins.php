@@ -24,8 +24,13 @@ class logins {
 		if(is_null(Session::get('userid'))){
 			return Redirect::to('login');
 		}else{
-
-			return $next($request);
+			$user = Session::get('user');
+			if($user->verified==0){
+				return Redirect::to('verify');
+			}else{
+				return $next($request);
+			}
+			
 		}
 
 	}

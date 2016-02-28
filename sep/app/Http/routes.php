@@ -15,21 +15,21 @@ Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('new-ticket', 'users\newTicketController@index');
+Route::get('new-ticket', 'users\NewTicketController@index');
 Route::post('new-ticket', 'users\newTicketController@inputs');
 
-Route::get('view-ticket', 'users\ticketController@index');
-Route::post('view-ticket', 'users\ticketController@inputs');
+Route::get('view-ticket', 'users\TicketController@index');
+Route::post('view-ticket', 'users\TicketController@inputs');
 
 
-Route::get('admin/usermanage', 'admin\registerdUserManagment@index');
-Route::post('admin/usermanage', 'admin\registerdUserManagment@inputs');
+Route::get('admin/usermanage', 'admin\RegisterdUserManagment@index');
+Route::post('admin/usermanage', 'admin\RegisterdUserManagment@inputs');
 
-Route::get('admin/view-ticket', 'admin\ticketControllerAdmin@index');
-Route::post('admin/view-ticket', 'admin\ticketControllerAdmin@inputs');
+Route::get('admin/view-ticket', 'admin\TicketControllerAdmin@index');
+Route::post('admin/view-ticket', 'admin\TicketControllerAdmin@inputs');
 
-Route::get('profile', 'users\userProfileController@index');
-Route::post('profile', 'users\userProfileController@inputs');
+Route::get('profile', 'users\UserProfileController@index');
+Route::post('profile', 'users\UserProfileController@inputs');
 
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');
@@ -52,11 +52,13 @@ Route::get('treatments/edit/{id}', 'TreatmentController@edit');
 Route::post('treatments/new', 'TreatmentController@insertNew');
 
 
-Route::get('register', 'registrationController@index');
-Route::post('register','registrationController@inputs');
-Route::get('login', 'loginController@index');
-Route::post('login','loginController@inputs');
-Route::get('signout','loginController@signout');
+Route::get('verify', 'users\VerifyController@index');
+Route::post('verify','users\VerifyController@inputs');
+Route::get('register', 'RegistrationController@index');
+Route::post('register','RegistrationController@inputs');
+Route::get('login', 'LoginController@index');
+Route::post('login','LoginController@inputs');
+Route::get('signout','LoginController@signout');
 
 Route::get('rate','rateController@index');
 

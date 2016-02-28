@@ -10,16 +10,19 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
-class registerdUserManagment extends Controller {
+class RegisterdUserManagment extends Controller 
+{
 
 	/*
 	|--------------------------------------------------------------------------
-	| Home Controller
+	| Registerd users management Controller
 	|--------------------------------------------------------------------------
+	| @author Michika Iranga Perera 
 	|
-	| This controller renders your application's "dashboard" for users that
-	| are authenticated. Of course, you are free to change or remove the
-	| controller as you wish. It is just here to get your app started!
+	| This class will handle the registered Users Profile Infromation
+	| Such as User activation,Deactivation
+	| 
+	| 
 	|
 	*/
 
@@ -40,11 +43,131 @@ class registerdUserManagment extends Controller {
 	 */
 	public function index()
 	{
-		$user = $user = Session::get('user');
+		$user=Session::get('user');
 		
 		return view('admin/userManage')->with('user',$user);
 		
 		//eturn view('admin/usermanage');
+	}
+	/**
+	*
+	* Get the active registered users
+	* 
+	* @return Json Response
+	*
+	*/
+	private function loadTableRegisterd()
+	{
+		$user=user::where('active',1)->skip(0)->take(20)->get();
+		$count=user::where('active',1)->count();
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count]);
+	}
+	/**
+	*
+	* Reset the passwords of users
+	* @param list $ids Users ids
+	* @return Json Response
+	*
+	*/
+	private function resetPassword($ids)
+	{
+		if( !is_null($ids) ){
+				foreach( $ids as &$value ){
+					$user=user::find($value);
+					if( !is_null($user) ){
+						$pass=Str::random(10);
+						$user->password = md5($pass);
+						$user->save();
+						Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
+							$m->from('hello@app.com', 'Your Application');
+							$m->to($user->email, $user->name)->subject('New Password!');
+						});
+					}else{
+						return  response()->json(['message' => 'Users not passsed', 'code' => 'error']);
+					}
+				}
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+			return  response()->json(['code' => 'success' , 'task' => 'resetPassword']);
+	}
+	/**
+	*
+	* Get the blocked the users
+	* 
+	* @return Json Response
+	*
+	*/
+	private function loadTableBlocked()
+	{
+		$user=user::where('active',0)->skip(0)->take(20)->get();
+		$count=user::where('active',0)->count();
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
+	}
+	/**
+	*
+	* Deactivate the registered users
+	* @param list $ids Users ids
+	* @return Json Response
+	*
+	*/
+	private function deactivaeUsers($ids)
+	{
+		if( !is_null($ids) ){
+				foreach ($ids as &$value) {
+					$user = user::find($value);
+					if($user->id==Session::get('userid')){
+						continue;
+					}
+					$user->active = 0;
+					$user->save();
+				}
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+			return  response()->json(['code' => 'success' , 'task' => 'DeactivateUsers']);
+	}
+	/**
+	*
+	* Activate the registered users
+	* @param list $ids Users ids
+	* @return Json Response
+	*
+	*/
+	private function activateUsers($ids)
+	{
+		if( !is_null($ids) ){
+				foreach ($ids as &$value) {
+					$user = user::find($value);
+					$user->active = 1;
+					$user->save();
+				}
+			}else{
+				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'ActivateUsers']);
+	}
+	/**
+	*
+	* Search the users according to the type
+	* @param String $searchstring what to search
+	* @param Integer $tasktype what type of search
+	* @return Json Response
+	*
+	*/
+	private function search($searchString,$tasktype)
+	{
+		$user=null;
+		if( $tasktype==1 ){
+				$user=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
+				$count=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->count();
+				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd','total' =>$count]);
+			}else{
+				$user=user::where('active','0')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
+				$count=user::where('active','0')->where('email', 'LIKE', "%$searchString%")->count();
+				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
+			}
 	}
 	/**
 	*
@@ -59,114 +182,31 @@ class registerdUserManagment extends Controller {
 	*
 	* @return JSON Response
 	**/
-	public function inputs(){
-
-		$user = Session::get('user');
-		if(is_null($user)){
+	public function inputs()
+	{
+		$user=Session::get('user');
+		if( is_null($user) ){
 			return  response()->json(['message' => ':3', 'code' => 'error']);
 		}
-
-		if(Request::get('task')=="loadtableRegisterd"){
-			$user = user::where('active',1)->skip(0)->take(20)->get();
-			$count = user::where('active',1)->count();
-			
-			return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count]);
-		}elseif (Request::get('task')=="resetPassword") {
-			
-			$ids = Request::get('users');
-			if(!is_null($ids)){
-
-
-				foreach ($ids as &$value) {
-					$user = user::find($value);
-					if(!is_null($user)){
-
-						$pass = Str::random(10);
-						$user->password = md5($pass);
-						$user->save();
-						Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
-							$m->from('hello@app.com', 'Your Application');
-
-							$m->to($user->email, $user->name)->subject('New Password!');
-						});
-
-					}else{
-						return  response()->json(['message' => 'Users not passsed', 'code' => 'error']);
-					}
-				}
-
-
-
-			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
-			}
-
-			return  response()->json(['code' => 'success' , 'task' => 'resetPassword']);
-
-		}elseif (Request::get('task')=="loadtableBlocked") {
-			$user = user::where('active',0)->skip(0)->take(20)->get();
-			$count = user::where('active',0)->count();
-			return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
-		}elseif (Request::get('task')=="DeactivateUsers") {
-			$ids = Request::get('users');
-			if(!is_null($ids)){
-
-
-				foreach ($ids as &$value) {
-					$user = user::find($value);
-					if($user->id==Session::get('userid')){
-						continue;
-					}
-					$user->active = 0;
-					$user->save();
-					
-				}
-
-
-
-			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
-			}
-
-			return  response()->json(['code' => 'success' , 'task' => 'DeactivateUsers']);
-		}elseif (Request::get('task')=="ActivateUsers") {
-			$ids = Request::get('users');
-			if(!is_null($ids)){
-
-
-				foreach ($ids as &$value) {
-					$user = user::find($value);
-					$user->active = 1;
-					$user->save();
-				}
-
-
-
-			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
-			}
-
-			return  response()->json(['code' => 'success' , 'task' => 'ActivateUsers']);
-
-		}elseif(Request::get('task')=="search"){
-			$user = null;
-			$searchString = Request::get('searchString');
-			if(Request::get('tasktype')==1){
-				$user = user::where('active','1')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
-				$count = user::where('active','1')->where('email', 'LIKE', "%$searchString%")->count();
-				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd','total' =>$count]);
-			}else{
-				$user = user::where('active','0')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
-				$count = user::where('active','0')->where('email', 'LIKE', "%$searchString%")->count();
-				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
-			}
-			
-			
-			
+		if( Request::get('task')=="loadtableRegisterd" ){
+			return $this->loadTableRegisterd();
+		}elseif( Request::get('task')=="resetPassword" ){
+			$ids=Request::get('users');
+			return $this->resetPassword($ids);
+		}elseif( Request::get('task')=="loadtableBlocked" ){
+			return $this->loadTableBlocked();
+		}elseif( Request::get('task')=="DeactivateUsers" ){
+			$ids=Request::get('users');
+			return $this->deactivaeUsers($ids);
+		}elseif( Request::get('task')=="ActivateUsers" ){
+			$ids=Request::get('users');
+			return $this->activateUsers($ids);
+		}elseif( Request::get('task')=="search" ){
+			$searchString=Request::get('searchString');
+			$tasktype = Request::get('tasktype');
+			return $this->search($searchString,$tasktype);
 		}else{
 			return  response()->json(['message' => 'hacker', 'code' => 'error']);
 		}
-
-		
 	}
 }

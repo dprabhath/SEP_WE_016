@@ -177,29 +177,19 @@
 				sound: '../../resources/common/sounds/sound2'
 			});
 		}
-
 	}
-
-
-
-
+	/*************************************** Main Jquery Handler ****************************/
 	$(document).ready(function(){
 		loadtable("1");
 		$('#selectall').click(function(){
-
 			if($(this).prop('checked')==true){
 				
 				$('.inside').prop('checked', true);
 			}else{
 				$('.inside').prop('checked', false);
 			}
-
-			
 			return true;
-
 		});
-
-
 		$('#content_table').on('click','.close_ticket_anchor',function(e){
 			///alert($(this).attr('href'));
 			e.preventDefault();
@@ -250,9 +240,6 @@
 				loadtable("1");
 			}
 		});
-		
-
-
 		/************************************ Close tickets/Open Tickets *******************************/
 		$('#action_close_ticket').click(function(e){
 			e.preventDefault();
@@ -427,9 +414,9 @@
 </div>
 {!! Form::open() !!}
 
-<input type="text" name="task" value="">
-<input type="submit">
-{!! Form::close() !!}
-@stop
-@section('footer')
-@stop
+<!--input type="text" name="task" value="">
+	<input type="submit"-->
+	{!! Form::close() !!}
+	@stop
+	@section('footer')
+	@stop

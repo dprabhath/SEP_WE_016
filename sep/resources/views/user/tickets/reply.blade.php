@@ -59,7 +59,7 @@
 
 		
 	}
-		/*************************************** Getting Json requets from the server ****************************/
+	/*************************************** Getting Json requets from the server ****************************/
 	function returnofjsend(data){
 		var htmls="";
 		$('#wait').hide();
@@ -72,7 +72,6 @@
 			return false;
 		}
 		if(data['task']=="replyTickets"){
-
 			Lobibox.notify("success", {
 				title: 'success',
 				msg: "Reply Sent",
@@ -92,23 +91,17 @@
 			@else
 			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src={{ url('/') }}/uploads/profile_pics/emp.png alt='...'>";
 			@endif
-			
+
 			htmlMsg+= "</a></div>";
 			htmlMsg+= "<div class='media-body'>";
 			htmlMsg+= "<p> "+M['message']+" </p>";
 			htmlMsg+= "<p style='padding-top:20px;'>Time "+M['created_at']+" </p></div></div></div>";
-
 			document.getElementById('messageWindow').innerHTML+=htmlMsg;
-			var objDiv = document.getElementById('messageWindow');
-			objDiv.scrollTop = objDiv.scrollHeight;
-
-
-
+			var objDiv=document.getElementById('messageWindow');
+			objDiv.scrollTop=objDiv.scrollHeight;
 		}
-
 	}
-
-
+	/*************************************** Main Jquery Handler ****************************/
 	$(document).ready(function(){
 		var objDiv = document.getElementById('messageWindow');
 		objDiv.scrollTop = objDiv.scrollHeight;
@@ -121,9 +114,9 @@
 			document.getElementById("replyText").value="";
 			if(text==""){
 				Lobibox.notify("warning", {
-				title: 'warning',
-				msg: "You havent typed anything",
-				sound: '../resources/common/sounds/sound4'
+					title: 'warning',
+					msg: "You havent typed anything",
+					sound: '../resources/common/sounds/sound4'
 				});
 				return false;
 			}
@@ -173,41 +166,41 @@
 	</div>
 	<div id="messageWindow" class="row" style="overflow-y:scroll; height:70vh;padding:10px;background-color: #d5dade;">
 
-	@foreach ($messages as $message)
+		@foreach ($messages as $message)
 
 		@if($message->user_id == $user->id)
 
-			<div style="padding:10px;">
-				<div class="media reply-user" style="padding:10px;">
-					<div class="media-left">
-						<a href="#">
-							<img height="48" width="48" class="media-object img-circle" 
-							
-									@if(! empty($user) && $user->pic!='')
+		<div style="padding:10px;">
+			<div class="media reply-user" style="padding:10px;">
+				<div class="media-left">
+					<a href="#">
+						<img height="48" width="48" class="media-object img-circle" 
 
-										src="{{$user->pic}}"
+						@if(! empty($user) && $user->pic!='')
 
-									@else
-									src="{{ url('/') }}/uploads/profile_pics/emp.png"
-									@endif
-							alt="...">
-						</a>
-					</div>
+						src="{{$user->pic}}"
+
+						@else
+						src="{{ url('/') }}/uploads/profile_pics/emp.png"
+						@endif
+						alt="...">
+					</a>
+				</div>
 				<div class="media-body">
 					
 					<p> {{$message->message}} </p>
-						<p style="padding-top:20px;">Time {{$message->created_at}} </p>
-					</div>
+					<p style="padding-top:20px;">Time {{$message->created_at}} </p>
 				</div>
 			</div>
+		</div>
 
 
 		@else
-    		
-			<div style="padding:10px;">
-				<div class="media reply-staff" style="padding:10px;">
-					<div class="media-right pull-right">
-						<a href="#">
+
+		<div style="padding:10px;">
+			<div class="media reply-staff" style="padding:10px;">
+				<div class="media-right pull-right">
+					<a href="#">
 						@if(! empty($staff) && $staff->pic!='')
 
 						<img height="48" width="48" class="media-object img-circle" src="{{$staff->pic}}" alt="...">
@@ -215,45 +208,45 @@
 						@else
 						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/staff.jpg" alt="...">
 						@endif
-							
-						</a>
-					</div>
+
+					</a>
+				</div>
 				<div class="media-body">
 					
 					<p> {{$message->message}} </p>
-						<p style="padding-top:20px;">Time {{$message->created_at}} </p>
-					</div>
+					<p style="padding-top:20px;">Time {{$message->created_at}} </p>
 				</div>
 			</div>
+		</div>
 
 		@endif
 
 
 
 
-	@endforeach
+		@endforeach
 
-					</div>
-					@if($ticket->opened==1)
-					<div class="row" style="padding:20px;">
-						<form id="reply_form">
-							<div class="form-group">
-								<label for="exampleInputEmail1">Reply:</label>
-								<textarea id="replyText" class="form-control" rows="4" style="border:1px solid black !important;border-radius:0px !important;background-color:rgba(0,0,0,0.1) !important;"></textarea>
-							</div>
-							<button type="submit" class="btn btn-default">Reply</button>
-							<button type="reset" class="btn btn-default">Reset</button>
-						</form>
-					</div>
-					@else
-					<div class="row" style="padding:50px;">
+	</div>
+	@if($ticket->opened==1)
+	<div class="row" style="padding:20px;">
+		<form id="reply_form">
+			<div class="form-group">
+				<label for="exampleInputEmail1">Reply:</label>
+				<textarea id="replyText" class="form-control" rows="4" style="border:1px solid black !important;border-radius:0px !important;background-color:rgba(0,0,0,0.1) !important;"></textarea>
+			</div>
+			<button type="submit" class="btn btn-default">Reply</button>
+			<button type="reset" class="btn btn-default">Reset</button>
+		</form>
+	</div>
+	@else
+	<div class="row" style="padding:50px;">
 
-					</div>
-					@endif
-				</div>
+	</div>
+	@endif
+</div>
 
 <div id="wait">
-  
+
 </div>
 @stop
 @section('footer')
