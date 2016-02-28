@@ -1,13 +1,14 @@
 <?php namespace App\Http\Controllers;
 
 use App\Doctor;
-use App\pendingDoctor;
+use App\Treatment;
+use App\pendingTreatment;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use Request;
 
-class DoctorController extends Controller {
+class TreatmentController extends Controller {
 
 	/*
 	|--------------------------------------------------------------------------
@@ -37,29 +38,36 @@ class DoctorController extends Controller {
 	 */
 	public function index()
 	{
-		$doctors = Doctor::all();
+		$treatments = Treatment::all();
 
-		return view('doctor.index')->with('doctors', $doctors);
+		return view('treatment.index')->with('treatments', $treatments);
 		//return $doctors;
 	}
 
 	public function show($id)
 	{
-		$doctor = Doctor::findOrFail($id);
+		$treatment = Treatment::findOrFail($id);
 
-		return View::make('doctor.show')->with('doctor', $doctor);
+		return View::make('treatment.show')->with('treatment', $treatment);
 	}
 
-	public function newdoctor()
+	public function newtreatment()
 	{
-		return View::make('doctor.newdoctor');
+		return View::make('treatment.new');
 	}
 
-	public function pendingdoctor()
+	public function pendingTreatment()
 	{
-		$doctors = pendingDoctor::all();
+		$treatments = pendingTreatment::all();
 
-		return View::make('doctor.pendingdoctor')->with('doctors', $doctors);;
+		return View::make('treatment.pending')->with('treatments', $treatments);;
+	}
+
+	public function showPendingTreatment($id)
+	{
+		$treatment = pendingTreatment::find($id);
+
+		return View::make('treatment.showpending')->with('treatment', $treatment);;
 	}
 
 	public function edit($id)
@@ -68,13 +76,6 @@ class DoctorController extends Controller {
 
 
 		return view('doctor.edit')->with('doctor', $doctor);
-	}
-
-	public function showPending($id)
-	{
-		$doctor = pendingDoctor::findOrFail($id);
-
-		return view('doctor.showpending')->with('doctor', $doctor);
 	}
 
 	public function update($id)
@@ -93,9 +94,9 @@ class DoctorController extends Controller {
 			$file = \Input::file('image');
 			$format = explode('.', $file->getClientOriginalName());
 
-			$file->move('uploads/profile_pics/doctors', $id . '.' . $format[sizeof($format) - 1]);
+			$file->move('uploads/profile_pics', $id . '.' . $format[sizeof($format) - 1]);
 
-			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/doctors/' . $id . '.' . $format[sizeof($format) - 1]]);
+			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/' . $id . '.' . $format[sizeof($format) - 1]]);
 		}
 		if($specialization != null && $specialization != "")
 		{
@@ -159,60 +160,44 @@ class DoctorController extends Controller {
 
 	public function insertNewPending($value)
 	{
-		$doctor = pendingDoctor::find($value);
+		$treatment = pendingTreatment::find($value);
 
-		$first_name = $doctor->first_name;
-		$last_name =  $doctor->last_name;
-		$specialization =  $doctor->specialization;
-		$notes =  $doctor->notes;
-		$profqual =  $doctor->profqual;
-		$eduqual =  $doctor->eduqual;
-		$hospital =  $doctor->hospital;
-		$address =  $doctor->address;
-		$email = $doctor->email;
-		$phone = $doctor->phone;
+		$name = $treatment->name;
+		$description =  $treatment->description;
+		
 
-		$newDoctor = new Doctor;
+		$newTreatment = new Treatment;
 
-		$newDoctor->first_name = $first_name;
-		$newDoctor->last_name = $last_name;
-		$newDoctor->specialization  = $specialization;
-		$newDoctor->notes  = $notes;
-		$newDoctor->profqual = $profqual;
-		$newDoctor->eduqual = $eduqual;
-		$newDoctor->hospital = $hospital;
-		$newDoctor->address = $address;
-		$newDoctor->email = $email;
-		$newDoctor->phone = $phone;
+		$newTreatment->name = $name;
+		$newTreatment->description = $description;
+		
+		echo $newTreatment;
 
-		$newDoctor->save();
-		$doctor->delete();
+		$newTreatment->save();
+		$treatment->delete();
 	}
 
 	public function deletePending($value)
 	{
-		$doctor = pendingDoctor::find($value);
-		$doctor->delete();
+		$treatment = pendingTreatment::find($value);
+		$treatment->delete();
 	}
 
 	public function insertNew()
 	{
 		$input = Request::all();
 
-		$pendingDoctor = new pendingDoctor;
+		$pendingTreatment = new pendingTreatment;
 
-		$pendingDoctor->first_name = Request::get('fname');
-		$pendingDoctor->last_name = Request::get('lname');
-		$pendingDoctor->specialization = Request::get('spec');
-		$pendingDoctor->notes = Request::get('notes');	
-		$pendingDoctor->profqual = Request::get('profqual');
-		$pendingDoctor->eduqual = Request::get('eduqual');
-		$pendingDoctor->hospital = Request::get('hospital');
-		$pendingDoctor->address = Request::get('address');
-		$pendingDoctor->email = Request::get('email');
-		$pendingDoctor->phone = Request::get('phone');
+		$pendingTreatment->name = Request::get('name');
+		$pendingTreatment->description = Request::get('desc');
+		
 
-		$pendingDoctor->save();
+		$pendingTreatment->save();
+
+		$treatments = Treatment::all();
+
+		return view('treatment.index')->with('treatments', $treatments);
 	}
 
 

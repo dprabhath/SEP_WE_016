@@ -205,13 +205,13 @@
 
 <div class="col-md-12 graphs">
        <div class="xs">
-        <h3>Approval-Pending Physicians</h3>
+        <h3>Approval-Pending Treatments</h3>
             <table id="indextable" class="table table-striped">
      <thead>
         <tr>
           <th> {!! Form::checkbox('chk[]', 'check', false, ['onChange' => 'checkAll(this)']) !!}   </th>
           <th> <a href="javascript:SortTable(1,'T');"> Name </a> </th>
-          <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
+          <th> <a href="javascript:SortTable(2,'T');"> Description </a> </th>
           <th> <a href="javascript:SortTable(3,'T');"> Added By </a> </th>
           <th> <a href="javascript:SortTable(4,'T');"> Date </a> </th>
         </tr>
@@ -219,20 +219,18 @@
       <tbody>
             <?php $count = 0 ?>
 
-            {!! Form::open(array('url' => 'pending')) !!}
-            @foreach ($doctors as $doctor)
+            {!! Form::open(array('url' => 'pendingtreatments')) !!}
+            @foreach ($treatments as $treatment)
             
                 <tr onmouseover="ChangeColor(this, true);" 
                     onmouseout="ChangeColor(this, false);" 
                     >
 
-                    <td> {!! Form::checkbox("pendingid[$count]", $doctor->id, false) !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->first_name !!} {!! $doctor->last_name !!}</td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->specialization !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->user !!} </td>
-                    <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->created_at !!} </td>
-
-                    <div id="doccont" class="collapse">{!! $doctor->first_name !!}</div>
+                    <td> {!! Form::checkbox("pendingid[$count]", $treatment->id, false) !!} </td>
+                    <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->name !!} </td>
+                    <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->specialization !!} </td>
+                    <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->user !!} </td>
+                    <td onclick="NavigateTo('pendingtreatments/{{ $treatment->id }}')" style="cursor: pointer;"> {!! $treatment->created_at !!} </td>
 
                     <?php $count++ ?>
 
@@ -250,6 +248,7 @@
                     {!! Form::close() !!}  
         </div>
   </div>
+  
   
 
 @stop

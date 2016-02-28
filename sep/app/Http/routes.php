@@ -38,7 +38,19 @@ Route::get('newdoctor', 'DoctorController@newdoctor');
 Route::post('newdoctor', 'DoctorController@insertNew');
 Route::get('doctors/{id}', 'DoctorController@show');
 Route::post('doctors', 'DoctorController@sortfilter');
+Route::get('pending/{id}', 'DoctorController@showPending');
 Route::get('pending', 'DoctorController@pendingdoctor');
+Route::post('pending', 'DoctorController@pendingAction');
+
+Route::get('treatments', 'TreatmentController@index');
+Route::get('pendingtreatments/{id}', 'TreatmentController@showPendingTreatment');
+Route::get('pendingtreatments', 'TreatmentController@pendingTreatment');
+Route::post('pendingtreatments', 'TreatmentController@pendingAction');
+Route::get('treatments/new', 'TreatmentController@newtreatment');
+Route::get('treatments/{id}', 'TreatmentController@show');
+Route::get('treatments/edit/{id}', 'TreatmentController@edit');
+Route::post('treatments/new', 'TreatmentController@insertNew');
+
 
 Route::get('register', 'registrationController@index');
 Route::post('register','registrationController@inputs');
