@@ -4,21 +4,12 @@ use App\Doctor;
 use App\pendingDoctor;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\View;
 use Request;
+use Session;
 
 class DoctorController extends Controller {
-
-	/*
-	|--------------------------------------------------------------------------
-	| Welcome Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller renders the "marketing page" for the application and
-	| is configured to only allow guests. Like most of the other sample
-	| controllers, you are free to modify or remove it as you desire.
-	|
-	*/
 
 	/**
 	 * Create a new controller instance.
@@ -27,56 +18,92 @@ class DoctorController extends Controller {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('guest');
+		$this->middleware('AdminloginCheck');
 	}
 
 	/**
-	 * Show the application welcome screen to the user.
+	 * Shows the Doctor List to the user.
 	 *
-	 * @return Response
+	 * @return index view
 	 */
 	public function index()
 	{
 		$doctors = Doctor::all();
+		$user = Session::get('user');
 
-		return view('doctor.index')->with('doctors', $doctors);
+		return view('doctor.index')->with('doctors', $doctors)->with('user',$user);
 		//return $doctors;
 	}
 
+	/**
+	 * Shows the profile of a specific Doctor to the user.
+	 *
+	 * @return show view
+	 */
 	public function show($id)
 	{
 		$doctor = Doctor::findOrFail($id);
+		$user = Session::get('user');
 
-		return View::make('doctor.show')->with('doctor', $doctor);
+		return View::make('doctor.show')->with('doctor', $doctor)->with('user',$user);
 	}
 
+	/**
+	 * Shows the page for adding a new Doctor to the user.
+	 *
+	 * @return newdoctor view
+	 */
 	public function newdoctor()
 	{
-		return View::make('doctor.newdoctor');
+		$user = Session::get('user');
+
+		return View::make('doctor.newdoctor')->with('user',$user);
 	}
 
+	/**
+	 * Shows the page for approving and deleting new Doctor Requests to the admin.
+	 *
+	 * @return pendingdoctor view
+	 */
 	public function pendingdoctor()
 	{
 		$doctors = pendingDoctor::all();
+		$user = Session::get('user');
 
-		return View::make('doctor.pendingdoctor')->with('doctors', $doctors);;
+		return View::make('doctor.pendingdoctor')->with('doctors', $doctors)->with('user',$user);
 	}
 
+	/**
+	 * Shows the page for editing a Doctor's page to the admin.
+	 *
+	 * @return edit view
+	 */
 	public function edit($id)
 	{
 		$doctor = Doctor::findOrFail($id);
+		$user = Session::get('user');
 
-
-		return view('doctor.edit')->with('doctor', $doctor);
+		return view('doctor.edit')->with('doctor', $doctor)->with('user',$user);
 	}
 
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
 	public function showPending($id)
 	{
 		$doctor = pendingDoctor::findOrFail($id);
+		$user = Session::get('user');
 
-		return view('doctor.showpending')->with('doctor', $doctor);
+		return view('doctor.showpending')->with('doctor', $doctor)->with('user',$user);
 	}
 
+	/**
+	 * Updates the details of the the Doctor whose ID was passed into the function.
+	 *
+	 * @return show view
+	 */
 	public function update($id)
 	{
 		$specialization = Request::get('spec');
@@ -133,9 +160,13 @@ class DoctorController extends Controller {
 
 		$current_doctor = Doctor::find($id);
 
-		return view('doctor.show')->with('doctor', $current_doctor);
+		return redirect()->action('DoctorController@show', $id);
 	}
 
+	/**
+	 * Selects which action to take depending on whether the admin choosed to Approve the selected requests or to Delete them
+	 *
+	 */
 	public function pendingAction()
 	{
 		$typeApprove = Request::get('approve');
@@ -155,8 +186,15 @@ class DoctorController extends Controller {
 				$this->deletePending($value);
 			}
 		}
+
+		return redirect()->back();
 	}
 
+	/**
+	 * Inserts a currently pending doctor into the Doctors table and deletes that record from the pendingDoctors table.
+	 *
+	 * @return pendingdoctor view
+	 */
 	public function insertNewPending($value)
 	{
 		$doctor = pendingDoctor::find($value);
@@ -187,14 +225,31 @@ class DoctorController extends Controller {
 
 		$newDoctor->save();
 		$doctor->delete();
+
+		$this->pendingdoctor();
+
+		return redirect()->back();
 	}
 
+	/**
+	 * Deletes a currently pending doctor from the pendingDoctors table.
+	 *
+	 * @return pendingdoctor view
+	 */
 	public function deletePending($value)
 	{
 		$doctor = pendingDoctor::find($value);
 		$doctor->delete();
+
+		$doctors = pendingDoctor::all();
+		$user = Session::get('user');
 	}
 
+	/**
+	 * Adds a new Pending Docotr into the pendingDoctors table.
+	 *
+	 * @return previous view
+	 */
 	public function insertNew()
 	{
 		$input = Request::all();
@@ -213,6 +268,8 @@ class DoctorController extends Controller {
 		$pendingDoctor->phone = Request::get('phone');
 
 		$pendingDoctor->save();
+
+		return redirect()->back();
 	}
 
 

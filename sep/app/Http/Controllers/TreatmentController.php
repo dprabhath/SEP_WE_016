@@ -7,19 +7,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use Request;
+use Session;
 
 class TreatmentController extends Controller {
-
-	/*
-	|--------------------------------------------------------------------------
-	| Welcome Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller renders the "marketing page" for the application and
-	| is configured to only allow guests. Like most of the other sample
-	| controllers, you are free to modify or remove it as you desire.
-	|
-	*/
 
 	/**
 	 * Create a new controller instance.
@@ -28,115 +18,76 @@ class TreatmentController extends Controller {
 	 */
 	public function __construct()
 	{
-		//$this->middleware('guest');
+		$this->middleware('AdminloginCheck');
 	}
 
 	/**
-	 * Show the application welcome screen to the user.
+	 * Shows the Treatment List to the user.
 	 *
-	 * @return Response
+	 * @return index view
 	 */
 	public function index()
 	{
 		$treatments = Treatment::all();
+		$user = Session::get('user');
 
-		return view('treatment.index')->with('treatments', $treatments);
-		//return $doctors;
+		return view('treatment.index')->with('treatments', $treatments)->with('user',$user);
 	}
 
+	/**
+	 * Shows the page of a specific Treatment to the user.
+	 *
+	 * @return show view
+	 */
 	public function show($id)
 	{
 		$treatment = Treatment::findOrFail($id);
+		$user = Session::get('user');
 
-		return View::make('treatment.show')->with('treatment', $treatment);
+		return View::make('treatment.show')->with('treatment', $treatment)->with('user',$user);
 	}
 
+	/**
+	 * Shows the page for adding a new Treatment to the user.
+	 *
+	 * @return newtreatment view
+	 */
 	public function newtreatment()
 	{
-		return View::make('treatment.new');
+		$user = Session::get('user');
+		return View::make('treatment.new')->with('user',$user)->with('message', '');
 	}
 
+	/**
+	 * Shows the page for approving and deleting new New Treatment Requests to the admin.
+	 *
+	 * @return pendingtreatment view
+	 */
 	public function pendingTreatment()
 	{
 		$treatments = pendingTreatment::all();
+		$user = Session::get('user');
 
-		return View::make('treatment.pending')->with('treatments', $treatments);;
+		return View::make('treatment.pending')->with('treatments', $treatments)->with('user',$user);
 	}
 
+	/**
+	 * Shows the details of a pending Treatment to the admin.
+	 *
+	 * @return showpending view
+	 */
 	public function showPendingTreatment($id)
 	{
 		$treatment = pendingTreatment::find($id);
+		$user = Session::get('user');
 
-		return View::make('treatment.showpending')->with('treatment', $treatment);;
+		return View::make('treatment.showpending')->with('treatment', $treatment)->with('user',$user);
 	}
 
-	public function edit($id)
-	{
-		$doctor = Doctor::findOrFail($id);
-
-
-		return view('doctor.edit')->with('doctor', $doctor);
-	}
-
-	public function update($id)
-	{
-		$specialization = Request::get('spec');
-		$notes = Request::get('notes');
-		$profqual = Request::get('profqual');
-		$eduqual = Request::get('eduqual');
-		$hospital = Request::get('hospital');
-		$email = Request::get('email');
-		$phone = Request::get('phone');
-		$address = Request::get('address');
-
-		if(\Input::hasFile('image'))
-		{
-			$file = \Input::file('image');
-			$format = explode('.', $file->getClientOriginalName());
-
-			$file->move('uploads/profile_pics', $id . '.' . $format[sizeof($format) - 1]);
-
-			Doctor::where('id', $id)->update(['imagepath' => 'uploads/profile_pics/' . $id . '.' . $format[sizeof($format) - 1]]);
-		}
-		if($specialization != null && $specialization != "")
-		{
-			Doctor::where('id', $id)->update(['specialization' => $specialization]);
-		}
-		if($notes != null && $notes != "")
-		{
-			Doctor::where('id', $id)->update(['notes' => $notes]);
-		}
-		if($profqual != null && $profqual != "")
-		{
-			Doctor::where('id', $id)->update(['profqual' => $profqual]);
-		}
-		if($eduqual != null && $eduqual != "")
-		{
-			Doctor::where('id', $id)->update(['eduqual' => $eduqual]);
-		}
-		if($hospital != null && $hospital != "")
-		{
-			Doctor::where('id', $id)->update(['hospital' => $hospital]);
-		}
-		if($email != null && $email != "")
-		{
-			Doctor::where('id', $id)->update(['email' => $email]);
-		}
-		if($phone != null && $phone != "")
-		{
-			Doctor::where('id', $id)->update(['phone' => $phone]);
-		}
-		if($address != null && $address != "")
-		{
-			Doctor::where('id', $id)->update(['address' => $address]);
-		}
-
-
-		$current_doctor = Doctor::find($id);
-
-		return view('doctor.show')->with('doctor', $current_doctor);
-	}
-
+	/**
+	 * Selects which action to take depending on whether the admin choosed to Approve the selected requests or to Delete them
+	 *
+	 */
 	public function pendingAction()
 	{
 		$typeApprove = Request::get('approve');
@@ -156,8 +107,14 @@ class TreatmentController extends Controller {
 				$this->deletePending($value);
 			}
 		}
+
+		return redirect()->back();
 	}
 
+	/**
+	 * Inserts new Treatment into Treatments table and deletes that record from the Pending Treatments table
+	 *
+	 */
 	public function insertNewPending($value)
 	{
 		$treatment = pendingTreatment::find($value);
@@ -177,12 +134,20 @@ class TreatmentController extends Controller {
 		$treatment->delete();
 	}
 
+	/**
+	 * Deletes Treatment from Pending Treatments table
+	 *
+	 */
 	public function deletePending($value)
 	{
 		$treatment = pendingTreatment::find($value);
 		$treatment->delete();
 	}
 
+	/**
+	 * Inserts a new Treatment into the Pending Treatments table
+	 *
+	 */
 	public function insertNew()
 	{
 		$input = Request::all();
@@ -191,13 +156,13 @@ class TreatmentController extends Controller {
 
 		$pendingTreatment->name = Request::get('name');
 		$pendingTreatment->description = Request::get('desc');
-		
+		$pendingTreatment->user = Session::get('user');
 
 		$pendingTreatment->save();
 
 		$treatments = Treatment::all();
 
-		return view('treatment.index')->with('treatments', $treatments);
+		return redirect()->back()->with('message', 'Successfully Entered!');
 	}
 
 

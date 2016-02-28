@@ -37,7 +37,9 @@
                     </div>
                     <div class="panel-body">
                         <div class="alert alert-info" style="display:none">
-                            Please fill details to send a new message
+                            @if($message != '')
+                                <h4> {!! $message !!}</h4>
+                            @endif
                         </div>
 						{!! Form::open(array('class' => 'form-horizontal', 'files' => true, 'name' => 'editForm', 'onsubmit' => 'return validateForm()')) !!}
 							<hr>
