@@ -16,7 +16,7 @@ Route::get('/', 'HomeController@index');
 Route::get('home', 'HomeController@index');
 
 Route::get('new-ticket', 'users\NewTicketController@index');
-Route::post('new-ticket', 'users\newTicketController@inputs');
+Route::post('new-ticket', 'users\NewTicketController@inputs');
 
 Route::get('view-ticket', 'users\TicketController@index');
 Route::post('view-ticket', 'users\TicketController@inputs');
