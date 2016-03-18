@@ -24,9 +24,11 @@ class LoginController extends Controller {
 	 *
 	 * @return void
 	 */
+	
 	public function __construct()
 	{
 		//$this->middleware('auth');
+		
 	}
 	/**
 	 * Show the application dashboard to the user.
@@ -36,8 +38,8 @@ class LoginController extends Controller {
 	public function index()
 	{
 		$user=user::where('id',Session::get('userid'))->first();
-		if(is_null($user)){
-			if(!is_null(Session::get('loginMsg'))){
+		if( is_null($user) ){
+			if( !is_null(Session::get('loginMsg')) ){
 				return view('login')->with('msg','complete');
 			}else{
 				return view('login');
@@ -62,7 +64,8 @@ class LoginController extends Controller {
 				return true;
 			}
 		}elseif( $type=="TP" ){
-			if(preg_match("/^[0-9]{10}$/", $value)){
+
+			if(preg_match("/^[0-9]{9}$/", $value)){
 				return true;
 			}
 		}
@@ -79,6 +82,10 @@ class LoginController extends Controller {
 	**/
 	public function inputs()
 	{
+		$user=user::where('id',Session::get('userid'))->first();
+		if( !is_null($user) ){
+			return Redirect::to('home');
+		}
 		if( Request::get('formname')=="reset" ){
 			/**
 			*
@@ -88,7 +95,7 @@ class LoginController extends Controller {
 			$email=Request::get('email');
 			$user=null;
 			if($this->regex($email,"TP")){
-				$user=user::where('tp',$email)->first();
+				$user=user::where('tp',"+94".$email)->first();
 			}elseif($this->regex($email,"EMAIL")){
 				$user=user::where('email',$email)->first();
 			}else{
@@ -101,12 +108,12 @@ class LoginController extends Controller {
 				$user->password=md5($pass);
 				if($user->save()){
 					Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
-						$m->from('hello@app.com', 'Your Application');
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
 						$m->to($user->email, $user->name)->subject('New Password!');
 					});
-					return "ok";
+					return "Check the Email Settings or your internet connection";
 				}else{
-					return "erro";
+					return "Check the Email Settings or your internet connection";
 				}
 			}
 		}elseif( Request::get('formname')=="loginFrom" ){
@@ -118,15 +125,17 @@ class LoginController extends Controller {
 			$email=Request::get('email_login');
 			$password=md5(Request::get('password_login'));
 			$user=null;
-			if ( $this->regex($email,"EMAIL") ){
-				$user = user::where('email',$email)->where('password','=',$password)->where('active','=',1)->first();
+			if( $this->regex($email,"EMAIL") ){
+				$user=user::where('email',$email)->where('password','=',$password)->where('active','=',1)->first();
+			}elseif ($this->regex($email,"TP")) {
+				$user=user::where('tp',"+94".$email)->where('password','=',$password)->where('active','=',1)->first();
 			}
 			if( is_null($user) ){
 				return view('login')->with('fail',1);
 			}else{
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
-				if(is_null(Session::get('url'))){
+				if( is_null(Session::get('url')) ){
 					return Redirect::to('home');
 				}else{
 					//return Session::get('url');
@@ -142,8 +151,75 @@ class LoginController extends Controller {
 	/**
 	* Initiate the logout of the user
 	**/
-	public function signout(){
+	public function signout()
+	{
 		Session::flush();
+		session_start();
+		unset($_SESSION['access_token']);
+		unset($_SESSION['OAuth_email']);
+		unset($_SESSION['OAuth_name']);
 		return Redirect::to('home');
+	}
+	/**
+	* Take the response from the Google Auth and process it
+	**/
+	public function gauth()
+	{
+		$user=user::where('id',Session::get('userid'))->first();
+		if( !is_null($user) ){
+			return Redirect::to('home');
+		}
+		session_start();
+		if( isset($_SESSION['OAuth_email']) ){
+			$userEmail=$_SESSION['OAuth_email'];
+			$user=user::where('email',$userEmail)->first();
+			if( is_null($user) ){
+				$newUser=new user;
+				$newUser->email=$userEmail;
+				$pass=Str::random(10);
+				$newUser->password=md5($pass);
+				if( isset($_SESSION['OAuth_name']) ){
+					$newUser->name=$_SESSION['OAuth_name'];
+				}else{
+					$newUser->name="User";
+				}
+				$newUser->level="1";
+				$newUser->active=1;
+				$newUser->verified=0;
+				if( $newUser->save() ){
+					Mail::send('mailtemplate/sociallogin', ['name'=> $newUser->name,'pass'=>$pass], function ($m) use ($newUser) {
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($newUser->email, $newUser->name)->subject('New Password!');
+					});
+					//return "Check the Email Settings or your internet connection";
+				}else{
+					return "Check the Email Settings or your internet connection";
+				}
+				Session::put('userid', $newUser->id);
+				Session::put('user',$newUser);
+				return Redirect::to('profile');
+			}else{
+				if( $user->active==0 ){
+					Session::flush();
+					unset($_SESSION['access_token']);
+					unset($_SESSION['OAuth_email']);
+					unset($_SESSION['OAuth_name']);
+					return Redirect::to('login');
+				}	
+				Session::put('userid', $user->id);
+				Session::put('user',$user);
+				if( is_null(Session::get('url')) ){
+					return Redirect::to('home');
+				}else{
+					return Redirect::to(Session::get('url'));
+				}
+			}
+		}else{
+				Session::flush();
+				unset($_SESSION['access_token']);
+				unset($_SESSION['OAuth_email']);
+				unset($_SESSION['OAuth_name']);
+				return Redirect::to('login');
+		}
 	}
 }

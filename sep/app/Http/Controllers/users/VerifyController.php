@@ -46,9 +46,9 @@ class VerifyController extends Controller {
 			Session::put('phoneKey',rand(99999, 999999));
 		}
 		$user=Session::get('user');
-		$phone=$user->tp;
-		$phone=substr($phone, 3);
 		if( !is_null($user) && $user->verified==0 ){
+			$phone=$user->tp;
+			$phone=substr($phone, 3);
 			return view('user.verify')->with('user',$user)->with('phone',$phone);
 		}else{
 			return Redirect::to('home');
@@ -76,7 +76,11 @@ class VerifyController extends Controller {
 	**/
 	public function inputs()
 	{
+
 		$user=Session::get('user');
+		if( is_null($user) || $user->verified==1 ){
+			return response()->json(['message' => 'Missmatch Data', 'code' => 'error']);
+		}
 		if( Request::get('task')=="sendEmail" ){
 			/**
 			*
@@ -111,8 +115,8 @@ class VerifyController extends Controller {
 			*
 			*/
 			$phone=Request::get('phone');
-			if( is_null($phone) ){
-				return  response()->json(['message' => 'Missmatch Data', 'code' => 'error' ,'task' => 'sendPhone']);
+			if( is_null($phone) || trim($phone) =="" || !preg_match("/^[0-9]{9}$/", $phone)){
+				return  response()->json(['message' => 'Check your Phone number', 'code' => 'error' ,'task' => 'sendPhone']);
 			}
 			$phone="+94".$phone;
 			if( $user->tp!=$phone ){

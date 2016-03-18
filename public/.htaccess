@@ -5,7 +5,7 @@
 
     RewriteEngine On
     # Redirect Trailing Slashes...
-    
+    RewriteCond $1 !^(GAuth|FBAuth)
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
     # Handle Front Controller...

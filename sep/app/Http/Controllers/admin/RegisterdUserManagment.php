@@ -56,11 +56,12 @@ class RegisterdUserManagment extends Controller
 	* @return Json Response
 	*
 	*/
-	private function loadTableRegisterd()
+	private function loadTableRegisterd($skiper)
 	{
-		$user=user::where('active',1)->skip(0)->take(20)->get();
+		$resultCount=20;
+		$user=user::where('active',1)->skip($resultCount*$skiper)->take($resultCount)->get();
 		$count=user::where('active',1)->count();
-		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count]);
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count,'skips' =>$resultCount]);
 	}
 	/**
 	*
@@ -189,7 +190,8 @@ class RegisterdUserManagment extends Controller
 			return  response()->json(['message' => ':3', 'code' => 'error']);
 		}
 		if( Request::get('task')=="loadtableRegisterd" ){
-			return $this->loadTableRegisterd();
+			$x=Request::get('skip');
+			return $this->loadTableRegisterd($x);
 		}elseif( Request::get('task')=="resetPassword" ){
 			$ids=Request::get('users');
 			return $this->resetPassword($ids);

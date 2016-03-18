@@ -22,6 +22,8 @@
 </style>
 <script type="text/javascript">
 	const token = "{{ csrf_token() }}";
+	var loadTableRegisterd_count=0;
+	var loadTableBlocked_count=0;
 	var showing_table = 1;
 /****************************** send json requets to the server ******************************/
 	function jsend(dataString){
@@ -56,13 +58,13 @@
 	 
 		if(type=="1"){
 			
-			var d = {"_token": token ,"task": "loadtableRegisterd"};
+			var d = {"_token": token ,"task": "loadtableRegisterd","skip":loadTableRegisterd_count};
 			 
 			jsend(d);
 			
 			
 		}else if(type=="2"){
-			var d = {"_token": token ,"task": "loadtableBlocked"};
+			var d = {"_token": token ,"task": "loadtableBlocked","skip":loadTableBlocked_count};
 			 
 			jsend(d);
 		}
@@ -92,7 +94,24 @@
 			$('#DeActivateUsers').css("display","block");
 			
 			var users = data['users'];
-			var tot = "Showing "+users.length+" of "+data['total'];
+			var tot = "Showing "+(data['skips']*(loadTableRegisterd_count+1))+" of "+data['total'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadTableRegisterd_count+1)>=totals){
+				tot = "Showing "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadTableRegisterd_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('#user_count').html(tot);
 			for(var i = 0; i < users.length; i++){
 
@@ -199,8 +218,9 @@
 /************************* Document Ready Functions *************************************/
 	$(document).ready(function(){
 
-		//document.getElementById('fuckdiv').addEventListener('click', refresh);
+		
 		loadtable("1");
+
 		//alert("asdas");
 
 		$('#users_table_registered').on('click','button',function(){
@@ -352,6 +372,30 @@
 
 		});
 
+		$('#buttton_previous').click(function(e){
+			if(showing_table ==1){
+				loadTableRegisterd_count--;
+
+				loadtable("1");
+
+			}else{
+				
+
+			}
+
+		});
+		$('#buttton_next').click(function(e){
+			if(showing_table ==1){
+				loadTableRegisterd_count++;
+				
+				loadtable("1");
+
+			}else{
+				
+
+			}
+
+		});
 		
 	});
 
@@ -442,8 +486,8 @@
 								</div>
 							</div>
 							<div class="btn-group">
-								<a class="btn btn-default"><i class="fa fa-angle-left"></i></a>
-								<a class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
 							</div>
 
 

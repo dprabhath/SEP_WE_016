@@ -26,6 +26,9 @@ class adminLogins {
 		}else{
 
 			$user = Session::get('user');
+			if($user->verified==0){
+				return Redirect::to('verify');
+			}
 			if($url=="admin/usermanage"){
 
 				if($user->level<10){

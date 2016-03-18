@@ -59,6 +59,7 @@ Route::post('register','RegistrationController@inputs');
 Route::get('login', 'LoginController@index');
 Route::post('login','LoginController@inputs');
 Route::get('signout','LoginController@signout');
+Route::get('googleauth','LoginController@gauth');
 
 Route::get('rate','rateController@index');
 
