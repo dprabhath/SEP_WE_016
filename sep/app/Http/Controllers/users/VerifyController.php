@@ -96,7 +96,7 @@ class VerifyController extends Controller {
 				if( $checkUser==0 ){
 					$user->email=$email;
 				}else{
-					return  response()->json(['message' => 'Email already Registerd', 'code' => 'error' ,'task' => 'checkEmail']);
+					return  response()->json(['message' => 'Email already Registerd', 'code' => 'error' ,'task' => 'sendEmail']);
 				}
 			}
 			Mail::send('mailtemplate/emailVerify', ['name'=> $user->name,'code'=>Session::get('emailKey')], function ($m) use ($user) {

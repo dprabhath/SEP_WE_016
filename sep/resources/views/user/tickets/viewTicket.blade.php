@@ -77,6 +77,7 @@
 			},
 			error: function(jqXHR, textStatus, errorThrown) 
 			{
+				$('#wait').hide();
 				Lobibox.notify("error", {
 					title: 'Erro',
 					msg: 'An erro occurd',

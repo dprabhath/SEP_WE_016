@@ -24,6 +24,7 @@
 	const token = "{{ csrf_token() }}";
 	var loadTableRegisterd_count=0;
 	var loadTableBlocked_count=0;
+	var loadTablePending_count=0;
 	var showing_table = 1;
 /****************************** send json requets to the server ******************************/
 	function jsend(dataString){
@@ -40,6 +41,7 @@
 			},
 			error: function(jqXHR, textStatus, errorThrown) 
 			{
+				$('#wait').hide();
 				Lobibox.notify("error", {
 					title: 'Erro',
 					msg: 'An erro occurd',
@@ -67,6 +69,9 @@
 			var d = {"_token": token ,"task": "loadtableBlocked","skip":loadTableBlocked_count};
 			 
 			jsend(d);
+		}else if(type=="3"){
+			var d = {"_token": token ,"task": "loadtablePending","skip":loadTablePending_count};
+			jsend(d);
 		}
 	}
 /*************************************** Getting Json requets from the server ****************************/
@@ -92,7 +97,9 @@
 			$('#ActivateUsers').css("display","none");
 			//$('#DeleteUsers').css("display","none");
 			$('#DeActivateUsers').css("display","block");
-			
+			$('#DeleteUsers').css("display","none");
+			$('#ConfirmUsers').css("display","none");
+
 			var users = data['users'];
 			var tot = "Showing "+(data['skips']*(loadTableRegisterd_count+1))+" of "+data['total'];
 			var totals=data['total'];
@@ -143,6 +150,8 @@
 			$('#ActivateUsers').css("display","block");
 			//$('#DeleteUsers').css("display","block");
 			$('#DeActivateUsers').css("display","none");
+			$('#DeleteUsers').css("display","none");
+			$('#ConfirmUsers').css("display","none");
 			
 			var users = data['users'];
 			var tot = "Showing "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
@@ -164,9 +173,6 @@
 			} 
 			$('#user_count').html(tot);
 			for(var i = 0; i < users.length; i++){
-
-				
-
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
@@ -178,27 +184,59 @@
 				}else{
 					htmls+="<td>User</td></tr>";
 				}
-				
-
-
-				/*
-					to get all the users
-				$.each( users[i], function( key, value ) {
-  						alert( key + ": " + value );
-				});
-				*/
-
 			}
 			showing_table = 2;
 			document.getElementById("users_table_registered").innerHTML=htmls; 
-		}else if(data['task'] == "resetPassword"){
+		}else if(data['task'] == "loadtablePending"){
+/******************** Blocked User's Display ********************************************************************/
+			$('#ActivateUsers').css("display","none");
+			//$('#DeleteUsers').css("display","block");
+			$('#DeActivateUsers').css("display","none");
+			$('#DeleteUsers').css("display","block");
+			$('#ConfirmUsers').css("display","block");
+			
+			var users = data['users'];
+			var tot = "Showing "+(data['skips']*(loadTablePending_count+1))+" of "+data['total'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadTablePending_count+1)>=totals){
+				tot = "Showing "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			}
+			if(loadTablePending_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			} 
+			$('#user_count').html(tot);
+			for(var i = 0; i < users.length; i++){
+				htmls+= "<tr class='unread checked'>";
+				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
+				htmls+="<td>"+users[i]['email']+"</td>"
+				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
+				htmls+="<td>"+users[i]['created_at']+"</td>";
+
+				if(users[i]['level']==10){
+					htmls+="<td>Admin</td></tr>";
+				}else{
+					htmls+="<td>User</td></tr>";
+				}
+			}
+			showing_table = 3;
+			document.getElementById("users_table_registered").innerHTML=htmls; 
+		}else if( data['task'] == "resetPassword" ){
 
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Password Reseted",
 					sound: '../../resources/common/sounds/sound2'
 				});
-		}else if(data['task'] == "DeactivateUsers"){
+		}else if( data['task']=="DeactivateUsers" ){
 
 			loadtable("1");
 			Lobibox.notify("success", {
@@ -206,12 +244,28 @@
 					msg: "Deactivated success",
 					sound: '../../resources/common/sounds/sound2'
 				});
-		}else if(data['task'] == "ActivateUsers"){
+		}else if( data['task']=="ActivateUsers" ){
 
 			loadtable("2");
 			Lobibox.notify("success", {
 					title: 'success',
 					msg: "Activated success",
+					sound: '../../resources/common/sounds/sound2'
+				});
+		}else if( data['task']=="ConfirmUsers" ){
+
+			loadtable("3");
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Users Confirm success",
+					sound: '../../resources/common/sounds/sound2'
+				});
+		}else if( data['task']=="DeleteUsers" ){
+
+			loadtable("3");
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Users Delete success",
 					sound: '../../resources/common/sounds/sound2'
 				});
 		}
@@ -224,8 +278,10 @@
 		//alert("here");
 			if(showing_table ==1){
 					loadtable("1");
-			}else{
+			}else if(showing_table==2){
 				loadtable("2");
+			}else{
+				loadtable("3");
 			}
 	}
 
@@ -316,7 +372,12 @@
 				loadtable("1");
 
 		});
+		$('#PendingUsers').click(function(e){
+			e.preventDefault();
+			
+				loadtable("3");
 
+		});
 		
 /******************************** Users Deactivate Function **********************************/
 		$('#DeActivateUsers').click(function(e){
@@ -371,6 +432,66 @@
 
 			
 		});
+/********************************************* confirm users ***************************************/
+		$('#ConfirmUsers').click(function(e){
+			e.preventDefault();
+				var ids=[];
+			var i=0;
+
+			$(".inside").each(function(){
+    				if ($(this).prop('checked')==true){ 
+       					 ids[i]=$(this).attr( "value" );
+       					 i++;
+    				}
+
+			});
+			if(i===0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			var requets = {"_token": token ,"task": "ConfirmUsers","users":ids};
+			jsend(requets);
+
+			
+		});
+/********************************************* Delete users ***************************************/
+		$('#DeleteUsers').click(function(e){
+			e.preventDefault();
+			var ids=[];
+			var i=0;
+			$(".inside").each(function(){
+    				if ($(this).prop('checked')==true){ 
+       					 ids[i]=$(this).attr( "value" );
+       					 i++;
+    				}
+
+			});
+			if(i===0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Please Select at least one users',
+					sound: '../../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			
+			Lobibox.confirm({
+    			msg: "Are you sure you want to delete this user?",
+    			callback: function ($this, type, ev) {
+        			if (type === 'no'){
+	    				return false;
+	    			}else{
+	    				var requets = {"_token": token ,"task": "DeleteUsers","users":ids};
+						jsend(requets);
+	    			}
+    			}
+			});
+			
+		});
 /********************************* Search **************************************************/
 		$('form#search').submit(function(e){
 			
@@ -394,9 +515,12 @@
 
 				loadtable("1");
 
-			}else{
+			}else if(showing_table==2){
 				loadTableBlocked_count--;
 				loadtable("2");
+			}else{
+				loadTablePending_count--;
+				loadtable("3");
 			}
 
 		});
@@ -406,10 +530,13 @@
 				
 				loadtable("1");
 
-			}else{
+			}else if(showing_table==2){
 				loadTableBlocked_count++;
 				loadtable("2");
 
+			}else{
+				loadTablePending_count++;
+				loadtable("3");
 			}
 
 		});
@@ -477,6 +604,20 @@
 										</a>
 
 									</li>
+									<li id="DeleteUsers">
+										<a href="#" title="">
+											<i class="fa fa-calendar icon_9"></i>
+											Delete
+										</a>
+
+									</li>
+									<li id="ConfirmUsers">
+										<a href="#" title="">
+											<i class="fa fa-calendar icon_9"></i>
+											Confirm
+										</a>
+
+									</li>
 									
 
 								</ul>
@@ -497,7 +638,7 @@
 
 										<li class="divider"></li>
 
-										<li><a id="Pending Users" href="#">Pending Users</a></li>
+										<li id="PendingUsers"><a  href="#">Pending Users</a></li>
 
 									</ul>
 								</div>

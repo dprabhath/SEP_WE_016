@@ -65,6 +65,20 @@ class RegisterdUserManagment extends Controller
 	}
 	/**
 	*
+	* Get the pendig users who are not confirmed their account verification
+	*
+	* @param get the pagination number
+	* @return Json Response
+	*
+	*/
+	private function loadTablePending($skiper)
+	{
+		$user=user::where('verified',0)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
+		$count=user::where('verified',0)->count();
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtablePending', 'total' =>$count,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
 	* Reset the passwords of users
 	* @param list $ids Users ids
 	* @return Json Response
@@ -131,6 +145,47 @@ class RegisterdUserManagment extends Controller
 	}
 	/**
 	*
+	* Confirm Users
+	* @param lists $ids Users Ids
+	* @return Json Response
+	*/
+	private function confirmUsers($ids)
+	{
+		if( !is_null($ids) ){
+				foreach ($ids as &$value) {
+					$user = user::find($value);
+					$user->verified=1;
+					$user->save();
+				}
+			}else{
+				return  response()->json(['message' => 'hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'ConfirmUsers']);
+	}
+	/**
+	*
+	* Delete Users
+	* @param lists $ids Users Ids
+	* @return Json Response
+	*/
+	private function deleteUsers($ids)
+	{
+		if( !is_null($ids) ){
+				foreach ($ids as &$value) {
+					$user = user::find($value);
+					if( $user->level<10 && $user->verified==0 ){
+						$user->delete();
+					}
+				}
+			}else{
+				return  response()->json(['message' => 'hacker', 'code' => 'error']);
+			}
+
+			return  response()->json(['code' => 'success' , 'task' => 'DeleteUsers']);
+	}
+	/**
+	*
 	* Activate the registered users
 	* @param list $ids Users ids
 	* @return Json Response
@@ -141,13 +196,12 @@ class RegisterdUserManagment extends Controller
 		if( !is_null($ids) ){
 				foreach ($ids as &$value) {
 					$user = user::find($value);
-					$user->active = 1;
+					$user->active=1;
 					$user->save();
 				}
 			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+				return  response()->json(['message' => 'hacker', 'code' => 'error']);
 			}
-
 			return  response()->json(['code' => 'success' , 'task' => 'ActivateUsers']);
 	}
 	/**
@@ -209,6 +263,15 @@ class RegisterdUserManagment extends Controller
 			$searchString=Request::get('searchString');
 			$tasktype = Request::get('tasktype');
 			return $this->search($searchString,$tasktype);
+		}elseif( Request::get('task')=="loadtablePending" ){
+			$x=Request::get('skip');
+			return $this->loadTablePending($x);
+		}elseif( Request::get('task')=="ConfirmUsers" ){
+			$ids=Request::get('users');
+			return $this->confirmUsers($ids);
+		}elseif( Request::get('task')=="DeleteUsers" ){
+			$ids=Request::get('users');
+			return $this->deleteUsers($ids);
 		}else{
 			return  response()->json(['message' => 'hacker', 'code' => 'error']);
 		}
