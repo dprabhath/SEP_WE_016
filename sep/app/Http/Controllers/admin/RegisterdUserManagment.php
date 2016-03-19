@@ -25,7 +25,7 @@ class RegisterdUserManagment extends Controller
 	| 
 	|
 	*/
-
+	private $resultCount=10; //store the number of row count for each page
 	/**
 	 * Create a new controller instance.
 	 *
@@ -53,15 +53,15 @@ class RegisterdUserManagment extends Controller
 	*
 	* Get the active registered users
 	* 
+	* @param get the pagination number
 	* @return Json Response
 	*
 	*/
 	private function loadTableRegisterd($skiper)
 	{
-		$resultCount=20;
-		$user=user::where('active',1)->skip($resultCount*$skiper)->take($resultCount)->get();
-		$count=user::where('active',1)->count();
-		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count,'skips' =>$resultCount]);
+		$user=user::where('active',1)->where('verified','=',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
+		$count=user::where('active',1)->where('verified','=',1)->count();
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd', 'total' =>$count,'skips' =>$this->resultCount]);
 	}
 	/**
 	*
@@ -96,14 +96,15 @@ class RegisterdUserManagment extends Controller
 	*
 	* Get the blocked the users
 	* 
+	* @param get the pagination number
 	* @return Json Response
 	*
 	*/
-	private function loadTableBlocked()
+	private function loadTableBlocked($skiper)
 	{
-		$user=user::where('active',0)->skip(0)->take(20)->get();
-		$count=user::where('active',0)->count();
-		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
+		$user=user::where('active',0)->where('verified','=',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
+		$count=user::where('active',0)->where('verified','=',1)->count();
+		return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count,'skips' =>$this->resultCount]);
 	}
 	/**
 	*
@@ -124,7 +125,7 @@ class RegisterdUserManagment extends Controller
 					$user->save();
 				}
 			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+				return  response()->json(['message' => 'Unauthorized Access', 'code' => 'error']);
 			}
 			return  response()->json(['code' => 'success' , 'task' => 'DeactivateUsers']);
 	}
@@ -196,7 +197,8 @@ class RegisterdUserManagment extends Controller
 			$ids=Request::get('users');
 			return $this->resetPassword($ids);
 		}elseif( Request::get('task')=="loadtableBlocked" ){
-			return $this->loadTableBlocked();
+			$x=Request::get('skip');
+			return $this->loadTableBlocked($x);
 		}elseif( Request::get('task')=="DeactivateUsers" ){
 			$ids=Request::get('users');
 			return $this->deactivaeUsers($ids);

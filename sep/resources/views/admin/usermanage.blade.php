@@ -121,7 +121,7 @@
 				htmls+="<td>"+users[i]['email']+"</td>"
 				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
-				if(users[i]['level']==100){
+				if(users[i]['level']==10){
 					htmls+="<td>Admin</td></tr>";
 				}else{
 					htmls+="<td>User</td></tr>";
@@ -145,7 +145,23 @@
 			$('#DeActivateUsers').css("display","none");
 			
 			var users = data['users'];
-			var tot = "Showing "+users.length+" of "+data['total'];
+			var tot = "Showing "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadTableBlocked_count+1)>=totals){
+				tot = "Showing "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			}
+			if(loadTableBlocked_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			} 
 			$('#user_count').html(tot);
 			for(var i = 0; i < users.length; i++){
 
@@ -157,7 +173,7 @@
 				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 
-				if(users[i]['level']==100){
+				if(users[i]['level']==10){
 					htmls+="<td>Admin</td></tr>";
 				}else{
 					htmls+="<td>User</td></tr>";
@@ -379,8 +395,8 @@
 				loadtable("1");
 
 			}else{
-				
-
+				loadTableBlocked_count--;
+				loadtable("2");
 			}
 
 		});
@@ -391,7 +407,8 @@
 				loadtable("1");
 
 			}else{
-				
+				loadTableBlocked_count++;
+				loadtable("2");
 
 			}
 

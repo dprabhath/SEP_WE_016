@@ -161,7 +161,9 @@ class LoginController extends Controller {
 		return Redirect::to('home');
 	}
 	/**
+	*
 	* Take the response from the Google Auth and process it
+	*
 	**/
 	public function gauth()
 	{
@@ -171,6 +173,12 @@ class LoginController extends Controller {
 		}
 		session_start();
 		if( isset($_SESSION['OAuth_email']) ){
+			/**
+			*
+			* Checking for the sessions variables that is proceced in the FB and Google authentication php
+			* files
+			*
+			**/
 			$userEmail=$_SESSION['OAuth_email'];
 			$user=user::where('email',$userEmail)->first();
 			if( is_null($user) ){

@@ -39,9 +39,6 @@ class RegistrationController extends Controller {
 	 */
 	public function index()
 	{
-		//$users = user::all();
-		//return $users;
-		//Session::put('userid', 1);
 		$user = user::where('id',Session::get('userid'))->first();
 		if(is_null($user)){
 			return view('registration');
@@ -68,9 +65,7 @@ class RegistrationController extends Controller {
 				return true;
 			}
 		}
-
 		return false;
-
 	}
 	/**
 	*	This function will verify the email address for the new Registration
@@ -165,7 +160,7 @@ class RegistrationController extends Controller {
 				$newUser->nic=$nic;
 			}
 			$newUser->password=md5($password);
-			$phone = "+94".$phone;
+			$phone="+94".$phone;
 			$newUser->tp=$phone;
 			$newUser->level="1";
 			$newUser->active=1;
