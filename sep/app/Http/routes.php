@@ -38,13 +38,13 @@ Route::get('newdoctor', 'DoctorController@newdoctor');
 Route::post('newdoctor', 'DoctorController@insertNew');
 Route::get('doctors/{id}', 'DoctorController@show');
 Route::post('doctors', 'DoctorController@sortfilter');
-Route::get('pending/{id}', 'DoctorController@showPending');
-Route::get('pending', 'DoctorController@pendingdoctor');
+Route::get('admin/pending/{id}', 'DoctorController@showPending');
+Route::get('admin/pending', 'DoctorController@pendingdoctor');
 Route::post('pending', 'DoctorController@pendingAction');
 
 Route::get('treatments', 'TreatmentController@index');
-Route::get('pendingtreatments/{id}', 'TreatmentController@showPendingTreatment');
-Route::get('pendingtreatments', 'TreatmentController@pendingTreatment');
+Route::get('admin/pendingtreatments/{id}', 'TreatmentController@showPendingTreatment');
+Route::get('admin/pendingtreatments', 'TreatmentController@pendingTreatment');
 Route::post('pendingtreatments', 'TreatmentController@pendingAction');
 Route::get('treatments/new', 'TreatmentController@newTreatment');
 Route::get('treatments/{id}', 'TreatmentController@show');
