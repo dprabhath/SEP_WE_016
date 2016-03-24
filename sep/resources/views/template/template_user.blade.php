@@ -159,6 +159,7 @@ min-height:70px !important;
 </head>
 
 <body >
+
 	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
 		
 		<div id="header" align="left">
@@ -200,6 +201,7 @@ min-height:70px !important;
 									<!--img src="http://placehold.it/60x60" class="profile-image img-circle custom_profile_pic"> Username <b class="caret"></b></a-->
 									<ul class="dropdown-menu">
 									@if(! empty($user))
+
 										<li><a href="profile"><span class="glyphicon glyphicon-user"></span> 
 										
 										{{$user->email}}
@@ -213,6 +215,21 @@ min-height:70px !important;
 										@if($user->level>4)
 										<li class="divider"></li>
 										<li><a href="admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+										@else
+											@if($user->verified==1)
+											<!--Start of Tawk.to Script-->
+											<script type="text/javascript">
+												var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+												(function(){
+												var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+												s1.async=true;
+												s1.src='https://embed.tawk.to/56f36a2bd68ada7f0fa9e7f7/default';
+												s1.charset='UTF-8';
+												s1.setAttribute('crossorigin','*');
+												s0.parentNode.insertBefore(s1,s0);
+												})();
+											</script>
+											@endif
 										@endif
 										<li class="divider"></li>
 										<li><a href="signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
