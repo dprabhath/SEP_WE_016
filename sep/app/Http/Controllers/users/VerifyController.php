@@ -88,7 +88,7 @@ class VerifyController extends Controller {
 			*
 			*/
 			$email=Request::get('email');
-			if( is_null($email) ){
+			if( is_null($email) || trim($email) =="" || !preg_match("/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/", $email) ){
 				return  response()->json(['message' => 'Missmatch Data', 'code' => 'error' ,'task' => 'sendEmail']);
 			}
 			if( $user->email != $email ){
@@ -106,7 +106,7 @@ class VerifyController extends Controller {
 			});
 			$user->save();
 			Session::put('user',$user);
-			return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'sendEmail']);
+			return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'sendEmail','email' => $email]);
 			
 		}elseif( Request::get('task')=="sendPhone" ){
 			/**
@@ -119,10 +119,10 @@ class VerifyController extends Controller {
 				return  response()->json(['message' => 'Check your Phone number', 'code' => 'error' ,'task' => 'sendPhone']);
 			}
 			$phone="+94".$phone;
-			if( $user->tp!=$phone ){
+			if( $user->tp!=trim($phone) ){
 				$checkUser=user::where('tp',$phone)->count();
 				if( $checkUser==0 ){
-					$user->tp=$phone;
+					$user->tp=trim($phone);
 				}else{
 					return  response()->json(['message' => 'phone already Registerd', 'code' => 'error' ,'task' => 'sendPhone']);
 				}
@@ -135,7 +135,7 @@ class VerifyController extends Controller {
 			});
 			$user->save();
 			Session::put('user',$user);
-			return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'sendPhone']);
+			return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'sendPhone','phone' => $phone]);
 
 		}elseif( Request::get('task')=="verify" ){
 			/**

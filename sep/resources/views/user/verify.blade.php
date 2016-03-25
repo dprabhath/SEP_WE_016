@@ -33,8 +33,8 @@
   var emailVerify=false;
   var phoneVerify=false;
   var passwordVerify=false;
-  const currentEmail = "{{$user->email}}";
-  const currentPhone = "{{$phone}}";
+  var currentEmail = "{{$user->email}}";
+  var currentPhone = "{{$phone}}";
   /*************************REGEX Checks*******************************/
 
   function isEmail(email) {
@@ -115,11 +115,13 @@ function returnofjsend(data){
       $("#txtEmailFeed").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
       $("#txtEmailErro").text(data['message']);
       emailVerify=false;
+
     }else{
       emailVerify=true;
       $("#txtEmailDiv").attr('class', 'form-group has-success has-feedback');
       $("#txtEmailFeed").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
       $("#txtEmailErro").text("");
+      
     }
     
 
@@ -136,6 +138,7 @@ function returnofjsend(data){
      $("#txtPhoneDiv").attr('class', 'form-group has-success has-feedback');
      $("#txtPhoneFeed").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
      $("#txtPhoneErro").text("");
+
    }
  }else if(data['task']=="sendEmail"){
   if(data['code']=="error"){
@@ -145,6 +148,7 @@ function returnofjsend(data){
       sound: '../resources/common/sounds/sound4'
     }); 
   }else{
+    currentEmail = data['email'];
     Lobibox.notify("success", {
       title: 'success',
       msg: 'email sent',
@@ -159,6 +163,7 @@ function returnofjsend(data){
     sound: '../resources/common/sounds/sound4'
   }); 
 }else{
+  currentPhone = data['phone'].replace("+94","");
   Lobibox.notify("success", {
     title: 'success',
     msg: 'MMS sent',
@@ -192,7 +197,11 @@ function returnofjsend(data){
 $(document).ready(function(){
   $("#txtEmail").focusout(function(){
     
-    if(currentEmail==$(this).val()){
+    if(currentEmail==$(this).val() && isEmail($(this).val())){
+       emailVerify=true;
+      $("#txtEmailDiv").attr('class', 'form-group has-success has-feedback');
+      $("#txtEmailFeed").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
+      $("#txtEmailErro").text("");
       return;
     }
     if(isEmail($(this).val()))
@@ -206,6 +215,7 @@ $(document).ready(function(){
     }else{
      
         //$("#txtEmailErro").text("Invlaid Email");
+        $("#txtEmailErro").text("");
         $("#txtEmailDiv").attr('class', 'form-group has-error has-feedback');
         $("#txtEmailFeed").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
 
@@ -216,7 +226,12 @@ $(document).ready(function(){
 
 
   $("#txtPhone").focusout(function(){
-    if(currentPhone==($(this).val())){
+    if(currentPhone==($(this).val()) && isPhone($(this).val()) ){
+      phoneVerify=true;
+
+     $("#txtPhoneDiv").attr('class', 'form-group has-success has-feedback');
+     $("#txtPhoneFeed").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
+     $("#txtPhoneErro").text("");
       return;
     }
     if(isPhone($(this).val())){
@@ -226,6 +241,7 @@ $(document).ready(function(){
      jsend(d);
 
    }else{
+    $("#txtPhoneErro").text("");
     $("#txtPhoneDiv").attr('class', 'form-group has-error has-feedback');
     $("#txtPhoneFeed").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
   }

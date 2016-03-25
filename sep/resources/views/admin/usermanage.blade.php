@@ -181,6 +181,8 @@
 
 				if(users[i]['level']==10){
 					htmls+="<td>Admin</td></tr>";
+				}else if(users[i]['level']==2){
+					htmls+="<td>Doctor</td></tr>";
 				}else{
 					htmls+="<td>User</td></tr>";
 				}
@@ -223,6 +225,8 @@
 
 				if(users[i]['level']==10){
 					htmls+="<td>Admin</td></tr>";
+				}else if(users[i]['level']==2){
+					htmls+="<td>Doctor</td></tr>";
 				}else{
 					htmls+="<td>User</td></tr>";
 				}

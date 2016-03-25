@@ -16,11 +16,11 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('nic');
-			$table->string('email');
+			$table->string('email')->unique();
 			$table->timestamps();
 			$table->string('name');
 			$table->string('password');
-			$table->string('tp');
+			$table->string('tp')->nullable()->unique();
 			$table->string('pic');
 			$table->string('level');
 			$table->boolean('active');

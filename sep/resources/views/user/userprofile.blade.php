@@ -42,7 +42,7 @@
 		return regex.test(email);
 	}
 	function isPhone(phone){
-		var regex = /^[0-9]{10}$/;
+		var regex = /^[0-9]{9}$/;
 		return regex.test(phone);
 	}
 	function isNIC(nic){
@@ -164,6 +164,19 @@ $('#changeName').click(function(){
 	}
 
 });
+$('#changeTpnoWorking').click(function(){
+
+	if(isPhone($('[name="tpnoWorking"]').val())){
+		postdata("tpnoFormDoctor");
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "Check the Phone Number",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+
+});
 /****************After modle confirm click***************************************/
 $('#confirm_input_send').click(function(){
 	if($('#confirm_input').val()==$('[name="nic"]').val() && $('#confirm_input_send').attr("hi")=="nic"){
@@ -212,6 +225,11 @@ $('#input_name').dblclick(function(){
 	$('#changeName').removeAttr("disabled");
 	$('#input_name input').focus();
 
+});
+$('#input_tpnoWorking').dblclick(function(){
+	$('#input_tpnoWorking input').removeAttr( "disabled" );
+	$('#changeTpnoWorking').removeAttr("disabled");
+	$('#input_tpnoWorking input').focus();
 });
 
 /*---------------profile picuter change jquery functions -------------------*/
@@ -388,7 +406,7 @@ $("form#pictureForm").submit(function(e){
 
 				{!! Form::close() !!}
 
-					{!! Form::open(['id' => 'nameForm','class'=>'form-horizontal']) !!}
+				{!! Form::open(['id' => 'nameForm','class'=>'form-horizontal']) !!}
 				<div class="form-group">
 					<label for="focusedinput" class="col-sm-2 control-label">Name</label>
 					<div class="col-sm-8">
@@ -420,8 +438,9 @@ $("form#pictureForm").submit(function(e){
 						<div class="input-group" id="input_tpno">							
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-phone" aria-hidden="true" ></span>
+								+94
 							</span>
-							<input  type="text" disabled class="form-control1" placeholder="" value="{{$user->tp}}" >
+							<input  type="text" disabled class="form-control1" placeholder="" value="{!! str_replace('+94', '', $user->tp) !!}" >
 						</div>
 					</div>
 					<div class="col-sm-2">
@@ -433,7 +452,31 @@ $("form#pictureForm").submit(function(e){
 				</div>
 				{!! Form::close() !!}
 
+				@if(! empty($doctor) && $doctor->phone!='')
 
+				{!! Form::open(['id' => 'tpnoFormDoctor','class'=>'form-horizontal']) !!}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Working No</label>
+					<div class="col-sm-8">
+						<div class="input-group" id="input_tpnoWorking">							
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-phone" aria-hidden="true" ></span>
+								+94
+							</span>
+							{!! Form::hidden('formname','tpnoFormDoctor') !!}
+							<input  type="text" name="tpnoWorking" disabled class="form-control1" placeholder="" value="{!! str_replace('+94', '', $doctor->phone) !!}" >
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<p class="help-block">
+
+							<button style="padding-bottom:0px;" disabled id="changeTpnoWorking" type="button" class="btn btn-link"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+						</p>
+					</div>
+				</div>
+				{!! Form::close() !!}
+
+				@endif
 
 
 

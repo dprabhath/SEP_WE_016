@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\users;
 use App\user;
+use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
+
 class UserProfileController extends Controller {
 
 	/*
@@ -39,7 +41,13 @@ class UserProfileController extends Controller {
 	 */
 	public function index()
 	{
-		return view('user.userprofile')->with('user',Session::get('user'));
+		$doctor=Session::get('doctor');
+		if( is_null($doctor) ){
+			return view('user.userprofile')->with('user',Session::get('user'));
+		}else{
+			return view('user.userprofile')->with('user',Session::get('user'))->with('doctor',$doctor);
+		}	
+		
 	}
 	/**
 	*	Regular expressions testng function
@@ -56,7 +64,7 @@ class UserProfileController extends Controller {
 				return true;
 			}
 		}elseif( $type=="TP" ){
-			if( preg_match("/^[0-9]{10}$/", $value) ){
+			if( preg_match("/^[0-9]{9}$/", $value) ){
 				return true;
 			}
 		}
@@ -71,6 +79,12 @@ class UserProfileController extends Controller {
 	{
 		$user = user::where('id',Session::get('userid'))->first();
 		Session::put('user',$user);
+		if( $user->level==2 ){
+			$doctor=Doctor::where('email','=',$user->email)->first();
+			if( !is_null($doctor) ){
+				Session::put('doctor', $doctor);
+			}
+		}
 	}
 	/**
 	* Get all the JSON POST requests and process them
@@ -80,7 +94,7 @@ class UserProfileController extends Controller {
 	* 3. Change Password
 	* 4. Change Name
 	* @return JSON Response
-	**/
+	*/
 	public function inputs()
 	{
 		$user=Session::get('user');
@@ -161,7 +175,21 @@ class UserProfileController extends Controller {
 			}else{
 				return response()->json(['message'=>'Check your Name!','code'=>'warning']);
 			}
-			
+		}elseif( Request::get('formname')=="tpnoFormDoctor" ){
+			/**
+			*	Change the Doctors working no
+			*
+			*/
+			$phoneNo=Request::get('tpnoWorking');
+			$doctor=Session::get('doctor');
+			if( $this->regex($phoneNo,"TP") || is_null($doctor) ){
+				$doctor->phone=$phoneNo;
+				$doctor->save();
+				$this->updateSession();
+				return response()->json(['message'=>'Working Phone Number updated success!','code'=>'success']);
+			}else{
+				return response()->json(['message'=>'Check your Phone Number!','code'=>'warning']);
+			}
 		}
 	}
 }

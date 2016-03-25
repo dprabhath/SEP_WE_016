@@ -1,12 +1,14 @@
 <?php namespace App\Http\Controllers;
 
 use App\user;
+use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 //use Illuminate\http\Request;
 use Request;
+
 class LoginController extends Controller {
 
 	/*
@@ -135,6 +137,12 @@ class LoginController extends Controller {
 			}else{
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
+				if( $user->level==2 ){
+					$doctor=Doctor::where('email','=',$user->email)->first();
+					if( !is_null($doctor) ){
+						Session::put('doctor', $doctor);
+					}
+				}
 				if( is_null(Session::get('url')) ){
 					return Redirect::to('home');
 				}else{
@@ -216,6 +224,12 @@ class LoginController extends Controller {
 				}	
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
+				if( $user->level==2 ){
+					$doctor=Doctor::where('email','=',$user->email)->first();;
+					if( !is_null($doctor) ){
+						Session::put('doctor', $doctor);
+					}
+				}
 				if( is_null(Session::get('url')) ){
 					return Redirect::to('home');
 				}else{

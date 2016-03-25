@@ -1,11 +1,13 @@
 <?php namespace App\Http\Middleware;
 use App\user;
+use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use Closure;
 use Request;
+
 class logins {
 
 	/**
