@@ -1,0 +1,1 @@
+Running scheduled command: C:\xampp_new\php\php.exe artisan passwordReset:cron > /dev/null 2>&1 &

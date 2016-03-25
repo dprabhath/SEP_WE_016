@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'App\Console\Commands\Inspire',
+		'App\Console\Commands\passwordReset',
 	];
 
 	/**
@@ -22,8 +23,9 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule)
 	{
-		$schedule->command('inspire')
-				 ->hourly();
+		//$schedule->command('inspire')->hourly();
+		$schedule->command('passwordReset:cron')->cron('* * * * * *')->sendOutputTo(storage_path('logs/cronPasswordReset.log'));
+
 	}
 
 }

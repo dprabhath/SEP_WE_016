@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\admin;
 use App\user;
+use App\cronResetPassword;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -90,13 +91,18 @@ class RegisterdUserManagment extends Controller
 				foreach( $ids as &$value ){
 					$user=user::find($value);
 					if( !is_null($user) ){
+						$newMailCron=new cronResetPassword;
 						$pass=Str::random(10);
 						$user->password = md5($pass);
 						$user->save();
-						Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
-							$m->from('hello@app.com', 'Your Application');
-							$m->to($user->email, $user->name)->subject('New Password!');
-						});
+						$newMailCron->name=$user->name;
+						$newMailCron->email=$user->email;
+						$newMailCron->password=$pass;
+						$newMailCron->save();
+						//Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
+						//	$m->from('hello@app.com', 'Your Application');
+						//	$m->to($user->email, $user->name)->subject('New Password!');
+						//});
 					}else{
 						return  response()->json(['message' => 'Users not passsed', 'code' => 'error']);
 					}
