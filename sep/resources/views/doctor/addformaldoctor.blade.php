@@ -1,31 +1,84 @@
-@extends('template/template_user')
+@extends('admintemplate/template_admin')
 	
 @section('head')
-    <script type="text/javascript">
-    function validateForm() 
-    {
-        var spec = document.getElementById("spec").value;
-        var fname = document.getElementById("fname").value;
-        var lname = document.getElementById("lname").value;
-        
-    
-        if ((spec == null || spec == "") || (fname == null || fname == "") || (lname == null || lname == "")) 
-        {
-           alert("Fields marked with * must be filled.");
-           return false;
-        }
-        else
-        {
-            return true;
-        }       
-    }
+
+<script type="text/javascript">
 
     function NavigateTo(theUrl)
     {
       document.location.href = theUrl;
     }
 
+    function validateForm() 
+    {
+        var spec = document.getElementById("spec").value;
+        var notes = document.getElementById("notes").value;
+        var prof = document.getElementById("profqual").value;
+        var edu = document.getElementById("eduqual").value;
+        var hospital = document.getElementById("hospital").value;
+        var phone = document.getElementById("phone").value;
+        var email = document.getElementById("email").value;
+        var address = document.getElementById("address").value;
+        var image = document.getElementById("image").value;
+
+        var path = image.split("\\");
+
+        var filetype = path[path.length - 1].split(".");
+
+        var isFilled = true;
+
+        if (filetype[filetype.length - 1] == null || filetype[filetype.length - 1] == "") {
+           
+        }
+        else {
+            if ((filetype[filetype.length - 1] == "png") || (filetype[filetype.length - 1] == "PNG")|| (filetype[filetype.length - 1] == "jpg")) {
+            }
+            else
+            {
+                alert(filetype[filetype.length - 1] + " is not a supported image format.")
+                return false;
+            }
+        }
+        if (notes == null || notes == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (spec == null || spec == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (prof == null || prof == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (edu == null || edu == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (hospital == null || hospital == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (phone == null || phone == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (email == null || email == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (address == null || address == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        
+        return true;
+    }
+
 </script>
+
+
+
 @stop
 
 @section('navbar')
@@ -34,10 +87,9 @@
 		
 @section('body')
 
-   
-    <div class="panel-body1">
+ <div class="panel-body1">
         <div  class="panel-footer">
-            <h3><span class="semi-bold">Add New Physician</span></h3>
+            <h3><span class="semi-bold">Add New Formal Physician</span></h3>
         </div>
 
             <div class="tab-content">
@@ -46,14 +98,17 @@
                              {!! Form::open(array('class' => 'form-horizontal', 
                                                   'files' => true, 'name' => 'editForm', 
                                                   'onsubmit' => 'return validateForm()')) !!}
-
+                    
                                 <div class="form-group">
-                                    <label style="padding-left:60px"> Fields marked with * must be filled. </label>
-                                    
-                
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Display Picture : </label>
+                                    <div class="col-sm-8">
+                                        
+                                        {!! Form::file('image', ['id' => 'image']); !!}
+                                    </div>
+                                   
                                 </div>                  
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> First Name* : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> First Name : </label>
                                     <div class="col-sm-8">
                                         
                                         {!! Form::text('fname', null,  [ 'class' => 'form-control1', 'id' => 'fname']) !!}
@@ -61,7 +116,7 @@
                                    
                                 </div>
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> Last Name* : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Last Name : </label>
                                     <div class="col-sm-8">
                                         
                                         {!! Form::text('lname', null,  [ 'class' => 'form-control1', 'id' => 'lname']) !!}
@@ -69,7 +124,7 @@
                                    
                                 </div>
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> Specialization* : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Specialization : </label>
                                     <div class="col-sm-8">
                                         
                                         {!! Form::text('spec', null,  [ 'class' => 'form-control1', 'id' => 'spec']) !!}
@@ -125,14 +180,14 @@
                       <div class="row">
                           <div class="col-sm-8 col-sm-offset-2">
                                {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-                              <input class="btn btn_3 btn-lg btn-info" value="Cancel" onclick="NavigateTo('doctors')">
                               {!! Form::close() !!}
                           </div>
                       </div>
                     </div>
           
         </div>
-       
+  
+
 @stop
 
 @section('footer')

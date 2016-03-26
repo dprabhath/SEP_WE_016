@@ -212,6 +212,9 @@ min-height:70px !important;
 										
 										<li><a href="new-ticket"> New Ticket</a></li>
 										<li><a href="view-ticket"> View Ticket</a></li>
+										<li class="divider"></li>
+										<li><a href="doctors"> Physicians</a></li>
+										<li><a href="treatments"> Treatments</a></li>
 										@if($user->level>4)
 										<li class="divider"></li>
 										<li><a href="admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>

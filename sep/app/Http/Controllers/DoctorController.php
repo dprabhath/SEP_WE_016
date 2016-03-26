@@ -1,13 +1,18 @@
 <?php namespace App\Http\Controllers;
 
 use App\Doctor;
+use App\User;
 use App\pendingDoctor;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Request;
 use Session;
+use Mail;
+use DB;
+use App\reviews;
 
 class DoctorController extends Controller {
 
@@ -44,8 +49,9 @@ class DoctorController extends Controller {
 	{
 		$doctor = Doctor::findOrFail($id);
 		$user = Session::get('user');
+		$reviews = reviews::all()->where('doctor_id', $doctor->id);
 
-		return View::make('doctor.show')->with('doctor', $doctor)->with('user',$user);
+		return View::make('doctor.show')->with('doctor', $doctor)->with('user',$user)->with('reviews',$reviews);
 	}
 
 	/**
@@ -58,6 +64,33 @@ class DoctorController extends Controller {
 		$user = Session::get('user');
 
 		return View::make('doctor.newdoctor')->with('user',$user);
+	}
+
+	/**
+	 * Returns view consisting of the list of approved Informal Physicians
+	 *
+	 * @return newdoctor view
+	 */
+	public function approvedList()
+	{
+		$user = Session::get('user');
+		$doctors = Doctor::all()->where('formal', 0);
+
+		return View::make('doctor.approvedlist')->with('user',$user)->with('doctors',$doctors);
+	}
+
+	/**
+	 * Returns view consisting of the list of Physicians Reviews
+	 *
+	 * @return newdoctor view
+	 */
+	public function doctorReview($id)
+	{
+		$user = Session::get('user');
+		$doctor = Doctor::findOrFail($id);
+		$reviews = reviews::all()->where('doctor_id', $doctor->id);
+
+		return View::make('doctor.review')->with('user',$user)->with('doctor',$doctor)->with('reviews',$reviews);
 	}
 
 	/**
@@ -80,7 +113,7 @@ class DoctorController extends Controller {
 	 */
 	public function edit($id)
 	{
-		$doctor = Doctor::findOrFail($id);
+		$doctor = Doctor::find($id);
 		$user = Session::get('user');
 
 		return view('doctor.edit')->with('doctor', $doctor)->with('user',$user);
@@ -97,6 +130,42 @@ class DoctorController extends Controller {
 		$user = Session::get('user');
 
 		return view('doctor.showpending')->with('doctor', $doctor)->with('user',$user);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function updateDoctorReview($id)
+	{
+		$user = Session::get('user');
+		$doctor = Doctor::findOrFail($id);
+		$addedRating = Request::get('rating');
+
+		$newRating;
+
+		if ($doctor->rated == 0) {
+			$newRating = $addedRating;
+			Doctor::where('id', $id)->update(['rated' => 1]); 
+		}
+		else {
+			$newRating = ($doctor->rating + $addedRating) / 2.0;
+		}
+
+		Doctor::where('id', $id)->update(['rating' => $newRating]); 
+
+		$userReview = Request::get('review');
+
+		$newReview = new reviews;
+		$newReview->user_id = $user->id;
+		$newReview->user_name = $user->name;
+		$newReview->doctor_id = $doctor->id;
+		$newReview->doctor_name = $doctor->first_name . ' '. $doctor->last_name;
+		$newReview->review = $userReview;
+		$newReview->save();
+
+		return redirect()->back();
 	}
 
 	/**
@@ -199,6 +268,8 @@ class DoctorController extends Controller {
 		$email = $doctor->email;
 		$phone = $doctor->phone;
 
+		$userToSend = User::find($doctor->user_id);	
+
 		$newDoctor = new Doctor;
 
 		$newDoctor->first_name = $first_name;
@@ -211,11 +282,18 @@ class DoctorController extends Controller {
 		$newDoctor->address = $address;
 		$newDoctor->email = $email;
 		$newDoctor->phone = $phone;
+		$newDoctor->formal = 0;
 
 		$newDoctor->save();
 		$doctor->delete();
 
 		$this->pendingdoctor();
+
+		Mail::send('mailtemplate/doctorApproved', ['name'=> $userToSend->name,'doctor'=>$first_name], function ($m) use ($userToSend) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($userToSend->email, $userToSend->name)->subject('Wedaduru Doctor Approval');
+					});
 
 		return redirect()->back();
 	}
@@ -228,10 +306,20 @@ class DoctorController extends Controller {
 	public function deletePending($value)
 	{
 		$doctor = pendingDoctor::find($value);
+
+		$userToSend = User::find($doctor->user_id);	
+		$first_name = $doctor->first_name;
+
 		$doctor->delete();
 
 		$doctors = pendingDoctor::all();
 		$user = Session::get('user');
+
+		Mail::send('mailtemplate/doctorRejected', ['name'=> $userToSend->name,'doctor'=>$first_name], function ($m) use ($userToSend) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($userToSend->email, $userToSend->name)->subject('Wedaduru Doctor Approval');
+					});
 	}
 
 	/**
@@ -255,13 +343,111 @@ class DoctorController extends Controller {
 		$pendingDoctor->address = Request::get('address');
 		$pendingDoctor->email = Request::get('email');
 		$pendingDoctor->phone = Request::get('phone');
+		$pendingDoctor->formal = 0;
+
+		//$user = User::find(Session::get('user')->id);	
+
 		$pendingDoctor->user = Session::get('user')->name;
+		$pendingDoctor->user_id = Session::get('user')->id; 
 
 		$pendingDoctor->save();
 
 		return redirect()->back();
 	}
 
+	/**
+	 * Returns view for adding a new Formal Physician
+	 *
+	 * @return previous view
+	 */
+	public function newFormalPhysician()
+	{
+		$user = Session::get('user');
 
+		return View::make('doctor.addformaldoctor')->with('user',$user);
+	}
 
+	/**
+	 * Returns view for Creating Formal Physician Login
+	 *
+	 * @return previous view
+	 */
+	public function doctorCredentials()
+	{
+		$user = Session::get('user');
+		$formalDoctors = Doctor::select(DB::raw("CONCAT(first_name ,' ' ,last_name) AS full_name, id"))->where('formal', 1)->where('has_account', 0)->lists('full_name', 'id');
+
+		return View::make('doctor.doctorcredentials')->with('user',$user)->with('doctors', $formalDoctors);
+	}
+
+	/**
+	 * Creates account and generates random password for a Formal Physician
+	 *
+	 * @return previous view
+	 */
+	public function createDoctorCredentials()
+	{
+		$doctorID = Request::get('doctors');
+		$password = Str::random(10);
+		$doctorInfo = Doctor::find($doctorID);
+
+		Doctor::where('id', $doctorID)->update(['has_account' => 1]);
+			
+		$newUser = new User;
+		$newUser->email = $doctorInfo->email;
+		$newUser->name = $doctorInfo->first_name . ' ' . $doctorInfo->last_name;
+		$newUser->password = md5($password);
+		$newUser->tp = $doctorInfo->phone;
+		$newUser->level = 5;
+
+		$newUser->save();
+
+		Mail::send('mailtemplate/doctorPassword', ['name'=> $newUser->name,'password'=>$password], function ($m) use ($newUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($newUser->email, $newUser->name)->subject('Wedaduru Doctor Account');
+					});
+
+		return redirect()->back();
+	}
+
+	/**
+	 * Adds a new Formal Docotr into the Doctors table.
+	 *
+	 * @return previous view
+	 */
+	public function insertNewFormal()
+	{
+		$input = Request::all();
+
+		$newDoctor = new Doctor;
+
+		$newDoctor->first_name = Request::get('fname');
+		$newDoctor->last_name = Request::get('lname');
+		$newDoctor->specialization = Request::get('spec');
+		$newDoctor->notes = Request::get('notes');	
+		$newDoctor->profqual = Request::get('profqual');
+		$newDoctor->eduqual = Request::get('eduqual');
+		$newDoctor->hospital = Request::get('hospital');
+		$newDoctor->address = Request::get('address');
+		$newDoctor->email = Request::get('email');
+		$newDoctor->phone = Request::get('phone');
+		$newDoctor->formal = 1;
+
+		$lastEntry = Doctor::orderBy('id', 'DESC')->first();
+		$id = $lastEntry->id + 1;
+
+		if(\Input::hasFile('image')) {
+			$file = \Input::file('image');
+			$format = explode('.', $file->getClientOriginalName());
+
+			$file->move('uploads/profile_pics/doctors', $id . '.' . $format[sizeof($format) - 1]);
+
+			$newDoctor->imagepath = 'uploads/profile_pics/doctors/' . $id . '.' . $format[sizeof($format) - 1];
+		}
+
+		$newDoctor->save();
+
+		return redirect()->back();
+	}
 }

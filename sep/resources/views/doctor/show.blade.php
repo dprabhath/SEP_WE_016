@@ -2,6 +2,15 @@
 	
 @section('head')
 
+  <script type="text/javascript">
+
+    function NavigateTo(theUrl)
+    {
+      document.location.href = theUrl;
+    }
+
+</script>
+
 @stop
 
 @section('navbar')
@@ -9,6 +18,21 @@
 	
 		
 @section('body')
+
+    
+    <?php 
+      $ratingString;
+
+      if($doctor->rating > 8)
+        $ratingString = 'Excellent';
+      else if($doctor->rating > 5)
+        $ratingString = 'Good';
+      else if($doctor->rating == 5)
+        $ratingString = 'Average';
+      else if($doctor->rating < 5)
+        $ratingString = 'Below Average';
+
+    ?>
 
 
     <div class="panel panel-default bg-custom">
@@ -30,7 +54,7 @@
 
                         <p class="no-margin">Doctor Notes : {!! $doctor->notes!!} </p>
 
-                        <p class="no-margin"  style="padding-top:40px">User Rating : {!! $doctor->rating!!} </p>
+                        <p class="no-margin"  style="padding-top:40px">User Rating : {!! $ratingString !!} </p>
                     </div>
                 </div>
             </div>
@@ -77,14 +101,22 @@
           </div>
     </div>
     <div class="panel-body1">
-                <div class="wid_blog" >
-                <h2> User Comments </h2>
-                    <h1>" Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's "</h1>
-                    <h3> Username </h3>
-                    <h1 style="padding-top:10px">" Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's "</h1>
-                    <h3> Username </h3>
+                <div  class="panel-footer">
+                  <h3><span class="semi-bold"> User Comments </span></h3>
                 </div>
+                <div class="wid_blog" >
+                  @foreach ($reviews as $review)
+                              <h1> {!!  $review->review !!} </h1>
+                              <h3> {!!  $review->user_name !!} </h3>
+                  @endforeach 
+                </div>
+                <input class="btn btn_5 btn-lg btn-info" type="submit" value="Back" onclick="NavigateTo('../doctors')">
+                <input class="btn btn_5 btn-lg btn-info" value="Rate and Comment" onclick="NavigateTo('review/{!! $doctor->id!!}')">
+                @if($user->level>4)
+                <input class="btn btn_5 btn-lg btn-info" value="Edit" onclick="NavigateTo('edit/{!! $doctor->id!!}')">
+                @endif
     </div>
+
         
     
 @stop

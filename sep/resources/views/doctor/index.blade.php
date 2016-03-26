@@ -166,7 +166,14 @@
 				}
 			return "" + String(y) + "" + String(m) + "" + String(d) + "";
 		} 
+
+		function NavigateTo(theUrl)
+	    {
+	      document.location.href = theUrl;
+	    }
 	</script>
+
+
 
 
 
@@ -199,18 +206,34 @@
         		    onmouseout="ChangeColor(this, false);" 
         		    onclick="NavigateTo('doctors/{{ $doctor->id }}')" style="cursor: pointer;">
 
+        		    <?php 
+				      $ratingString;
+
+				      if($doctor->rating > 8)
+				        $ratingString = 'Excellent';
+				      else if($doctor->rating > 5)
+				        $ratingString = 'Good';
+				      else if($doctor->rating == 5)
+				        $ratingString = 'Average';
+				      else if($doctor->rating < 5)
+				        $ratingString = 'Below Average';
+
+    				?>
+
 		          	<td> {!! $doctor->first_name !!} </td>
 		          	<td> {!! $doctor->last_name !!} </td>
 		          	<td> {!! $doctor->specialization !!} </td>
 		          	<td> Hospital </td>
-		          	<td> {!! $doctor->rating !!} </td>
+		          	<td> {!! $ratingString; !!} </td>
 
 	          	</tr>  
        		
 	        @endforeach 
-	        
+	      
       </tbody>
+      
     </table>
+    <input class="btn btn_5 btn-lg btn-info" type="submit" value="Suggest Physician" onclick="NavigateTo('newdoctor')">
     </div>
 
 @stop

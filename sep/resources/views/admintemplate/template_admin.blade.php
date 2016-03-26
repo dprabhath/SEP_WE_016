@@ -184,7 +184,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        @if($user->level>9)
+                        @if($user->level>4)
                         <li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Users<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
@@ -204,6 +204,21 @@
                                 </li>
                                 <li>
                                     <a href="pendingtreatments">Treatments</a>
+                                </li>
+                            </ul>
+						</li>
+
+						<li>
+							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Physicians<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+                                <li>
+                                    <a href="newphysician">New Formal Physicians</a>
+                                </li>
+                                <li>
+                                    <a href="doctorcredentials">Physician Credentials</a>
+                                </li>
+                                <li>
+                                    <a href="approvedlist">Approved Physicians</a>
                                 </li>
                             </ul>
 						</li>

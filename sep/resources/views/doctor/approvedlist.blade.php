@@ -3,8 +3,7 @@
 @section('head')
 
 <script type="text/javascript">
-  
-  function ChangeColor(tableRow, highLight)
+      function ChangeColor(tableRow, highLight)
       {
         if (highLight)
         {
@@ -20,37 +19,9 @@
     {
       document.location.href = theUrl;
     }
+  </script>
 
-  function checkAll(ele)
-  {
-
-    //var ele = document.getElementById('checkallbox').value;
-    var checkboxes = document.getElementsByTagName('input');
-
-    if(ele.checked)
-    {
-      for(var i = 0; i < checkboxes.length; i++)
-      {
-        if(checkboxes[i].type == 'checkbox')
-        {
-          checkboxes[i].checked = true;
-        }
-      }
-    }
-    else
-    {
-      for(var i = 0; i < checkboxes.length; i++)
-      {
-        if(checkboxes[i].type == 'checkbox')
-        {
-          checkboxes[i].checked = false;
-        }
-      }
-    }
-  }
-</script>
-
-<script type="text/javascript">
+  <script type="text/javascript">
 
     var TableIDvalue = "indextable";
     var TableLastSortedColumn = -1;
@@ -210,54 +181,44 @@
 		
 @section('body')
 
-<div class="col-md-12 graphs">
-       <div class="xs">
-        <h3>Approval-Pending Physicians</h3>
-            <table id="indextable" class="table table-striped">
-               <thead>
-                  <tr>
-                    <th> {!! Form::checkbox('chk[]', 'check', false, ['onChange' => 'checkAll(this)']) !!}   </th>
-                    <th> <a href="javascript:SortTable(1,'T');"> Name </a> </th>
-                    <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
-                    <th> <a href="javascript:SortTable(3,'T');"> Added By </a> </th>
-                    <th> <a href="javascript:SortTable(4,'D');"> Date </a> </th>
-                  </tr>
-                </thead>
-                <tbody>
-                      <?php $count = 0 ?>
-
-                      {!! Form::open(array('url' => 'pending')) !!}
-                      @foreach ($doctors as $doctor)
-                      
-                          <tr onmouseover="ChangeColor(this, true);" 
-                              onmouseout="ChangeColor(this, false);" 
-                              >
-
-                              <td> {!! Form::checkbox("pendingid[$count]", $doctor->id, false) !!} </td>
-                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->first_name !!} {!! $doctor->last_name !!}</td>
-                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->specialization !!} </td>
-                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->user !!} </td>
-                              <td onclick="NavigateTo('pending/{{ $doctor->id }}')" style="cursor: pointer;"> {!! $doctor->created_at !!} </td>
-
-                              
-
-                              <?php $count++ ?>
-
-                          </tr>  
-                      @endforeach 
-                          <tr>
-                            
-                             
-                          </tr>
-                          
-                </tbody>
-            </table>
-                    <input class="btn btn_5 btn-lg btn-info" type="submit" value="Approve" name="approve">
-                    <input class="btn btn_5 btn-lg btn-info" type="submit" value="Delete" name="delete">
-                    {!! Form::close() !!}  
-        </div>
-  </div>
   
+  <div class="panel-body1">
+    <div  class="panel-footer">
+            <h3><span class="semi-bold">Approved Informal Physician List</span></h3>
+    </div>
+
+   <table id="indextable" class="table table-striped">
+     <thead>
+        <tr>
+          <th> <a href="javascript:SortTable(0,'T');"> First Name </a> </th>
+          <th> <a href="javascript:SortTable(1,'T');"> Last Name </a> </th>
+          <th> <a href="javascript:SortTable(2,'T');"> Specialization </a> </th>
+          <th> <a href="javascript:SortTable(3,'T');"> Hospital </a> </th>
+          <th>User Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          @foreach ($doctors as $doctor)
+          
+            <tr onmouseover="ChangeColor(this, true);" 
+                onmouseout="ChangeColor(this, false);" 
+                onclick="NavigateTo('../doctors/{{ $doctor->id }}')" style="cursor: pointer;">
+
+                <td> {!! $doctor->first_name !!} </td>
+                <td> {!! $doctor->last_name !!} </td>
+                <td> {!! $doctor->specialization !!} </td>
+                <td> {!! $doctor->hospital !!} </td>
+                <td> {!! $doctor->rating !!} </td>
+
+              </tr>  
+          
+          @endforeach 
+        
+      </tbody>
+      
+    </table>
+    </div>
 
 @stop
 

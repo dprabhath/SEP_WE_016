@@ -2,6 +2,12 @@
     
 @section('head')
 <script type="text/javascript">
+
+    function NavigateTo(theUrl)
+    {
+      document.location.href = theUrl;
+    }
+
     function validateForm() 
     {
         var spec = document.getElementById("spec").value;
@@ -173,7 +179,7 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                  {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-                <button class="btn-default btn">Cancel</button>
+                <input class="btn btn_5 btn-lg btn-info" value="Cancel" onclick="NavigateTo('../{!! $doctor->id!!}')">
                 {!! Form::close() !!}
             </div>
         </div>
