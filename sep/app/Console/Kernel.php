@@ -25,8 +25,8 @@ class Kernel extends ConsoleKernel {
 	protected function schedule(Schedule $schedule)
 	{
 		//$schedule->command('inspire')->hourly();
-		$schedule->command('passwordReset:cron')->cron('*/2 * * * *')->sendOutputTo(storage_path('logs/cronPasswordReset.log'));
-		$schedule->command('smsReset:cron')->cron('*/3 * * * *')->sendOutputTo(storage_path('logs/cronsmsReset.log'));
+		$schedule->command('passwordReset:cron')->cron('*/2 * * * * *')->sendOutputTo(storage_path('logs/cronPasswordReset.log'));
+		$schedule->command('smsReset:cron')->daily()->sendOutputTo(storage_path('logs/cronsmsReset.log'));
 
 	}
 

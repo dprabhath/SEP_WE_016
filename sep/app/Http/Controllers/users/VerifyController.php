@@ -167,7 +167,7 @@ class VerifyController extends Controller {
 			$code=Session::get('phoneKey');
 			$user->save();
 			Session::put('user',$user);
-			SMS::send('Your Confirmation Code is: '.$code, [], function($sms) use ($phone) {
+			SMS::queue('Your Confirmation Code is: '.$code, [], function($sms) use ($phone) {
     			$sms->to($phone);
 			});
 			//$this->sendsms('Your Confirmation Code is: '.$code,$phone);
