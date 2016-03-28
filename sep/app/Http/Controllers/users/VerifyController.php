@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers\users;
 use App\User;
+use App\smslimit;
 use Mail;
+use SMS;
 use Illuminate\Support\Str;
 use Session;
 use App\Http\Requests;
@@ -23,6 +25,25 @@ class VerifyController extends Controller {
 	|
 	*/
 
+	/**
+	* SMS sending function
+	*
+	* @return void
+	*/
+	private function sendsms($text,$destination)
+	{
+		$username = 'pbaf5haq'; 
+    	$password = 'FbgBp3V2';
+    	$source = 'Native Physican';
+    	$content =  'action=sendsms'. 
+                '&user='.rawurlencode($username). 
+                '&password='.rawurlencode($password). 
+                '&to='.rawurlencode($destination). 
+                '&from='.rawurlencode($source). 
+                '&text='.rawurlencode($text); 
+     
+    	$smsglobal_response = file_get_contents('http://www.smsglobal.com/http-api.php?'.$content); 
+	}
 	/**
 	 * Create a new controller instance.
 	 *
@@ -114,6 +135,22 @@ class VerifyController extends Controller {
 			*	Send the MMS including the activation code
 			*
 			*/
+			$smsLimit=smslimit::where('uid','=',Session::get('userid'))->first();
+			if( is_null($smsLimit) ){
+				$smsLimit=new smslimit;
+				$smsLimit->uid=Session::get('userid');
+				$smsLimit->count=1;
+				$smsLimit->save();
+			}else{
+				if($smsLimit->count>=2){
+					return  response()->json(['message' => 'you can only sent 2 SMS within a Day', 'code' => 'error' ,'task' => 'sendPhone']);
+				}else{
+					$smsCount=$smsLimit->count;
+					$smsCount++;
+					$smsLimit->count=$smsCount;
+					$smsLimit->save();
+				}
+			}
 			$phone=Request::get('phone');
 			if( is_null($phone) || trim($phone) =="" || !preg_match("/^[0-9]{9}$/", $phone)){
 				return  response()->json(['message' => 'Check your Phone number', 'code' => 'error' ,'task' => 'sendPhone']);
@@ -128,13 +165,20 @@ class VerifyController extends Controller {
 				}
 			}
 			$code=Session::get('phoneKey');
+			$user->save();
+			Session::put('user',$user);
+			SMS::send('Your Confirmation Code is: '.$code, [], function($sms) use ($phone) {
+    			$sms->to($phone);
+			});
+			//$this->sendsms('Your Confirmation Code is: '.$code,$phone);
+			/*
 			Mail::send('mailtemplate/emailVerify', ['name'=> $user->name,'code'=>Session::get('phoneKey')], function ($m) use ($user,$phone,$code) {
 				$m->from('hello@app.com', 'Your Application');
 
 				$m->to($phone."@mms.dialog.lk", $user->name)->subject($code);
 			});
-			$user->save();
-			Session::put('user',$user);
+			*/
+			
 			return  response()->json(['message' => 'Ok', 'code' => 'success' ,'task' => 'sendPhone','phone' => $phone]);
 
 		}elseif( Request::get('task')=="verify" ){

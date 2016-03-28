@@ -40,7 +40,7 @@ class RegistrationController extends Controller {
 	public function index()
 	{
 		$user = user::where('id',Session::get('userid'))->first();
-		if(is_null($user)){
+		if( is_null($user) ){
 			return view('registration');
 		}else{
 			return Redirect::to('home');

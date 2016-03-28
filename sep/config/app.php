@@ -146,6 +146,7 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		 Arcanedev\NoCaptcha\NoCaptchaServiceProvider::class,
+		 SimpleSoftwareIO\SMS\SMSServiceProvider::class,
 
 	],
 
@@ -197,6 +198,7 @@ return [
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
 		'Captcha' => Arcanedev\NoCaptcha\Facades\NoCaptcha::class,
+		'SMS' => SimpleSoftwareIO\SMS\Facades\SMS::class,
 
 	],
 

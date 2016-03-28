@@ -166,7 +166,7 @@ function returnofjsend(data){
   currentPhone = data['phone'].replace("+94","");
   Lobibox.notify("success", {
     title: 'success',
-    msg: 'MMS sent',
+    msg: 'SMS sent',
     sound: '../resources/common/sounds/sound2'
   });
 }
