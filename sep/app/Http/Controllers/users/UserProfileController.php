@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers\users;
-use App\user;
+use App\User;
 use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;

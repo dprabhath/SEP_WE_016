@@ -46,7 +46,7 @@ class RegisterdUserManagment extends Controller
 	{
 		$user=Session::get('user');
 		
-		return view('admin/userManage')->with('user',$user);
+		return view('admin/usermanage')->with('user',$user);
 		
 		//eturn view('admin/usermanage');
 	}
@@ -108,7 +108,7 @@ class RegisterdUserManagment extends Controller
 					}
 				}
 			}else{
-				return  response()->json(['message' => 'pak u hacker', 'code' => 'error']);
+				return  response()->json(['message' => 'hacker', 'code' => 'error']);
 			}
 			return  response()->json(['code' => 'success' , 'task' => 'resetPassword']);
 	}

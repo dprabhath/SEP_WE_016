@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers\users;
-use App\user;
+use App\User;
 use Mail;
 use Illuminate\Support\Str;
 use Session;

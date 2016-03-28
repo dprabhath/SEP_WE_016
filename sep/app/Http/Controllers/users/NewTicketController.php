@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers\users;
-use App\user;
+use App\User;
 use App\tickets;
 use App\tickets_messages;
 use Mail;
