@@ -34,6 +34,7 @@ class Doctors extends Migration {
 			$table->string('address');
 			$table->float('rating');
 			$table->string('imagepath');
+			$table->boolean('available')->default(0);
 		});
 	}
 
