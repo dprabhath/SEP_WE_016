@@ -18,9 +18,17 @@ class CreateDoctorsTable extends Migration {
 			$table->string('first_name');
 			$table->string('last_name');
 			$table->string('specialization');
-			$table->string('location');
+			$table->string('notes');
+			$table->string('profqual');
+			$table->string('eduqual');
+			$table->string('hospital');
+			$table->bigInteger('phone');
+			$table->string('email');
 			$table->string('address');
 			$table->float('rating');
+			$table->string('imagepath');
+			$table->boolean('formal');
+			$table->boolean('available')->default(0);
 		});
 	}
 

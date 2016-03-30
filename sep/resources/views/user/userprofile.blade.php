@@ -452,7 +452,7 @@ $("form#pictureForm").submit(function(e){
 				</div>
 				{!! Form::close() !!}
 
-				@if(! empty($doctor) && $doctor->phone!='')
+				@if(! empty($doctor) && $doctor->phone!='' )
 
 				{!! Form::open(['id' => 'tpnoFormDoctor','class'=>'form-horizontal']) !!}
 				<div class="form-group">

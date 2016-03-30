@@ -433,10 +433,10 @@ class DoctorController extends Controller {
 		$newDoctor->email = Request::get('email');
 		$newDoctor->phone = Request::get('phone');
 		$newDoctor->formal = 1;
-
-		$lastEntry = Doctor::orderBy('id', 'DESC')->first();
-		$id = $lastEntry->id + 1;
-
+		$newDoctor->save();
+		//$lastEntry = Doctor::orderBy('id', 'DESC')->first();
+		//$id = $lastEntry->id + 1;
+		$id = $newDoctor->id;
 		if(\Input::hasFile('image')) {
 			$file = \Input::file('image');
 			$format = explode('.', $file->getClientOriginalName());
