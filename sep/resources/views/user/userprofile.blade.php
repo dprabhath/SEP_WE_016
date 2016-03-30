@@ -1,7 +1,8 @@
 @extends('template/template_user')
 
 @section('head')
-
+<link href="{{ url('/') }}/resources/user_profile/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="{{ url('/') }}/resources/user_profile/bootstrap-toggle.min.js"></script>
 <style type="text/css">
 
 	.fa-spinner {
@@ -33,8 +34,11 @@
 		50% 50% 
 		no-repeat;
 	}
+
+	.toggle.android { width: 100%;}
 </style>
 <script type="text/javascript">
+	const token = "{{ csrf_token() }}";
 	/*************************REGEX Checks*******************************/
 
 	function isEmail(email) {
@@ -50,14 +54,8 @@
 		return regex.test(nic);
 	}
 	/**************************jquery post*******************************/
-	function postdata(name){
-		//alert(name);
-
-		$('form#'+name).submit(function(e){
-			$('#wait').show();
-			var formData = new FormData($(this)[0]);
-
-			$.ajax({
+	function ajaxs(formData){
+		$.ajax({
 				url: window.location.pathname,
 				type: 'POST',
 				data: formData,
@@ -100,6 +98,15 @@
 					contentType: false,
 					processData: false
 				});
+	}
+	function postdata(name){
+		//alert(name);
+
+		$('form#'+name).submit(function(e){
+			$('#wait').show();
+			var formData = new FormData($(this)[0]);
+			ajaxs(formData);
+			
 e.preventDefault();
 //e.unbind();
 return false;
@@ -152,16 +159,7 @@ $('#changeNic').click(function(){
 
 });
 $('#changeName').click(function(){
-
-	if($('[name="name"]').val()!=''){
-		postdata("nameForm");
-	}else{
-		Lobibox.notify("warning", {
-			title: 'warning',
-			msg: "Check the Name",
-			sound: '../resources/common/sounds/sound5'
-		});
-	}
+		$('form#nameForm').submit();
 
 });
 $('#changeTpnoWorking').click(function(){
@@ -299,8 +297,106 @@ $("form#pictureForm").submit(function(e){
 	//e.unbind();
 	return false;
 });
+$('form#nameForm').submit(function(e){
+
+	e.preventDefault();
+	if($('[name="name"]').val()!=''){
+		$('#wait').show();
+		var formData = new FormData($(this)[0]);
+		ajaxs(formData);
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "Check the Name",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+	
 
 });
+	@if(! empty($doctor) )
+	$('#toggle-two').change(function() {
+      //alert($(this).prop('checked'));
+      
+      //jsend(d);
+    });
+    	$("#available").on('click', '.android', function () {
+    		if($('#toggle-two').prop('checked')==true){
+    			var d = {"_token": token ,"task": "available" ,"status": "false"};
+    			jsend(d);
+    		}else{
+    			var d = {"_token": token ,"task": "available" ,"status": "true"};
+    			jsend(d);
+    		}
+    	});
+
+		@if( $doctor->available==0 )
+    		$('#toggle-two').bootstrapToggle('off');
+    	@else
+    		$('#toggle-two').bootstrapToggle('on');
+    	@endif
+    @endif
+
+
+	
+});
+
+function jsend(dataString){
+   // $('#wait').show();
+   var datas;
+   $.ajax({
+    type:"POST",
+    url : "{{ url('/') }}/profile",
+    data:dataString,
+    success : function(data){
+        //document.getElementById("re").innerHTML=data['code']; 
+        returnofjsend(data);
+        
+      },
+      error: function(jqXHR, textStatus, errorThrown) 
+      {
+        $('#wait').hide();
+        Lobibox.notify("error", {
+          title: 'Erro',
+          msg: 'An erro occurd',
+          sound: '../resources/common/sounds/sound4'
+        });
+        
+      }
+
+    },"json");
+
+   
+ }
+
+function returnofjsend(data){
+
+	$('#wait').hide();
+	if(data['code']=="error"){
+		Lobibox.notify("error", {
+          title: 'Erro',
+          msg: 'Contatct Administrators',
+          sound: '../resources/common/sounds/sound4'
+        });
+		return;
+	}
+	if(data['task']=="available"){
+
+		if(data['status']=="true"){
+			$('#toggle-two').bootstrapToggle('on');
+		}else{
+			$('#toggle-two').bootstrapToggle('off');
+		}
+
+		Lobibox.notify("success", {
+      	title: 'success',
+      	msg: 'Status Updated',
+      	sound: '../resources/common/sounds/sound2'
+    	});
+  	}
+
+
+}
 </script>
 @stop
 
@@ -315,7 +411,15 @@ $("form#pictureForm").submit(function(e){
 
 		<div class="list-group list-group-alternate"> 
 			<a data-toggle="tab" href="#home" class="list-group-item"><i class="ti ti-email"></i> Profile </a> 
-			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">4.5/5</span>Rating </a> 
+			@if(! empty($doctor) )
+				<a class="list-group-item"><span class="badge badge-warning">{{$doctor->rating}}</span>Rating </a> 
+				<a class="list-group-item" id='available'>
+				
+				<input type="checkbox" checked data-toggle="toggle" id="toggle-two" data-on="Available for Appointments" data-off="Not Available for Appointments" data-offstyle="danger" data-style="android" >
+				
+				 </a> 
+			@endif
+			
 			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Posts created </a>
 			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">100</span>Contributions </a> 
 			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Messages </a> 
@@ -504,7 +608,125 @@ $("form#pictureForm").submit(function(e){
 
 				{!! Form::close() !!}
 
-			
+				@if(! empty($doctor) )
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Specialization</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->specialization}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Professional qualtiys</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->profqual}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+
+						<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Educational qualtiys</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->eduqual}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+						<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Current Hospital</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->hospital}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+						<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Current Hospital</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->hospital}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label for="focusedinput" class="col-sm-2 control-label">Current Hospital</label>
+							<div class="col-sm-8">
+								<div class="input-group">							
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+									</span>
+
+							
+									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->hospital}}">
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+						
+							</div>
+						</div>
+					</div>
+
+				@endif
 
 			</div>
 			<div id="menu1" class="tab-pane fade r3_counter_box">

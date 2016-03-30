@@ -190,6 +190,26 @@ class UserProfileController extends Controller {
 			}else{
 				return response()->json(['message'=>'Check your Phone Number!','code'=>'warning']);
 			}
+		}elseif( Request::get('task')=="available" ){
+			$doctor=Session::get('doctor');
+			if( is_null($doctor) ){
+				return response()->json(['message'=>'hacker','code'=>'error','task'=>'available']);
+			}
+
+
+			if(Request::get('status')=="true"){
+				$doctor->available=1;
+				$doctor->save();
+				Session::put('doctor',$doctor);
+				return response()->json(['message'=>'hacker','code'=>'success','task'=>'available','status'=>'true']);
+			}else{
+				$doctor->available=0;
+				$doctor->save();
+				Session::put('doctor',$doctor);
+				return response()->json(['message'=>'hacker','code'=>'success','task'=>'available','status'=>'false']);
+			}
+
+
 		}
 	}
 }
