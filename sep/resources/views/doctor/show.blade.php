@@ -9,6 +9,7 @@
       document.location.href = theUrl;
     }
 
+    
 </script>
 
 @stop
@@ -48,6 +49,7 @@
 
                     </div>
                     <div class="col-sm-9">
+                      <div class="col-sm-8">
                         <h5 class="semi-bold">Dr {!! $doctor->first_name !!} {!! $doctor->last_name !!}</h5>
 
                         <p class="no-margin"  style="padding-top:40px">Specialization : {!! $doctor->specialization!!} </p>
@@ -55,6 +57,10 @@
                         <p class="no-margin">Doctor Notes : {!! $doctor->notes!!} </p>
 
                         <p class="no-margin"  style="padding-top:40px">User Rating : {!! $ratingString !!} </p>
+                        </div>
+                        <div class="col-sm-4">
+                       <button type="button" onclick="NavigateTo('review/{!! $doctor->id!!}')" class="btn btn-primary">Make An Apointment</button>
+                        </div>
                     </div>
                 </div>
             </div>

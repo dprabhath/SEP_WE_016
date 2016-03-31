@@ -716,46 +716,6 @@ function returnofjsend(data){
 							</div>
 						</div>
 					</div>
-						<div class="form-horizontal">
-						<div class="form-group">
-							<label for="focusedinput" class="col-sm-2 control-label">Current Hospital</label>
-							<div class="col-sm-8">
-								<div class="input-group">							
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
-									</span>
-
-							
-									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->hospital}}">
-
-								</div>
-							</div>
-							<div class="col-sm-2">
-						
-							</div>
-						</div>
-					</div>
-
-					<div class="form-horizontal">
-						<div class="form-group">
-							<label for="focusedinput" class="col-sm-2 control-label">Current Hospital</label>
-							<div class="col-sm-8">
-								<div class="input-group">							
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
-									</span>
-
-							
-									<input type="text" disabled class="form-control1" id="focusedinput" placeholder="" value="{{$doctor->hospital}}">
-
-								</div>
-							</div>
-							<div class="col-sm-2">
-						
-							</div>
-						</div>
-					</div>
-
 				@endif
 
 			</div>

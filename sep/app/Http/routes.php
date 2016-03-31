@@ -31,6 +31,7 @@ Route::post('admin/view-ticket', 'admin\TicketControllerAdmin@inputs');
 Route::get('profile', 'users\UserProfileController@index');
 Route::post('profile', 'users\UserProfileController@inputs');
 
+
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');
 Route::post('doctors/edit/{id}', 'DoctorController@update');
@@ -70,6 +71,7 @@ Route::get('googleauth','LoginController@gauth');
 
 Route::get('rate','rateController@index');
 
+Route::get('user/{id}', 'users\profileviewer@show');
 
 
 

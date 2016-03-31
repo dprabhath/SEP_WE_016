@@ -191,7 +191,7 @@ min-height:70px !important;
 
 								@if(! empty($user) && $user->pic!='')
 
-										<img src={{$user->pic}} class="profile-image img-circle custom_profile_pic">
+										<img src="{{ url('/') }}/{{$user->pic}}" class="profile-image img-circle custom_profile_pic">
 
 									@else
 										<img src="{{ url('/') }}/uploads/profile_pics/emp.png" class="profile-image img-circle custom_profile_pic">
@@ -202,7 +202,7 @@ min-height:70px !important;
 									<ul class="dropdown-menu">
 									@if(! empty($user))
 
-										<li><a href="profile"><span class="glyphicon glyphicon-user"></span> 
+										<li><a href="{{ url('/') }}/profile"><span class="glyphicon glyphicon-user"></span> 
 										
 										{{$user->email}}
 
@@ -210,14 +210,14 @@ min-height:70px !important;
 										<li class="dropdown-header"></li>
 										<li class="dropdown-header"><span class="glyphicon glyphicon-envelope"></span> Tickets</li>
 										
-										<li><a href="new-ticket"> New Ticket</a></li>
-										<li><a href="view-ticket"> View Ticket</a></li>
+										<li><a href="{{ url('/') }}/new-ticket"> New Ticket</a></li>
+										<li><a href="{{ url('/') }}/view-ticket"> View Ticket</a></li>
 										<li class="divider"></li>
 										<li><a href="doctors"> Physicians</a></li>
 										<li><a href="treatments"> Treatments</a></li>
 										@if($user->level>4)
 										<li class="divider"></li>
-										<li><a href="admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+										<li><a href="{{ url('/') }}/admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
 										@else
 											@if($user->verified==1)
 											<!--Start of Tawk.to Script-->
@@ -235,9 +235,9 @@ min-height:70px !important;
 											@endif
 										@endif
 										<li class="divider"></li>
-										<li><a href="signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
+										<li><a href="{{ url('/') }}/signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
 									@else
-											<li><a href="login"><span class="glyphicon glyphicon-log-out"></span> Sign-in</a></li>
+											<li><a href="{{ url('/') }}/login"><span class="glyphicon glyphicon-log-out"></span> Sign-in</a></li>
 									@endif
 									</ul>
 								</li>
