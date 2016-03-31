@@ -149,7 +149,7 @@
 										<img src="../{{$user->pic}}">
 
 									@else
-										<img src="{{ url('/') }}../uploads/profile_pics/emp.png">
+										<img src="{{ url('/') }}/uploads/profile_pics/emp.png">
 									@endif
 	        		<!--span class="badge">9</span--></a>
 	        		<ul class="dropdown-menu">

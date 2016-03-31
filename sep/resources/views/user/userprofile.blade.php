@@ -22,7 +22,7 @@
 	}
 	#wait{
 
-		display:    none;
+		
 		position:   fixed;
 		z-index:    10000000;
 		top:        0;
@@ -99,6 +99,7 @@
 					processData: false
 				});
 	}
+	/*
 	function postdata(name){
 		//alert(name);
 
@@ -113,77 +114,38 @@ return false;
 });
 $('#'+name).submit();
 }
-
+*/
 $(document).ready(function(){
 
-
+$('#wait').hide();
 
 /*******************************save clicks handle****************//////////////
 
 $('#changePassword').click(function(){
-
-	if($('[name="password"]').val()!=''){
-
-
-		$('#confirm_inpit_p').html("Retype your new Password");
-		$('#confirm_input').removeAttr( "type" );
-		$('#confirm_input_send').attr("hi","pass");
-		$('#confirm_input').val("");
-		$('#confirm_input').attr( "type", "password" );
-		$('#myModal').modal();
-	}else{
-		Lobibox.notify("warning", {
-			title: 'warning',
-			msg: "You cannot have blank passowrds",
-			sound: '../resources/common/sounds/sound5'
-		});
-	}
+	$('form#passwordForm').submit();
 });
 
 $('#changeNic').click(function(){
-
-	if(isNIC($('[name="nic"]').val())){
-		$('#confirm_inpit_p').html("Retype your NIC");
-		$('#confirm_input').removeAttr( "type" );
-		$('#confirm_input').val("");
-		$('#confirm_input').attr( "type", "text" );
-		$('#confirm_input_send').attr("hi","nic");
-		$('#myModal').modal();
-	}else{
-		Lobibox.notify("warning", {
-			title: 'warning',
-			msg: "Check the NIC!",
-			sound: '../resources/common/sounds/sound5'
-		});
-	}
-
+	$('form#nicForm').submit();
 });
 $('#changeName').click(function(){
 		$('form#nameForm').submit();
-
 });
 $('#changeTpnoWorking').click(function(){
-
-	if(isPhone($('[name="tpnoWorking"]').val())){
-		postdata("tpnoFormDoctor");
-	}else{
-		Lobibox.notify("warning", {
-			title: 'warning',
-			msg: "Check the Phone Number",
-			sound: '../resources/common/sounds/sound5'
-		});
-	}
-
+	$('form#tpnoFormDoctor').submit();
 });
 /****************After modle confirm click***************************************/
 $('#confirm_input_send').click(function(){
 	if($('#confirm_input').val()==$('[name="nic"]').val() && $('#confirm_input_send').attr("hi")=="nic"){
-
-
-		postdata("nicForm");
+		$('#wait').show();
+		var formData = new FormData($('form#nicForm')[0]);
+		ajaxs(formData);
 
 	}else if($('#confirm_input').val()==$('[name="password"]').val() && $('#confirm_input_send').attr("hi")=="pass"){
-		postdata("passwordForm");
+		//postdata("passwordForm");
+		$('#wait').show();
+		var formData = new FormData($('form#passwordForm')[0]);
+		ajaxs(formData);
 	}else{
 		Lobibox.notify("error", {
 			title: 'Erro',
@@ -314,6 +276,74 @@ $('form#nameForm').submit(function(e){
 	
 
 });
+
+$('form#nicForm').submit(function(e){
+
+	e.preventDefault();
+	if(isNIC($('[name="nic"]').val())){
+		$('#confirm_inpit_p').html("Retype your NIC");
+		$('#confirm_input').removeAttr( "type" );
+		$('#confirm_input').val("");
+		$('#confirm_input').attr( "type", "text" );
+		$('#confirm_input_send').attr("hi","nic");
+		$('#myModal').modal();
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "Check the NIC!",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+	
+
+});
+
+$('form#passwordForm').submit(function(e){
+
+	e.preventDefault();
+	if($('[name="password"]').val()!=''){
+
+
+		$('#confirm_inpit_p').html("Retype your new Password");
+		$('#confirm_input').removeAttr( "type" );
+		$('#confirm_input_send').attr("hi","pass");
+		$('#confirm_input').val("");
+		$('#confirm_input').attr( "type", "password" );
+		$('#myModal').modal();
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "You cannot have blank passowrds",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+	
+
+});
+
+$('form#tpnoFormDoctor').submit(function(e){
+
+	e.preventDefault();
+	if(isPhone($('[name="tpnoWorking"]').val())){
+		$('#wait').show();
+		var formData = new FormData($(this)[0]);
+		ajaxs(formData);
+	}else{
+		Lobibox.notify("warning", {
+			title: 'warning',
+			msg: "Check the Phone Number",
+			sound: '../resources/common/sounds/sound5'
+		});
+	}
+	
+
+});
+$('form#fromModle').submit(function(e){
+	e.preventDefault();
+	$('#confirm_input_send').click();
+
+});
+
 	@if(! empty($doctor) )
 	$('#toggle-two').change(function() {
       //alert($(this).prop('checked'));
@@ -342,7 +372,7 @@ $('form#nameForm').submit(function(e){
 });
 
 function jsend(dataString){
-   // $('#wait').show();
+  $('#wait').show();
    var datas;
    $.ajax({
     type:"POST",
@@ -756,7 +786,7 @@ function returnofjsend(data){
 			<div class="modal-body">
 				<p id="confirm_inpit_p">Retype</p>
 
-				{!! Form::open(['role'=>'form']) !!}
+				{!! Form::open(['role'=>'form','id' => 'fromModle']) !!}
 				<!-- form name -->
 				<input type="hidden" name="formname" value="reset"/>
 
