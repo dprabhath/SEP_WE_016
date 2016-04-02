@@ -24,6 +24,7 @@ class Timeslots extends Migration
             $table->string('saturday');
             $table->string('sunday');
             $table->string('notes');
+            $table->string('period')->default("0.30");
         });
     }
 
