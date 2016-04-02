@@ -23,6 +23,7 @@ class CreateAvailableSlotsTable extends Migration
             $table->string('thur');
             $table->string('fri');
             $table->string('sat');
+            $table->string('period')->default("0.30");
         });
     }
 

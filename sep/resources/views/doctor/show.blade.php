@@ -59,7 +59,7 @@
                         <p class="no-margin"  style="padding-top:40px">User Rating : {!! $ratingString !!} </p>
                         </div>
                         <div class="col-sm-4">
-                       <button type="button" onclick="NavigateTo('review/{!! $doctor->id!!}')" class="btn btn-primary">Make An Apointment</button>
+                       <button type="button" onclick="NavigateTo('{{ url('/') }}/setappointment-user/{!! $doctor->id!!}')" class="btn btn-primary">Make An Apointment</button>
                         </div>
                     </div>
                 </div>

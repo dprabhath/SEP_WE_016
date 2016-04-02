@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\users;
 use App\user;
+use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Input;
 use Validator;
 use Request;
+use Carbon\Carbon;
 class appointmentUser extends Controller {
 
 	/*
@@ -56,8 +58,18 @@ class appointmentUser extends Controller {
 	* @return view
 	*/
 	public function show($id){
-
-		return $id;
+		$doctor=null;
+		$userRequested=null;
+		$doctor=Doctor::where('id',$id)->first();
+		if( !is_null($doctor) ){
+			$userRequested=user::where('email','=',$doctor->email)->first();
+			if( !is_null($userRequested) ){
+				return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor);
+			}
+		}
+		return view('user.appointmetns.place')->with('user',Session::get('user'));
+		
+		
 	}
 
 }

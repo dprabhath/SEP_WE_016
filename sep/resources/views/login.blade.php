@@ -355,7 +355,7 @@
 						<div class="row" style="padding-top:20px;">
 							<div class="col-md-2 col-sm-2 col-xs-2">
 							</div>
-							<div class="col-md-2 col-sm-2 col-xs-2" align="center" style="padding-right:0px;margin-right:0px;"><a href="GAuth/idtoken.php">
+							<div class="col-md-2 col-sm-2 col-xs-2" align="center" style="padding-right:0px;margin-right:0px;"><a href="GAuth/idtoken.php?logout">
 								<i class="icon_4">G</i></a>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-3" align="center" style="padding-left:0px;margin-left:0px;"><a href="FBAuth/fbconfig.php">

@@ -72,7 +72,7 @@ Route::get('googleauth','LoginController@gauth');
 Route::get('rate','rateController@index');
 
 Route::get('user/{id}', 'users\profileviewer@show');
-Route::get('appointment-user/{id}', 'users\appointmentUser@show');
+Route::get('setappointment-user/{id}', 'users\appointmentUser@show');
 
 
 
