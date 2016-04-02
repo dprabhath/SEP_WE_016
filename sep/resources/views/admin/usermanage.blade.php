@@ -126,13 +126,19 @@
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
-				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
+				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
+				htmls+="<td><button id='userlevelchange' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">";
 				if(users[i]['level']==10){
-					htmls+="<td>Admin</td></tr>";
+					htmls+="Admin";
+				}else if(users[i]['level']==2){
+					htmls+="Doctor";
+				}else if(users[i]['level']==1){
+					htmls+="User";
 				}else{
-					htmls+="<td>User</td></tr>";
+					htmls+="Moderator";
 				}
+				htmls+="</button></td></tr>";
 
 				/*
 					to get all the users
@@ -176,16 +182,20 @@
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
-				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
+				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 
+				htmls+="<td><button id='userlevelchange' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">";
 				if(users[i]['level']==10){
-					htmls+="<td>Admin</td></tr>";
+					htmls+="Admin";
 				}else if(users[i]['level']==2){
-					htmls+="<td>Doctor</td></tr>";
+					htmls+="Doctor";
+				}else if(users[i]['level']==1){
+					htmls+="User";
 				}else{
-					htmls+="<td>User</td></tr>";
+					htmls+="Moderator";
 				}
+				htmls+="</button></td></tr>";
 			}
 			showing_table = 2;
 			document.getElementById("users_table_registered").innerHTML=htmls; 
@@ -220,16 +230,20 @@
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
 				htmls+="<td>"+users[i]['email']+"</td>"
-				htmls+="<td><button type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
+				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 
+				htmls+="<td><button id='userlevelchange' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">";
 				if(users[i]['level']==10){
-					htmls+="<td>Admin</td></tr>";
+					htmls+="Admin";
 				}else if(users[i]['level']==2){
-					htmls+="<td>Doctor</td></tr>";
+					htmls+="Doctor";
+				}else if(users[i]['level']==1){
+					htmls+="User";
 				}else{
-					htmls+="<td>User</td></tr>";
+					htmls+="Moderator";
 				}
+				htmls+="</button></td></tr>";
 			}
 			showing_table = 3;
 			document.getElementById("users_table_registered").innerHTML=htmls; 
@@ -272,6 +286,14 @@
 					msg: "Users Delete success",
 					sound: '../../resources/common/sounds/sound2'
 				});
+		}else if( data['task']=="changeRole" ){
+
+			refresh();
+			Lobibox.notify("success", {
+					title: 'success',
+					msg: "Users Role Updated",
+					sound: '../../resources/common/sounds/sound2'
+				});
 		}
 		
 	}
@@ -299,7 +321,7 @@
 
 		//alert("asdas");
 
-		$('#users_table_registered').on('click','button',function(){
+		$('#users_table_registered').on('click','#repassword',function(){
 			/**
 			*
 			*Dyanamicaly Generated Table's Reset Password Button Handle
@@ -323,6 +345,84 @@
 			}
 			var requets = {"_token": token ,"task": "resetPassword","users":ids};
 			jsend(requets);
+
+		});
+		$('#users_table_registered').on('click','#userlevelchange',function(){
+			/**
+			*
+			*Dyanamicaly Generated Table's Reset Password Button Handle
+			*
+			*
+			*/
+			var ids=[];
+			ids[0] = $(this).attr( "value" );
+			var i=0;
+
+			if(ids[0]>0){
+				i++;
+			}
+			if(i===0){
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: 'Something went Wrong',
+					sound: '../../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+
+			 Lobibox.alert('info', {
+			    msg: 'Change the Role Below',
+			    //buttons: ['ok', 'cancel', 'yes', 'no'],
+			    //Or more powerfull way
+			    buttons: {
+			        no: {
+			            'class': 'btn btn-info',
+			            closeOnClick: true,
+			            text: 'Admin'
+			        },
+			        load: {
+			            'class': 'btn btn-info',
+			            closeOnClick: true,
+			            text: 'Moderator'
+			        },
+			        yes: {
+			            'class': 'btn btn-info',
+			            closeOnClick: true,
+			            text: 'Doctor'
+			        },
+			        ok: {
+			            'class': 'btn btn-info',
+			            closeOnClick: true,
+			            text: 'User'
+			        }
+			    },
+			    callback: function(lobibox, type){
+			        var btnType;
+			        if (type === 'no'){
+			            btnType = 'Admin';
+			        }else if (type === 'yes'){
+			            btnType = 'Doctor';
+			        }else if (type === 'load'){
+			            btnType = 'Moderator';
+			        }else{
+			        	btnType = 'User';
+			        }
+			        Lobibox.confirm({
+		    			msg: "Are you sure you want chnage the role to "+ btnType+" ?",
+		    			callback: function ($this, type, ev) {
+		        			if (type === 'no'){
+			    				return false;
+			    			}else{
+			    				 var requets = {"_token": token ,"task": "changeRole","users":ids,"role":btnType};
+								 jsend(requets);
+			    			}
+		    			}
+					});
+			       
+			    }
+			});
+			
+			
 
 		});
 /********************************* select all users function ****************************/

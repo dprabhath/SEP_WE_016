@@ -185,6 +185,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         @if($user->level>4)
+                        @if($user->level>9)
                         <li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Users<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
@@ -196,6 +197,7 @@
                                 </li>
                             </ul>
 						</li>
+						@endif
 						<li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Pending<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">

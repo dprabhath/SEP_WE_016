@@ -233,6 +233,37 @@ class RegisterdUserManagment extends Controller
 	}
 	/**
 	*
+	* Change the role of the users
+	* @param Stringlist $id user ids
+	* @param String $role the role
+	* @return Json Response
+	*
+	*/
+	private function changeRole($ids,$role)
+	{
+		$level = 1;
+		if( $role=="User" ){
+			$level=1;
+		}elseif( $role=="Doctor" ){
+			$level=2;
+		}elseif( $role=="Admin" ){
+			$level=10;
+		}elseif( $role=="Moderator" ){
+			$level=5;
+		}
+		if( !is_null($ids) ){
+				foreach ($ids as &$value) {
+					$user = user::find($value);
+					$user->level=$level;
+					$user->save();
+				}
+		}else{
+			return  response()->json(['message' => 'hacker', 'code' => 'error']);
+		}
+		return  response()->json(['code' => 'success' , 'task' => 'changeRole']);
+	}
+	/**
+	*
 	*
 	* Take all the GET Json Requset and do the task accouring to them
 	* Tasks
@@ -278,6 +309,10 @@ class RegisterdUserManagment extends Controller
 		}elseif( Request::get('task')=="DeleteUsers" ){
 			$ids=Request::get('users');
 			return $this->deleteUsers($ids);
+		}elseif( Request::get('task')=="changeRole" ){
+			$ids=Request::get('users');
+			$role=Request::get('role');
+			return $this->changeRole($ids,$role);
 		}else{
 			return  response()->json(['message' => 'hacker', 'code' => 'error']);
 		}
