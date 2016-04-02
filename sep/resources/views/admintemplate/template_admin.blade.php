@@ -204,9 +204,7 @@
                                 <li>
                                     <a href="pending">Physicians</a>
                                 </li>
-                                <li>
-                                    <a href="pendingtreatments">Treatments</a>
-                                </li>
+                              
                             </ul>
 						</li>
 

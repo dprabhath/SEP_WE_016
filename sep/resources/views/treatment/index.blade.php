@@ -33,6 +33,13 @@
 				
 			</div>
 	   </div>
+	   <div class="panel-footer">
+           	<div class="row">
+                <div class="col-sm-8">
+                    <input class="btn btn_5 btn-lg btn-info" value="Add New Treatment" onclick="NavigateTo('treatments/new')">
+                </div>
+            </div>
+       	</div>
 
 </div>
 

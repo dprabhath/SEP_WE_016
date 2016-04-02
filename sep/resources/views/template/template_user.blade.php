@@ -213,8 +213,8 @@ min-height:70px !important;
 										<li><a href="{{ url('/') }}/new-ticket"> New Ticket</a></li>
 										<li><a href="{{ url('/') }}/view-ticket"> View Ticket</a></li>
 										<li class="divider"></li>
-										<li><a href="doctors"> Physicians</a></li>
-										<li><a href="treatments"> Treatments</a></li>
+										<li><a href="{{ url('/') }}/doctors"> Physicians</a></li>
+										<li><a href="{{ url('/') }}/treatments"> Treatments</a></li>
 										@if($user->level>4)
 										<li class="divider"></li>
 										<li><a href="{{ url('/') }}/admin/view-ticket"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>

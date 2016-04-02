@@ -67,6 +67,33 @@ class DoctorController extends Controller {
 	}
 
 	/**
+	 * Shows the Doctor List to the user.
+	 *
+	 * @return index view
+	 */
+	public function createSchedule()
+	{
+		$user = Session::get('user');
+
+		return view('doctor.createschedule')->with('user',$user);
+		//return $doctors;
+	}
+
+	/**
+	 * Shows the Doctor List to the user.
+	 *
+	 * @return index view
+	 */
+	public function updateSchedule()
+	{
+		$user = Session::get('user');
+
+		return view('doctor.createschedule')->with('user',$user);
+		//return $doctors;
+	}
+
+
+	/**
 	 * Returns view consisting of the list of approved Informal Physicians
 	 *
 	 * @return newdoctor view

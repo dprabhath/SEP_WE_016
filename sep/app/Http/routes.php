@@ -29,6 +29,8 @@ Route::get('admin/view-ticket', 'admin\TicketControllerAdmin@index');
 Route::post('admin/view-ticket', 'admin\TicketControllerAdmin@inputs');
 
 Route::get('profile', 'users\UserProfileController@index');
+Route::get('profile/schedule', 'DoctorController@createSchedule');
+Route::post('profile/schedule', 'DoctorController@updateSchedule');
 Route::post('profile', 'users\UserProfileController@inputs');
 
 

@@ -3,6 +3,7 @@
 use App\Doctor;
 use App\Treatment;
 use App\pendingTreatment;
+use App\DoctorTreatment;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
@@ -28,7 +29,7 @@ class TreatmentController extends Controller {
 	 */
 	public function index()
 	{
-		$treatments = Treatment::all();
+		$treatments = DoctorTreatment::all();
 		$user = Session::get('user');
 
 		return view('treatment.index')->with('treatments', $treatments)->with('user',$user);
@@ -41,10 +42,24 @@ class TreatmentController extends Controller {
 	 */
 	public function show($id)
 	{
-		$treatment = Treatment::findOrFail($id);
+		$treatment = DoctorTreatment::findOrFail($id);
 		$user = Session::get('user');
 
-		return View::make('treatment.show')->with('treatment', $treatment)->with('user',$user);
+		$image1 = 1;
+		$image2 = 1;
+		$image3 = 1;
+		$image4 = 1;
+
+		if($treatment->image1 == 'NONE')
+			$image1 = 0;
+		if($treatment->image2 == 'NONE')
+			$image2 = 0;
+		if($treatment->image3 == 'NONE')
+			$image3 = 0;
+		if($treatment->image4 == 'NONE')
+			$image4 = 0;
+
+		return View::make('treatment.show')->with('treatment', $treatment)->with('user',$user)->with('image1',$image1)->with('image2',$image2)->with('image3',$image3)->with('image4',$image4);
 	}
 
 	/**
@@ -55,7 +70,7 @@ class TreatmentController extends Controller {
 	public function newTreatment()
 	{
 		$user = Session::get('user');
-		return View::make('treatment.new')->with('user',$user)->with('message', '');
+		return View::make('treatment.newtreatment')->with('user',$user)->with('message', '');
 	}
 
 	/**
@@ -151,13 +166,64 @@ class TreatmentController extends Controller {
 		$input = Request::all();
 		$user = Session::get('user');
 
-		$pendingTreatment = new pendingTreatment;
+		$Treatment = new DoctorTreatment;
 
-		$pendingTreatment->name = Request::get('name');
-		$pendingTreatment->description = Request::get('desc');
-		$pendingTreatment->user = $user->name;
+		$Treatment->name = Request::get('tname');
+		$Treatment->doctor_id = $user->id;
+		$Treatment->description = Request::get('description');
+		$Treatment->conditions1 = Request::get('wsigns');
+		$Treatment->conditions2 = Request::get('condition');
 
-		$pendingTreatment->save();
+		$Treatment->save();
+
+
+
+		if(\Input::hasFile('image1')) {
+			$file = \Input::file('image1');
+			$format = explode('.', $file->getClientOriginalName());
+
+			$filepath = 'uploads/treatments/'. $Treatment->id . '-1.' . $format[sizeof($format) - 1];
+			$file->move('uploads/treatments', $Treatment->id . '-1.' . $format[sizeof($format) - 1]);
+
+			$Treatment->image1 = Request::get('image1');
+			DoctorTreatment::where('id', $Treatment->id)->update(['image1' => $filepath]);
+		}
+
+		if(\Input::hasFile('image2')) {
+			$file = \Input::file('image2');
+			$format = explode('.', $file->getClientOriginalName());
+
+			$filepath = 'uploads/treatments/'. $Treatment->id . '-2.' . $format[sizeof($format) - 1];
+
+			$file->move('uploads/treatments', $Treatment->id . '-2.' . $format[sizeof($format) - 1]);
+
+			$Treatment->image1 = Request::get('image2');
+			DoctorTreatment::where('id', $Treatment->id)->update(['image2' => $filepath]);
+		}
+
+		if(\Input::hasFile('image3')) {
+			$file = \Input::file('image3');
+			$format = explode('.', $file->getClientOriginalName());
+
+			$filepath = 'uploads/treatments/'. $Treatment->id . '-3.' . $format[sizeof($format) - 1];
+
+			$file->move('uploads/treatments', $Treatment->id . '-3.' . $format[sizeof($format) - 1]);
+
+			$Treatment->image1 = Request::get('image3');
+			DoctorTreatment::where('id', $Treatment->id)->update(['image3' => $filepath]);
+		}
+		
+		if(\Input::hasFile('image4')) {
+			$file = \Input::file('image4');
+			$format = explode('.', $file->getClientOriginalName());
+
+			$filepath = 'uploads/treatments/'. $Treatment->id . '-4.' . $format[sizeof($format) - 1];
+
+			$file->move('uploads/treatments', $Treatment->id . '-4.' . $format[sizeof($format) - 1]);
+
+			$Treatment->image1 = Request::get('image4');
+			DoctorTreatment::where('id', $Treatment->id)->update(['image4' => $filepath]);
+		}
 
 		$treatments = Treatment::all();
 
