@@ -13,6 +13,7 @@ use Session;
 use Mail;
 use DB;
 use App\reviews;
+use App\Timeslots;
 
 class DoctorController extends Controller {
 
@@ -87,6 +88,35 @@ class DoctorController extends Controller {
 	public function updateSchedule()
 	{
 		$user = Session::get('user');
+
+		$ifExists = Timeslots::where('doctor_id', $user->id)->get();
+
+		if(count($ifExists) > 0) {
+			Timeslots::where('doctor_id', $user->id)->update(['monday' => Request::get('monday_from') .'-'. Request::get('monday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['tuesday' => Request::get('tuesday_from') .'-'. Request::get('tuesday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['wednesday' => Request::get('wednesday_from') .'-'. Request::get('wednesday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['thursday' => Request::get('thursday_from') .'-'. Request::get('thursday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['friday' => Request::get('friday_from') .'-'. Request::get('friday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['saturday' => Request::get('saturday_from') .'-'. Request::get('saturday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['sunday' => Request::get('sunday_from') .'-'. Request::get('sunday_till')]);
+			Timeslots::where('doctor_id', $user->id)->update(['notes' => 'None']);
+		}
+		else {
+			$newTimeslot = new Timeslots();
+
+			$newTimeslot->doctor_id = $user->id;
+			$newTimeslot->monday = Request::get('monday_from') .'-'. Request::get('monday_till');
+			$newTimeslot->tuesday = Request::get('tuesday_from') .'-'. Request::get('tuesday_till');
+			$newTimeslot->wednesday = Request::get('wednesday_from') .'-'. Request::get('wednesday_till');
+			$newTimeslot->thursday = Request::get('thursday_from') .'-'. Request::get('thursday_till');
+			$newTimeslot->friday = Request::get('friday_from') .'-'. Request::get('friday_till');
+			$newTimeslot->saturday = Request::get('saturday_from') .'-'. Request::get('saturday_till');
+			$newTimeslot->sunday = Request::get('sunday_from') .'-'. Request::get('sunday_till');
+			$newTimeslot->created = 1;
+			$newTimeslot->notes = 'None';
+
+			$newTimeslot->save();
+		}
 
 		return view('doctor.createschedule')->with('user',$user);
 		//return $doctors;

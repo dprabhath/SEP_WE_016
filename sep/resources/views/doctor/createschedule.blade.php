@@ -107,7 +107,7 @@
                                 </div>  
                                 <div class="col-xs-2">
                                     <div class="input-group"> 
-                                      {!! Form::text('frisday_till', null,  [ 'class' => 'form-control1','id' => 'friday_till', 'placeholder' => 'Till']) !!}
+                                      {!! Form::text('friday_till', null,  [ 'class' => 'form-control1','id' => 'friday_till', 'placeholder' => 'Till']) !!}
                                     </div>
                                 </div>    
                               </div>
