@@ -23,7 +23,7 @@
 
 <div class="panel-body1">
        <div class="panel-footer">         
-          <h1> {!! $treatment->name !!} </h1>
+          <h1> {!! $treatment->name !!} : Dr. {!! $doctor->first_name !!} {!! $doctor->last_name !!}</h1>
        </div>
 
        <div class="grid_3 grid_5">

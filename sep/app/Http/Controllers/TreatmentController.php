@@ -44,6 +44,7 @@ class TreatmentController extends Controller {
 	{
 		$treatment = DoctorTreatment::findOrFail($id);
 		$user = Session::get('user');
+		$doctor = Doctor::findOrFail($treatment->doctor_id);
 
 		$image1 = 1;
 		$image2 = 1;
@@ -59,7 +60,7 @@ class TreatmentController extends Controller {
 		if($treatment->image4 == 'NONE')
 			$image4 = 0;
 
-		return View::make('treatment.show')->with('treatment', $treatment)->with('user',$user)->with('image1',$image1)->with('image2',$image2)->with('image3',$image3)->with('image4',$image4);
+		return View::make('treatment.show')->with('treatment', $treatment)->with('user',$user)->with('image1',$image1)->with('image2',$image2)->with('image3',$image3)->with('image4',$image4)->with('doctor', $doctor);
 	}
 
 	/**
