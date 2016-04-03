@@ -44,12 +44,7 @@ class appointmentUser extends Controller {
 	public function index()
 	{
 		
-		if(is_null(Session::get('user'))){
-				return view('home');
-		}else{
-				return view('home')->with('user',Session::get('user'));
-		}
-		return view('home');
+		
 	}
 
 	/**
@@ -68,8 +63,6 @@ class appointmentUser extends Controller {
 			}
 		}
 		return view('user.appointmetns.place')->with('user',Session::get('user'));
-		
-		
 	}
 
 }
