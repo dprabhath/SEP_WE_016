@@ -398,12 +398,14 @@
 
 						</div>
 					</div>
+					<div class="table-responsive">
 					<table class="table">
 						<tbody id="content_table">
 							
 							
 						</tbody>
 					</table>
+					</div>
 				</div>
 
 			</div>

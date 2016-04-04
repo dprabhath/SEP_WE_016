@@ -155,7 +155,7 @@ $('#confirm_input_send').click(function(){
 	}
 });
 /***********************inputs disbalitiy unlock *****************/
-$('#input_email').dblclick(function(){
+$('#input_email').click(function(){
 	$('#input_email input').removeAttr( "disabled" );
 	$('#input_email input').focus();
 
@@ -168,25 +168,25 @@ $('#input_tpno').dblclick(function(){
 
 });
 */
-$('#input_password').dblclick(function(){
+$('#input_password').click(function(){
 	$('#input_password input').removeAttr( "disabled" );
 	$('#changePassword').removeAttr("disabled");
 	$('#input_password input').focus();
 
 });
-$('#input_nic').dblclick(function(){
+$('#input_nic').click(function(){
 	$('#input_nic input').removeAttr( "disabled" );
 	$('#changeNic').removeAttr("disabled");
 	$('#input_nic input').focus();
 
 });
-$('#input_name').dblclick(function(){
+$('#input_name').click(function(){
 	$('#input_name input').removeAttr( "disabled" );
 	$('#changeName').removeAttr("disabled");
 	$('#input_name input').focus();
 
 });
-$('#input_tpnoWorking').dblclick(function(){
+$('#input_tpnoWorking').click(function(){
 	$('#input_tpnoWorking input').removeAttr( "disabled" );
 	$('#changeTpnoWorking').removeAttr("disabled");
 	$('#input_tpnoWorking input').focus();

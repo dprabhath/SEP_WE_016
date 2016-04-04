@@ -59,7 +59,11 @@
                         <p class="no-margin"  style="padding-top:40px">User Rating : {!! $ratingString !!} </p>
                         </div>
                         <div class="col-sm-4">
+                        @if( $doctor->available==1 )
                        <button type="button" onclick="NavigateTo('{{ url('/') }}/setappointment-user/{!! $doctor->id!!}')" class="btn btn-primary">Make An Apointment</button>
+                       @else
+                        <button type="button" class="btn btn-danger">Not Available for Apointment</button>
+                       @endif
                         </div>
                     </div>
                 </div>

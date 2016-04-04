@@ -73,8 +73,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4cc2f', end
     top: -5px;
     float: left;
     left: -5px;
-    width:35px;
-    max-width:35px;
+    width:35px !important;
+    max-width:35px !important;
+    max-height: 35px !important;
+    height: 35px !important;
 }
     
 }
@@ -104,8 +106,10 @@ min-height:70px !important;
     top: -13px;
     float: left;
     left: -5px;
-    width:45px;
-    max-width:45px;
+    width:45px !important;
+    max-width:45px !important;
+    max-height: 45px !important;
+    height: 45px !important;
 }
 
 }

@@ -755,12 +755,14 @@
 
 						</div>
 					</div>
+					<div class="table-responsive">
 					<table class="table">
 						<tbody id="users_table_registered">
 							
 							
 						</tbody>
 					</table>
+					</div>
 				</div>
 
 			</div>

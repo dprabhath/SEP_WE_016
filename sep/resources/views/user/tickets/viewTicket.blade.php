@@ -387,6 +387,7 @@
 	</div>
 	<div class="row" style="max-width:100%;">
 		<div class="container-fluid" style="max-width:100%;">
+		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -403,6 +404,7 @@
 
 				</tbody>
 			</table>
+			</div>
 		</div>
 		
 	</div>

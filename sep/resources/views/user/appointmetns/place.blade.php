@@ -31,7 +31,8 @@ function profile(url){
 		@if( $doctor->rating!=0.0 )
 		$('#example').barrating({
         		theme: 'css-stars',
-        		hoverState: false
+        		hoverState: false,
+            showSelectedRating: true
       		});
 
 		$('#example').barrating('readonly', true);
@@ -124,6 +125,11 @@ function profile(url){
   					<option value="3" data-html="good">3</option>
   					<option value="4" data-html="good">4</option>
   					<option value="5" data-html="good">5</option>
+            <option value="6" data-html="good">6</option>
+            <option value="7" data-html="good">7</option>
+            <option value="8" data-html="good">8</option>
+            <option value="9" data-html="good">9</option>
+            <option value="10" data-html="good">10</option>
 				 </select>
 			      @endif
 			    </div>
