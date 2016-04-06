@@ -17,7 +17,8 @@ class CreateDoctorSchedulesTable extends Migration
             $table->timestamps();
             $table->integer('did');
             $table->integer('uid');
-            $table->dateTime('schedule'); //schedule time
+            $table->dateTime('schedule_start'); //schedule time
+            $table->dateTime('schedule_end');
             $table->string('code'); // send for the patient, to give it to the doctor
             $table->integer('trys'); //for security code entering to check is it a bruteforce
             $table->boolean('confirmed')->default(0); // is it confirmed by the doctor, doctor have to confirmed it before oneday
