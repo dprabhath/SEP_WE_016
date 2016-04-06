@@ -204,7 +204,7 @@ class LoginController extends Controller {
 				$newUser->verified=0;
 				if( $newUser->save() ){
 					Mail::send('mailtemplate/sociallogin', ['name'=> $newUser->name,'pass'=>$pass], function ($m) use ($newUser) {
-						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->from('daemon@mail.altairsl.us', 'Native Physician');
 						$m->to($newUser->email, $newUser->name)->subject('New Password!');
 					});
 					//return "Check the Email Settings or your internet connection";

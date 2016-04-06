@@ -181,6 +181,12 @@ class RegisterdUserManagment extends Controller
 				foreach ($ids as &$value) {
 					$user = user::find($value);
 					if( $user->level<10 && $user->verified==0 ){
+
+						Mail::send('mailtemplate/accountDelete', ['name'=> $user->name], function ($m) use ($user) {
+							$m->from('daemon@mail.altairsl.us', 'Native Physician');
+
+							$m->to($user->email, $user->name)->subject('Account Deleted');
+						});
 						$user->delete();
 					}
 				}

@@ -191,6 +191,8 @@ function profile(url){
           </tbody>
   			</table>
 		</div>
+    @else
+      <h1> TimeTable is not availble for this Doctor </h1>
     @endif
 		</div>
 	 	</div>

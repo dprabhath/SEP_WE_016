@@ -121,7 +121,7 @@ class VerifyController extends Controller {
 				}
 			}
 			Mail::send('mailtemplate/emailVerify', ['name'=> $user->name,'code'=>Session::get('emailKey')], function ($m) use ($user) {
-				$m->from('hello@app.com', 'Your Application');
+				$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
 				$m->to($user->email, $user->name)->subject('Confirmation Code');
 			});

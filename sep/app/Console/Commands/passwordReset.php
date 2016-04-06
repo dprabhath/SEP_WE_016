@@ -42,7 +42,7 @@ class passwordReset extends Command {
 		$tasks = cronResetPassword::all();
 		foreach( $tasks as $task ) {
 				Mail::queue('mailtemplate/passwordreset', ['name'=> $task->name,'pass'=> $task->password], function ($m) use ($task) {
-					$m->from('hello@app.com', 'Your Application');
+					$m->from('daemon@mail.altairsl.us', 'Native Physician');
 					$m->to($task->email, $task->name)->subject('New Password!');
 				});
 				$task->delete();
