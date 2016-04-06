@@ -161,50 +161,37 @@ function profile(url){
 	 	<!-- schedule shower -->
 	 	<div class="row">
 	 	<div class="col-sm-12" id="timeslotcol">
+    @if(!empty($timetable))
 		 	<div class="table-responsive">
   			<table class="table table-striped" id="timeslotshow">
     			<caption>Available TimeSlots</caption>
-    			<thead>
-    				<th>2016/03/02</th>
-    				<th>2016/03/03</th>
-    				<th>2016/03/04</th>
-    				<th>2016/03/05</th>
-    				<th>2016/03/06</th>
-    				<th>2016/03/07</th>
-    				<th>2016/03/08</th>
-    			</thead>
-    			<tbody id="selectable-7">
-    				<tr>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-    					<td class="tdselect">8.30-9.00</td>
-
-    				</tr>
-    				<tr>
-    					<td class="tdselect">9.00-9.30</td>
-    					<td class="tdselect">9.00-9.30</td>
-    					<td class="tdselect">9.00-9.30</td>
-    					<td class="tdselect">9.00-9.30</td>
-    					<td class="tdselect">9.00-9.30</td>
-    					<td></td>
-    					<td class="tdselect">9.00-9.30</td>
-    				</tr>
-    				<tr>
-    					<td class="tdselect">9.30-10.00</td>
-    					<td class="tdselect">9.30-10.00</td>
-    					<td ></td>
-    					<td></td>
-    					<td></td>
-    					<td class="tdselect">9.30-10.00</td>
-    					<td class="tdselect">9.30-10.00</td>
-    				</tr>
-    			</tbody>
+            <thead>
+            @foreach($timetable as $k => $v)
+                <th>{{ $k }}</th>
+            @endforeach
+            </thead>
+          <tbody id="selectable-7">
+          {{-- */$count=0;/*--}}
+          @foreach($timetable as $k => $v)
+            @if( $count<count($v) )
+                {{-- */$count=count($v);/*--}}
+            @endif
+          @endforeach
+          @for ($i = 0; $i < $count; $i++)
+            <tr>
+            @foreach($timetable as $k => $v)
+              @if(count($v)>$i)
+                <td class="tdselect">{{$v[$i]}}</td>
+              @else
+                <td></td>
+              @endif
+            @endforeach
+            </tr>
+          @endfor
+          </tbody>
   			</table>
 		</div>
+    @endif
 		</div>
 	 	</div>
 	 	<div class="row">
