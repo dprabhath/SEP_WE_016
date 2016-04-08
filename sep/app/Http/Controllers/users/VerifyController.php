@@ -64,7 +64,7 @@ class VerifyController extends Controller {
 			Session::put('emailKey',rand(10000, 99999));
 		}
 		if( is_null(Session::get('phoneKey')) ){
-			Session::put('phoneKey',rand(99999, 999999));
+			Session::put('phoneKey',rand(9999999999, 99999999999));
 		}
 		$user=Session::get('user');
 		if( !is_null($user) && $user->verified==0 ){
@@ -165,6 +165,9 @@ class VerifyController extends Controller {
 				}
 			}
 			$code=Session::get('phoneKey');
+			if( is_null($code) ){
+				return  response()->json(['message' => 'Refresh the page', 'code' => 'error' ,'task' => 'sendPhone']);
+			}
 			$user->save();
 			Session::put('user',$user);
 			SMS::queue('Your Confirmation Code is: '.$code, [], function($sms) use ($phone) {
@@ -188,8 +191,9 @@ class VerifyController extends Controller {
 			*
 			*/
 			$codePhone=Request::get('codePhone');
-			$codeEmail=Request::get('codeEmail');
-			if( Session::get('phoneKey')==$codePhone && Session::get('emailKey')==$codeEmail ){
+			//$codeEmail=Request::get('codeEmail');
+			if( !is_null($codePhone) && Session::get('phoneKey')==$codePhone  ){
+			//if( Session::get('phoneKey')==$codePhone && Session::get('emailKey')==$codeEmail  ){
 				$user->verified=1;
 				$user->save();
 				Session::flush();

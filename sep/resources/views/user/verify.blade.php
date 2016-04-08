@@ -261,7 +261,8 @@ $(document).ready(function(){
 
   $("#verifyButton").click(function(){
 
-    if($.trim($("#txtPhoneCode").val())=="" || $.trim($("#txtEmailCode").val())==""){
+     if($.trim($("#txtPhoneCode").val())==""){
+   // if($.trim($("#txtPhoneCode").val())=="" || $.trim($("#txtEmailCode").val())==""){
       Lobibox.notify("warning", {
         title: 'Warning',
         msg: 'Fill the confirmation codes',
@@ -284,13 +285,12 @@ $(document).ready(function(){
 
 @section('body')
 
-
 <div class="row">
   <div class="r3_counter_box">
     <p style="color:red;padding-top:10px;"></p>
     {!! Form::open(['id' => 'registration','class' => 'form-horizontal','style' => 'padding-top:20px;']) !!}
     <input type="hidden" name="task" value="submit">
-    <div id="txtEmailDiv" class="form-group has-feedback">
+    <!--div id="txtEmailDiv" class="form-group has-feedback">
       <label class="control-label col-sm-2" for="txtEmail">Email</label>
       <div class="col-sm-4">
         <input type="text" class="form-control" id="txtEmail" name="txtEmail" aria-describedby="inputSuccess3Status" value="{{$user->email}}">
@@ -309,7 +309,7 @@ $(document).ready(function(){
      
       
     </div>
-  </div>
+  </div-->
   
 
 

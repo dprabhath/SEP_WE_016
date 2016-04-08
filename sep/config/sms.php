@@ -89,6 +89,6 @@ return [
     'twilio' => [
         'account_sid' => 'AC4f158b529aa7c0b5e05a3b780e123360',
         'auth_token' => 'f2f994001eee477eb6a1f7ac364946c8',
-        'verify' => true,
+        'verify' => false,
     ]
 ];
