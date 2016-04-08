@@ -16,15 +16,79 @@
     #timeslotcol{
     	padding-top:50px;
     }
+    #wait{
+
+    display:    none;
+    position:   fixed;
+    z-index:    1000000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+    url('{{ url('/') }}/resources/common/gif/ajax-loader.gif') 
+    50% 50% 
+    no-repeat;
+
+
+  }
 
 </style>
 
 <script type="text/javascript">
-var selectedslot="";
+const token = "{{ csrf_token() }}";
+const doctor_id = "{{ $doctor->id }}"
+var selectedslot=null;
 function profile(url){
 	window.open(url);
 }
 	
+  /****************************** send json requets to the server ******************************/
+  function jsend(dataString){
+    $('#wait').show();
+    var datas;
+    $.ajax({
+      type:"POST",
+      url : "{{ url('/') }}/setappointment-user",
+      data:dataString,
+      success : function(data){
+        //document.getElementById("re").innerHTML=data['code']; 
+        returnofjsend(data);
+        
+      },
+      error: function(jqXHR, textStatus, errorThrown) 
+      {
+        $('#wait').hide();
+        Lobibox.notify("error", {
+          title: 'Erro',
+          msg: 'An erro occurd',
+          sound: '../../resources/common/sounds/sound4'
+        });
+        
+      }
+
+    },"json");
+
+    
+  }
+  /*************** get the return of the JSON ************************************/
+  function returnofjsend(data){
+    $('#wait').hide();
+    if(data['code']=="error"){
+      Lobibox.notify("warning", {
+          title: 'warning',
+          msg: data['message'],
+          sound: '../../resources/common/sounds/sound4'
+        });
+      return false;
+    }
+    if(data['task'] == "makeAppointment"){
+
+
+
+    }
+  }
+
 	$( document ).ready(function() {
   
   		@if(! empty($doctor) )
@@ -44,9 +108,9 @@ function profile(url){
 			   filter:'.tdselect',
                selected: function( event, ui ) {
                		var s=$(this).find('.ui-selected');
-            		//alert(s.html());
+            		//alert(s.attr('start')+" "+s.attr('end'));
             		console.log(s.html());
-            		selectedslot=s.html();
+            		selectedslot=s;
                },
                selecting: function(event, ui){
             		if( $(".ui-selected, .ui-selecting").length > 1){
@@ -55,9 +119,33 @@ function profile(url){
       			},
       			unselecting: function( event, ui ) {
             		console.log("unselecting");
-            		selectedslot="";
+            		selectedslot=null;
       			}
             });
+
+    $("#makeAppointment").click(function(){
+        if(selectedslot!=null){
+          //alert(selectedslot.attr('start')+" "+selectedslot.attr('end'));
+          Lobibox.confirm({
+          msg: "Are you sure you want to Make Appointment ?",
+          callback: function ($this, type, ev) {
+              if (type === 'no'){
+              return false;
+            }else{
+            var requets = {"_token": token ,"task": "makeAppointment","doctor_id":doctor_id,"start":selectedslot.attr('start'),"end":selectedslot.attr('end')};
+            jsend(requets);
+            }
+          }
+      });
+        }else{
+          Lobibox.notify("warning", {
+          title: 'warning',
+          msg: 'Select a time slot',
+          sound: '../../resources/common/sounds/sound4'
+        });
+        }
+    })
+
 	});
 
 
@@ -181,7 +269,7 @@ function profile(url){
             <tr>
             @foreach($timetable as $k => $v)
               @if(count($v)>$i)
-                <td class="tdselect">{{$v[$i]}}</td>
+                <td start='{{ $timevals[$k][$i]->start }}' end='{{ $timevals[$k][$i]->end }}' class="tdselect">{{$v[$i]}}</td>
               @else
                 <td></td>
               @endif
@@ -202,7 +290,7 @@ function profile(url){
   				<div class="form-group">
     			<div class="col-sm-3 col-xs-1"></div>
 			    <div class="col-sm-6 col-xs-10">
-			      <button type="submit" class="btn btn-info btn-block">Make an Appointment</button>
+			      <button type="submit" id="makeAppointment" class="btn btn-info btn-block">Make an Appointment</button>
 			    </div>
 			    <div class="col-sm-3 col-xs-1">
 			    	
@@ -220,6 +308,8 @@ function profile(url){
 	</div>
 	</div>
 </div>
+</div>
+  <div id="wait">
 @stop
 
 @section('footer')

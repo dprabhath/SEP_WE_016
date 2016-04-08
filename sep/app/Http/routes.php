@@ -75,6 +75,7 @@ Route::get('rate','rateController@index');
 
 Route::get('user/{id}', 'users\profileviewer@show');
 Route::get('setappointment-user/{id}', 'users\appointmentUser@show');
+Route::post('setappointment-user', 'users\appointmentUser@inputs');
 
 
 

@@ -56,6 +56,54 @@ class appointmentUser extends Controller {
 	*/
 	public function inputs()
 	{
+		if( Request::get('task')=="makeAppointment" ){
+			$doctor_id=Request::get('doctor_id');
+			$start=Request::get('start');
+			$end=Request::get('end');
+			if( !is_null($doctor_id) && !is_null($start) && !is_null($end) ){
+				$doctor=Doctor::where('id',$doctor_id)->first();
+				$timeSlot=Timeslots::where('doctor_id','=',$doctor->id)->first();
+				if( !is_null($doctor) || !is_null($timeSlot) ){
+					$period=explode(".", $timeSlot->period);
+					if( count($period)!=2 ){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+					$periodMinutes=$period[1];
+					$periodHours=$period[0];
+					$periodMinutes = $periodMinutes + $periodHours*60;
+					//verify start and end time is in timegap
+					$startDate=Carbon::createFromFormat('Y-m-d H:i:s',$start);
+					$endDate=Carbon::createFromFormat('Y-m-d H:i:s',$end);
+					if( $startDate->diffInMinutes($endDate,false)!=$periodMinutes ){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+					//verify start is above 1 day
+					$dt = Carbon::now('Asia/Colombo');
+					$dt->hour = 0;
+					$dt->minute = 0;
+					$dt->second = 0;
+					$daysLeft=$dt->diffInDays($startDate);
+					if( $daysLeft<2 || $daysLeft>8 ){
+						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					}
+					//verify user dont have any schdules with the same doctor within a week
+					// dont check for the cancel ones
+
+
+
+					//save the new schedule and send a email to the user
+
+
+
+				}else{
+					return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+				}
+			}else{
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+		}else{
+			return  response()->json(['message' => 'Invalid Option', 'code' => 'error']);
+		}
 
 	}
 
@@ -72,10 +120,10 @@ class appointmentUser extends Controller {
 		if( !is_null($doctor) ){
 			$userRequested=user::where('email','=',$doctor->email)->first();
 			if( !is_null($userRequested) ){
-				$timeslots=Timeslots::where('doctor_id','=',$doctor->id)->first();
-				if( !is_null($timeslots) ){
+				$timeSlots=Timeslots::where('doctor_id','=',$doctor->id)->first();
+				if( !is_null($timeSlots) ){
 					//getting the time period
-					$period=explode(".", $timeslots->period);
+					$period=explode(".", $timeSlots->period);
 					if(count($period)!=2){
 						return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor);
 					}
@@ -89,28 +137,29 @@ class appointmentUser extends Controller {
 					$dayCount=0;
 					$dt->addDays(2);
 					$timetable=array();
+					$timevals=array();
 					while($dayCount<7){
 						$day=array();
 						if($dt->dayOfWeek==1){
 							//echo "monday<br>";
-							$day=$this->stringDateToArray($timeslots->monday);
+							$day=$this->stringDateToArray($timeSlots->monday);
 						}elseif($dt->dayOfWeek==2){
-							$day=$this->stringDateToArray($timeslots->tuesday);
+							$day=$this->stringDateToArray($timeSlots->tuesday);
 							//echo "tuesday<br>";
 						}elseif($dt->dayOfWeek==3){
-							$day=$this->stringDateToArray($timeslots->wednesday);
+							$day=$this->stringDateToArray($timeSlots->wednesday);
 							//echo "wedensday<br>";
 						}elseif($dt->dayOfWeek==4){
-							$day=$this->stringDateToArray($timeslots->thursday);
+							$day=$this->stringDateToArray($timeSlots->thursday);
 							//echo "Thursday<br>";
 						}elseif($dt->dayOfWeek==5){
-							$day=$this->stringDateToArray($timeslots->friday);
+							$day=$this->stringDateToArray($timeSlots->friday);
 							//echo "Friday<br>";
 						}elseif($dt->dayOfWeek==6){
-							$day=$this->stringDateToArray($timeslots->saturday);
+							$day=$this->stringDateToArray($timeSlots->saturday);
 							//echo "Saturday<br>";
 						}elseif($dt->dayOfWeek==0){
-							$day=$this->stringDateToArray($timeslots->sunday);
+							$day=$this->stringDateToArray($timeSlots->sunday);
 							//echo "Sunday<br>";
 						}
 						if(count($day)!=4){
@@ -127,11 +176,15 @@ class appointmentUser extends Controller {
 							}
 						}
 						$key=$dt->toDateString();
-						$timetable[$key]=$this->timeCal($day,$tempCancel,$periodMinutes,$dt,$doctor->id);
+						$returnArray=array();
+						$returnArray=$this->timeCal($day,$tempCancel,$periodMinutes,$dt,$doctor->id);
+						//$timetable[$key]=$this->timeCal($day,$tempCancel,$periodMinutes,$dt,$doctor->id);
+						$timetable[$key]=$returnArray['times'];
+						$timevals[$key]=$returnArray['vals'];
 						$dt->addDay();
 						$dayCount++;
 					}
-					return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor)->with('timetable',$timetable);
+					return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor)->with('timetable',$timetable)->with('timevals',$timevals);
 				}else{
 					return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor);
 				}
@@ -188,7 +241,9 @@ class appointmentUser extends Controller {
 		$startCancel->minute=$Cancel[1];
 		$endCancel->hour=$Cancel[2];
 		$endCancel->minute=$Cancel[3];	
-		$times=array(); // returning array of the available time slots
+		$times=array();
+		$timeval=array(); // returning array of the available time slots
+		$twodArray=array();
 		// process default time
 		while( floor($startDefault->diffInMinutes($endDefault,false) / $periodMinutes) > 0  ){
 			$con1=floor($startDefault->diffInMinutes($startCancel,false) / $periodMinutes);
@@ -203,11 +258,15 @@ class appointmentUser extends Controller {
 				if( is_null($schedules) ){
 					$msg=$startDefault->format('h:i A')."-". $startDefault->copy()->addMinutes($periodMinutes)->format('h:i A');
 					array_push($times, $msg);
+					$obj = (object) array('start' => $startDefault->toDateTimeString() , 'end' => $startDefault->copy()->addMinutes($periodMinutes)->toDateTimeString());
+					array_push($timeval,$obj);
 				}
 				$startDefault->addMinutes($periodMinutes);
 			}
 		}
-		return $times;
+		$twodArray['times']=$times;
+		$twodArray['vals']=$timeval;
+		return $twodArray;
 	}
 
 }
