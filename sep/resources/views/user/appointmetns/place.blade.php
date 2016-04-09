@@ -84,7 +84,13 @@ function profile(url){
     }
     if(data['task'] == "makeAppointment"){
 
-
+       
+        Lobibox.notify("success", {
+          title: 'Appointment',
+          msg: data['message'],
+          sound: '../../resources/common/sounds/sound4'
+        });
+    
 
     }
   }

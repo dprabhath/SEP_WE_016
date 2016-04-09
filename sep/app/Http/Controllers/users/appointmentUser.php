@@ -5,6 +5,7 @@ use App\doctorSchedule;
 use App\Timeslots;
 use App\cancelSlots;
 use Mail;
+use SMS;
 use Illuminate\Support\Str;
 use Session;
 use App\Http\Requests;
@@ -88,12 +89,30 @@ class appointmentUser extends Controller {
 					}
 					//verify user dont have any schdules with the same doctor within a week
 					// dont check for the cancel ones
-
-
-
+					$dt->addDays(2);
+					$dtEnd=$dt->copy()->addDays(7);
+					$schedules=doctorSchedule::where('did','=',$doctor_id)->where('uid','=',Session::get('userid'))->where('schedule_start','>',$dt->toDateTimeString())->where('schedule_end','<',$dtEnd->toDateTimeString())->where('cancelUser','=',0)->where('cancelDoctor','=',0)->first();
+					if( !is_null($schedules) ){
+						return  response()->json(['message' => 'You already have a appointment in this week', 'code' => 'error']);
+					}
 					//save the new schedule and send a email to the user
+					$newSchedule= new doctorSchedule;
+					$newSchedule->did=$doctor_id;
+					$newSchedule->uid=Session::get('userid');
+					$newSchedule->schedule_start=$startDate->toDateTimeString();
+					$newSchedule->schedule_end=$endDate->toDateTimeString();
+					$newSchedule->code=rand(10000, 99999);
+					$newSchedule->trys=0;
+					$newSchedule->save();
+					$dName=$doctor->first_name." ".$doctor->last_name;
+					$user=Session::get('user');
+					Mail::send('mailtemplate/appointmentPlaced', ['name'=> $user->name,'dName'=>$dName,'Date'=>$startDate->toDateString(),'Time'=>$startDate->format('h:i A'),'code'=>$newSchedule->code], function ($m) use ($user) {
+						$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
+						$m->to($user->email, $user->name)->subject('Appointment Details');
+					});
 
+					return  response()->json(['message' => 'Your appointment placed successfully', 'code' => 'success','task'=>'makeAppointment']);
 
 				}else{
 					return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
