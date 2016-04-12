@@ -88,10 +88,10 @@
 			@if(! empty($user) && $user->pic!='')
 
 
-			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='../{{$user->pic}}' alt='...'>";
+			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='{{ url('/') }}/{{$user->pic}}' alt='...'>";
 			@else
 
-			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src='{{ url('/') }}../uploads/profile_pics/staff.jpg' alt='...'>";
+			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src={{ url('/') }}/uploads/profile_pics/emp.png alt='...'>";
 			@endif
 			
 			htmlMsg+= "</a></div>";
