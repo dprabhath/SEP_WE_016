@@ -113,7 +113,7 @@ class LoginController extends Controller {
 						$m->from('daemon@mail.altairsl.us', 'Daemon');
 						$m->to($user->email, $user->name)->subject('New Password!');
 					});
-					return "Check the Email Settings or your internet connection";
+					return "ok";
 				}else{
 					return "Check the Email Settings or your internet connection";
 				}
