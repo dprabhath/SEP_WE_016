@@ -179,7 +179,7 @@
 
 						@if(! empty($user) && $user->pic!='')
 
-						src="{{$user->pic}}"
+						src="{{ url('/') }}/{{$user->pic}}"
 
 						@else
 						src="{{ url('/') }}/uploads/profile_pics/emp.png"
@@ -204,10 +204,10 @@
 					<a href="#">
 						@if(! empty($staff) && $staff->pic!='')
 
-						<img height="48" width="48" class="media-object img-circle" src="{{$staff->pic}}" alt="...">
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/{{$staff->pic}}" alt="...">
 
 						@else
-						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/staff.jpg" alt="...">
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/emp.png" alt="...">
 						@endif
 
 					</a>

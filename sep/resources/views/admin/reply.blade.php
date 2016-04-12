@@ -183,10 +183,10 @@
 						<img height="48" width="48" class="media-object img-circle"
 						@if(! empty($ticket_owner) && $ticket_owner->pic!='')
 
-						src="../{{$ticket_owner->pic}}"
+						src="{{ url('/') }}/{{$ticket_owner->pic}}"
 
 						@else
-						src="{{ url('/') }}../uploads/profile_pics/emp.png"
+						src="{{ url('/') }}/uploads/profile_pics/emp.png"
 						@endif
 						alt="...">
 					</a>
@@ -208,10 +208,10 @@
 					<a href="#">
 						@if(! empty($user) && $user->pic!='')
 
-						<img height="48" width="48" class="media-object img-circle" src="../{{$user->pic}}" alt="...">
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/{{$user->pic}}" alt="...">
 
 						@else
-						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}../uploads/profile_pics/staff.jpg" alt="...">
+						<img height="48" width="48" class="media-object img-circle" src="{{ url('/') }}/uploads/profile_pics/emp.png" alt="...">
 						@endif
 
 					</a>
