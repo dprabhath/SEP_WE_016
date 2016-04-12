@@ -48,7 +48,137 @@ class appointmentUser extends Controller {
 	public function index()
 	{
 		
-		
+		return view('user.appointmetns.list')->with('user',Session::get('user'));
+	}
+	/**
+	*
+	* take the post request and process them
+	* @return Json response
+	*/
+	public function viewInputs()
+	{
+		if( Request::get('task')=="loadtableconfirmed" ){
+			$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',1)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip(0)->take(20)->get();
+
+			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',1)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->count();
+
+			$doctorName=array();
+			for( $x=0; $x < sizeof($schedules); $x++ ){
+				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
+				if(is_null($doctor)){
+					$doctorName[]="Name Not Available";
+				}else{
+					$doctorName[]=$doctor;
+				}
+				
+				
+			}
+
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableconfirmed', 'total' =>$count,'doctorName' => $doctorName]);
+
+		}elseif( Request::get('task')=="loadtableunconfirmed" ){
+			$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',0)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip(0)->take(20)->get();
+
+			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',0)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->count();
+			$doctorName=array();
+			for( $x=0; $x < sizeof($schedules); $x++ ){
+				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
+				if(is_null($doctor)){
+					$doctorName[]="Name Not Available";
+				}else{
+					$doctorName[]=$doctor;
+				}
+				
+				
+			}
+
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableunconfirmed', 'total' =>$count,'doctorName' => $doctorName]);
+
+		}elseif( Request::get('task')=="loadtablecanceled" ){
+			$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->skip(0)->take(20)->get();
+
+			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->count();
+			$doctorName=array();
+			for( $x=0; $x < sizeof($schedules); $x++ ){
+				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
+				if(is_null($doctor)){
+					$doctorName[]="Name Not Available";
+				}else{
+					$doctorName[]=$doctor;
+				}
+				
+				
+			}
+
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecanceled', 'total' =>$count,'doctorName' => $doctorName]);
+
+		}elseif( Request::get('task')=="loadtablecompleted" ){
+			$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',1)->skip(0)->take(20)->get();
+
+			$count=doctorSchedule::where('uid','=',Session::get('userid'))->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',1)->count();
+			$doctorName=array();
+			for( $x=0; $x < sizeof($schedules); $x++ ){
+				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
+				if(is_null($doctor)){
+					$doctorName[]="Name Not Available";
+				}else{
+					$doctorName[]=$doctor;
+				}
+				
+				
+			}
+
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecompleted', 'total' =>$count,'doctorName' => $doctorName]);
+
+		}elseif( Request::get('task')=="loadtableall" ){
+			$dt=Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->skip(0)->take(20)->get();
+
+			$count=doctorSchedule::where('uid','=',Session::get('userid'))->count();
+			$doctorName=array();
+			for( $x=0; $x < sizeof($schedules); $x++ ){
+				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
+				if(is_null($doctor)){
+					$doctorName[]="Name Not Available";
+				}else{
+					$doctorName[]=$doctor;
+				}
+			}
+
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableall', 'total' =>$count,'doctorName' => $doctorName]);
+		}elseif( Request::get('task')=="viewDetails" ){
+			$appointment=Request::get('appointment');
+			if( is_null($appointment) ){
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+			$schedule=doctorSchedule::where('uid','=',Session::get('userid'))->where('id','=',$appointment[0])->first();
+			if( is_null($schedule) ){
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+			$doctor=Doctor::where('id',$schedule->did)->select('id','first_name', 'last_name','address','phone','specialization')->first();
+			return  response()->json(['schedules' => $schedule, 'code' => 'success' , 'task' => 'viewDetails','doctor' => $doctor]);
+
+		}elseif ( Request::get('task')=="cancelAppointment" ) {
+			$appointments=Request::get('appointments');
+			if( is_null($appointments) ){
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+			foreach ($appointments as &$value) {
+				$schedule=doctorSchedule::where('uid','=',Session::get('userid'))->where('id','=',$value)->first();
+				if( is_null($schedule) ){
+					continue;
+				}
+				$schedule->cancelUser=1;
+				$schedule->save();
+			}
+			return  response()->json(['code' => 'success' , 'task' => 'cancelAppointment']);
+		}
+
+		return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 	}
 	/**
 	*
@@ -58,10 +188,27 @@ class appointmentUser extends Controller {
 	public function inputs()
 	{
 		if( Request::get('task')=="makeAppointment" ){
-			$doctor_id=Request::get('doctor_id');
+			$doctor_id=Session::get('requestedDoctor');
+			$timeVal=Session::get('timeval');
 			$start=Request::get('start');
 			$end=Request::get('end');
-			if( !is_null($doctor_id) && !is_null($start) && !is_null($end) ){
+			$check=false;
+			if( is_null($timeVal) ){
+				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+			}
+			foreach ($timeVal as $key => $values) {
+
+				foreach ($values as $value) {
+    				if( $value->start==trim($start) && $value->end==trim($end) ){
+    				$check=true;
+    				break;
+    				}
+    				//return  response()->json(['message' => count($values), 'code' => 'error']);
+				}
+    			
+			}
+
+			if( !is_null($doctor_id) && !is_null($start) && !is_null($end) && !is_null($timeVal) && $check==true ){
 				$doctor=Doctor::where('id',$doctor_id)->first();
 				$timeSlot=Timeslots::where('doctor_id','=',$doctor->id)->first();
 				if( !is_null($doctor) || !is_null($timeSlot) ){
@@ -72,12 +219,16 @@ class appointmentUser extends Controller {
 					$periodMinutes=$period[1];
 					$periodHours=$period[0];
 					$periodMinutes = $periodMinutes + $periodHours*60;
-					//verify start and end time is in timegap
+					//verify slot is free
 					$startDate=Carbon::createFromFormat('Y-m-d H:i:s',$start);
 					$endDate=Carbon::createFromFormat('Y-m-d H:i:s',$end);
-					if( $startDate->diffInMinutes($endDate,false)!=$periodMinutes ){
-						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					$scheduleFree=doctorSchedule::where('did','=',$doctor_id)->where('schedule_start','=',$startDate->toDateTimeString())->where('schedule_end','=',$endDate->toDateTimeString())->where('cancelUser','=',0)->where('cancelDoctor','=',0)->first();
+					if( !is_null($scheduleFree) ){
+						return  response()->json(['message' => 'Slot is Already reserved please select another or refresh', 'code' => 'error']);
 					}
+					//if( $startDate->diffInMinutes($endDate,false)!=$periodMinutes ){
+					//	return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+					//}
 					//verify start is above 1 day
 					$dt = Carbon::now('Asia/Colombo');
 					$dt->hour = 0;
@@ -85,7 +236,7 @@ class appointmentUser extends Controller {
 					$dt->second = 0;
 					$daysLeft=$dt->diffInDays($startDate);
 					if( $daysLeft<2 || $daysLeft>8 ){
-						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+						return  response()->json(['message' => 'Refresh the page', 'code' => 'error']);
 					}
 					//verify user dont have any schdules with the same doctor within a week
 					// dont check for the cancel ones
@@ -103,16 +254,20 @@ class appointmentUser extends Controller {
 					$newSchedule->schedule_end=$endDate->toDateTimeString();
 					$newSchedule->code=rand(10000, 99999);
 					$newSchedule->trys=0;
-					$newSchedule->save();
-					$dName=$doctor->first_name." ".$doctor->last_name;
-					$user=Session::get('user');
-					Mail::send('mailtemplate/appointmentPlaced', ['name'=> $user->name,'dName'=>$dName,'Date'=>$startDate->toDateString(),'Time'=>$startDate->format('h:i A'),'code'=>$newSchedule->code], function ($m) use ($user) {
-						$m->from('daemon@mail.altairsl.us', 'Native Physician');
+					if($newSchedule->save()){
+						$dName=$doctor->first_name." ".$doctor->last_name;
+						$user=Session::get('user');
+						Mail::send('mailtemplate/appointmentPlaced', ['name'=> $user->name,'dName'=>$dName,'Date'=>$startDate->toDateString(),'Time'=>$startDate->format('h:i A'),'code'=>$newSchedule->code], function ($m) use ($user) {
+							$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
-						$m->to($user->email, $user->name)->subject('Appointment Details');
-					});
+							$m->to($user->email, $user->name)->subject('Appointment Details');
+						});
 
-					return  response()->json(['message' => 'Your appointment placed successfully', 'code' => 'success','task'=>'makeAppointment']);
+						return  response()->json(['message' => 'Your appointment placed successfully', 'code' => 'success','task'=>'makeAppointment']);
+					}else{
+						return  response()->json(['message' => 'Selected slot is already reserved', 'code' => 'error']);
+					}
+					
 
 				}else{
 					return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
@@ -203,6 +358,8 @@ class appointmentUser extends Controller {
 						$dt->addDay();
 						$dayCount++;
 					}
+					Session::put('requestedDoctor',$doctor->id);
+					Session::put('timeval',$timevals);
 					return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor)->with('timetable',$timetable)->with('timevals',$timevals);
 				}else{
 					return view('user.appointmetns.place')->with('user',Session::get('user'))->with('userReq',$userRequested)->with('doctor',$doctor);
@@ -285,6 +442,7 @@ class appointmentUser extends Controller {
 		}
 		$twodArray['times']=$times;
 		$twodArray['vals']=$timeval;
+		
 		return $twodArray;
 	}
 

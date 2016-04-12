@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -13,7 +12,7 @@ class CreateDoctorSchedulesTable extends Migration
     public function up()
     {
         Schema::create('doctor_schedules', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->index();
             $table->timestamps();
             $table->integer('did');
             $table->integer('uid');
@@ -25,10 +24,12 @@ class CreateDoctorSchedulesTable extends Migration
             $table->boolean('cancelUser')->default(0); // cancelation requested by the user and that cancalation cannot be undone becuase in the meantime someone else can be take that time slot
             $table->boolean('cancelDoctor')->default(0); // cancelation requested by the doctor and that cancaltion cannot be undone becuase in the meantime someone else can be take that time slot
             $table->boolean('completed')->default(0); // patient have to give the code to the doctor and doctor can set this to 1 by entering the code
+            //$table->primary(array('id','did','schedule_start','schedule_end'));
 
         });
+        DB::statement('ALTER TABLE  `doctor_schedules` DROP PRIMARY KEY , ADD PRIMARY KEY ( `did` ,`schedule_start`,`schedule_end` ) ;');
     }
-
+     
     /**
      * Reverse the migrations.
      *

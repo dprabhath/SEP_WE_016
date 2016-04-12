@@ -40,7 +40,7 @@ const token = "{{ csrf_token() }}";
 const doctor_id = "{{ $doctor->id }}"
 var selectedslot=null;
 function profile(url){
-	window.open(url);
+	window.location.replace(url);
 }
 	
   /****************************** send json requets to the server ******************************/
@@ -90,8 +90,11 @@ function profile(url){
           msg: data['message'],
           sound: '../../resources/common/sounds/sound4'
         });
-    
-
+        
+        setTimeout(function(){
+          redirect("{{ url('/') }}/view-appointment");
+        }, 2000);
+        
     }
   }
 
@@ -315,7 +318,7 @@ function profile(url){
 	</div>
 </div>
 </div>
-  <div id="wait">
+  <div id="wait"></div>
 @stop
 
 @section('footer')
