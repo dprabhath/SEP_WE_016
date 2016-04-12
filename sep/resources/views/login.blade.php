@@ -209,7 +209,10 @@
 					//alert("click Detected");
 					var email = $('[name=email]').val();
 					var pat = /([0-9]{9})$/;
-					var m = email.match(pat)[0];
+					var m = email.match(pat);
+					if(m.length>0){
+						m=m[0];
+					}
 					if(isEmail(email)){
 						$( "#passrecover" ).submit();
 					}else if(isPhone(m)){
