@@ -85,7 +85,7 @@
 			htmlMsg+= "<div class='media reply-user' style='padding:10px;'>";
 			htmlMsg+= "<div class='media-left'>";
 			htmlMsg+= "<a href='#'>";
-			@if(! empty($$user) && $$user->pic!='')
+			@if(! empty($user) && $user->pic!='')
 
 			htmlMsg+="<img height='48' width='48' class='media-object img-circle' src={{$user->pic}} alt='...'>";
 

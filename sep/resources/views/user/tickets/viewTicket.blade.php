@@ -250,11 +250,13 @@
 			ids = $(this).attr('href');
 			//var requets = {"_token": token ,"task": "viewTicket","ticket":ids};
 			//jsend(requets);
-			$('<form action="{{ url('/') }}/view-ticket" method="POST">' + 
-				'<input type="hidden" name="_token" value="' + token + '">' +
-				'<input type="hidden" name="ticket" value="' + ids + '">' +
-				'<input type="hidden" name="task" value="viewTicket">' +
-				'</form>').submit();
+			//$('<form action="{{ url('/') }}/view-ticket" method="POST">' + 
+			//	'<input type="hidden" name="_token" value="' + token + '">' +
+			//	'<input type="hidden" name="ticket" value="' + ids + '">' +
+			//	'<input type="hidden" name="task" value="viewTicket">' +
+			//	'</form>').submit();
+			$('[name=ticket]').attr('value',ids);
+			$('#viewform').submit();
 
 			e.preventDefault();
 		});
@@ -361,6 +363,11 @@
 @section('navbar')
 @stop
 @section('body')
+<form id="viewform" style="display: none;" action="{{ url('/') }}/view-ticket" method="POST"> 
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="hidden" name="ticket" value="">
+				<input type="hidden" name="task" value="viewTicket">
+</form>
 <div class="row">
 	<div class="container-fluid">
 		<div class="col-sm-8">

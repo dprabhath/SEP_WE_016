@@ -277,11 +277,13 @@
 			ids = $(this).attr('href');
 			//var requets = {"_token": token ,"task": "viewTicket","ticket":ids};
 			//jsend(requets);
-			$('<form action="{{ url('/') }}/admin/view-ticket" method="POST">' + 
-				'<input type="hidden" name="_token" value="' + token + '">' +
-				'<input type="hidden" name="ticket" value="' + ids + '">' +
-				'<input type="hidden" name="task" value="viewTicket">' +
-				'</form>').submit();
+			//$('<form action="{{ url('/') }}/admin/view-ticket" method="POST">' + 
+			//	'<input type="hidden" name="_token" value="' + token + '">' +
+			//	'<input type="hidden" name="ticket" value="' + ids + '">' +
+			//	'<input type="hidden" name="task" value="viewTicket">' +
+			//	'</form>').submit();
+			$('[name=ticket]').attr('value',ids);
+			$('#viewform').submit();
 		});
 		$('#dropdown_menu_opened').click(function(e){
 			if(showing_table==2 || showing_table==3){
@@ -406,6 +408,11 @@
 @stop
 
 @section('body')
+<form id="viewform" style="display: none;" action="{{ url('/') }}/admin/view-ticket" method="POST">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="hidden" name="ticket" value="">
+				<input type="hidden" name="task" value="viewTicket">
+				</form>
 <div class="graphs">
 	<div class="xs">
 
