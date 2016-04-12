@@ -19,7 +19,7 @@
 
 	}
 
-	#dbox{
+	#dbox,#buttton_previous,#buttton_next{
 		background-color:#fff;
 		padding:10px;
 		height:40px;
@@ -62,6 +62,8 @@
 <script type="text/javascript">
 	const token = "{{ csrf_token() }}";
 	var showing_table = 1;
+	var loadtableopendtickets_count=0;
+	var loadtableclosedtickets_count=0;
 	/****************************** send json requets to the server ******************************/
 	function jsend(dataString){
 		$('#wait').show();
@@ -95,13 +97,13 @@
 
 		if(type=="1"){
 			
-			var d = {"_token": token ,"task": "loadtableopendtickets"};
+			var d = {"_token": token ,"task": "loadtableopendtickets","skip":loadtableopendtickets_count};
 
 			jsend(d);
 			
 			
 		}else if(type=="2"){
-			var d = {"_token": token ,"task": "loadtableclosedtickets"};
+			var d = {"_token": token ,"task": "loadtableclosedtickets","skip":loadtableclosedtickets_count};
 
 			jsend(d);
 		}
@@ -121,8 +123,25 @@
 		if(data['task']=="loadtableopendtickets"){
 
 			var tickets = data['tickets'];
-			var tot = "Showing Opened Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Opened Tickets "+(data['skips']*(loadtableopendtickets_count+1))+" of "+data['total'];
 			var last_messages = data['msgs'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtableopendtickets_count+1)>=totals){
+				tot = "Showing Opened Tickets "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtableopendtickets_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
@@ -140,8 +159,25 @@
 
 		}else if(data['task']=="loadtableclosedtickets"){
 			var tickets = data['tickets'];
-			var tot = "Showing Closed Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Closed Tickets "+(data['skips']*(loadtableclosedtickets_count+1))+" of "+data['total'];
 			var last_messages = data['msgs'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtableclosedtickets_count+1)>=totals){
+				tot = "Showing Closed Tickets "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtableclosedtickets_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
@@ -291,6 +327,30 @@
 			jsend(requets);
 
 		});
+		$('#buttton_previous').click(function(e){
+			if(showing_table ==1){
+				loadtableopendtickets_count--;
+
+				loadtable("1");
+			}else{
+				loadtableclosedtickets_count--;
+				loadtable("2");
+			}
+
+		});
+
+		$('#buttton_next').click(function(e){
+			if(showing_table ==1){
+				loadtableopendtickets_count++;
+				
+				loadtable("1");
+
+			}else{
+				loadtableclosedtickets_count++;
+				loadtable("2");
+			}
+
+		});
 		
 
 	});
@@ -352,10 +412,10 @@
 
 
 
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_previous" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 						</div>
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_next" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 						</div>
 						<div id="dbox" style="float:right;border-color: #fff;padding:7px;">

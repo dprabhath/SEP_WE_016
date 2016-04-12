@@ -9,6 +9,10 @@
 	</p>
 	<p>Time : {{$Time}}
 	</p>
+	<p>Place : {{$doctor->address}}
+	</p>
+	<p>Doctor's Phone No : {{$doctor->phone}}
+	</p>
 	<p>Code : {{$code}}
 </body>
 </html>

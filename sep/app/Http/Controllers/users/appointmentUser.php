@@ -28,7 +28,7 @@ class appointmentUser extends Controller {
 	| controller as you wish. It is just here to get your app started!
 	|
 	*/
-
+	private $resultCount=10;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -52,14 +52,16 @@ class appointmentUser extends Controller {
 	}
 	/**
 	*
-	* take the post request and process them
-	* @return Json response
+	* Return the Confirmed Appointments which are in future
+	* 
+	* @param Integer $skiper get the pagination number
+	* @return Json Response
+	*
 	*/
-	public function viewInputs()
+	private function loadTableConfirmed($skiper)
 	{
-		if( Request::get('task')=="loadtableconfirmed" ){
-			$dt = Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',1)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip(0)->take(20)->get();
+		$dt=Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',1)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
 			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',1)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->count();
 
@@ -74,12 +76,20 @@ class appointmentUser extends Controller {
 				
 				
 			}
-
-			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableconfirmed', 'total' =>$count,'doctorName' => $doctorName]);
-
-		}elseif( Request::get('task')=="loadtableunconfirmed" ){
-			$dt = Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',0)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip(0)->take(20)->get();
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableconfirmed', 'total' =>$count,'doctorName' => $doctorName,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
+	* Return the UnConfirmed Appointments which are in future
+	* 
+	* @param Integer $skiper get the pagination number
+	* @return Json Response
+	*
+	*/
+	private function loadTableUnConfirmed($skiper)
+	{
+		$dt=Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',0)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
 			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('confirmed','=',0)->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',0)->count();
 			$doctorName=array();
@@ -93,12 +103,20 @@ class appointmentUser extends Controller {
 				
 				
 			}
-
-			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableunconfirmed', 'total' =>$count,'doctorName' => $doctorName]);
-
-		}elseif( Request::get('task')=="loadtablecanceled" ){
-			$dt = Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->skip(0)->take(20)->get();
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableunconfirmed', 'total' =>$count,'doctorName' => $doctorName,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
+	* Return the canceled Appointments which are in future
+	* 
+	* @param Integer $skiper get the pagination number
+	* @return Json Response
+	*
+	*/
+	private function loadTableCanceled($skiper)
+	{
+		$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
 			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->count();
 			$doctorName=array();
@@ -112,12 +130,20 @@ class appointmentUser extends Controller {
 				
 				
 			}
-
-			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecanceled', 'total' =>$count,'doctorName' => $doctorName]);
-
-		}elseif( Request::get('task')=="loadtablecompleted" ){
-			$dt = Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',1)->skip(0)->take(20)->get();
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecanceled', 'total' =>$count,'doctorName' => $doctorName,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
+	* Return the completed Appointments
+	* 
+	* @param Integer $skiper get the pagination number
+	* @return Json Response
+	*
+	*/
+	private function loadTableCompleted($skiper)
+	{
+		$dt = Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
 			$count=doctorSchedule::where('uid','=',Session::get('userid'))->where('cancelUser','=',0)->where('cancelDoctor','=',0)->where('completed','=',1)->count();
 			$doctorName=array();
@@ -132,11 +158,20 @@ class appointmentUser extends Controller {
 				
 			}
 
-			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecompleted', 'total' =>$count,'doctorName' => $doctorName]);
-
-		}elseif( Request::get('task')=="loadtableall" ){
-			$dt=Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->skip(0)->take(20)->get();
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtablecompleted', 'total' =>$count,'doctorName' => $doctorName,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
+	* Return all the Appointments
+	* 
+	* @param Integer $skiper get the pagination number
+	* @return Json Response
+	*
+	*/
+	private function loadTableAll($skiper)
+	{
+		$dt=Carbon::now('Asia/Colombo');
+			$schedules=doctorSchedule::where('uid','=',Session::get('userid'))->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
 			$count=doctorSchedule::where('uid','=',Session::get('userid'))->count();
 			$doctorName=array();
@@ -149,22 +184,59 @@ class appointmentUser extends Controller {
 				}
 			}
 
-			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableall', 'total' =>$count,'doctorName' => $doctorName]);
-		}elseif( Request::get('task')=="viewDetails" ){
-			$appointment=Request::get('appointment');
-			if( is_null($appointment) ){
+			return  response()->json(['schedules' => $schedules, 'code' => 'success' , 'task' => 'loadtableall', 'total' =>$count,'doctorName' => $doctorName,'skips' =>$this->resultCount]);
+	}
+	/**
+	*
+	* Return the details of the Appointments
+	* 
+	* @param Integer $appointment id of the appointment
+	* @return Json Response
+	*
+	*/
+	private function viewDetails($appointment)
+	{
+		if( is_null($appointment) ){
 				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 			}
 			$schedule=doctorSchedule::where('uid','=',Session::get('userid'))->where('id','=',$appointment[0])->first();
 			if( is_null($schedule) ){
 				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 			}
+			$status="";
+			$startDate=Carbon::createFromFormat('Y-m-d H:i:s',$schedule->schedule_start);
+			$dt = Carbon::now('Asia/Colombo');
+			
+			if( $schedule->cancelUser==1 ){
+				$status="Canceled by you";
+			}elseif( $schedule->cancelDoctor==1 ) {
+				$status="Canceled by the Doctor";
+			}elseif( $schedule->completed==1 ) {
+				$status="Appointment was completed";
+			}elseif( $schedule->confirmed==0 ){
+				$status="Appointment not confirmed by the doctor";
+			}else{
+				$val=$dt->diffInHours($startDate, false);
+				if($val>=0){
+					$status="Appointment will be held ".$startDate->diffForHumans($dt);
+				}else{
+					$status="Appointment Expired";
+				}
+			}
 			$doctor=Doctor::where('id',$schedule->did)->select('id','first_name', 'last_name','address','phone','specialization')->first();
-			return  response()->json(['schedules' => $schedule, 'code' => 'success' , 'task' => 'viewDetails','doctor' => $doctor]);
-
-		}elseif ( Request::get('task')=="cancelAppointment" ) {
-			$appointments=Request::get('appointments');
-			if( is_null($appointments) ){
+			return  response()->json(['schedules' => $schedule, 'code' => 'success' , 'task' => 'viewDetails','doctor' => $doctor,'status'=>$status,'startDate'=>$startDate->format('Y-m-d h:i A')]);
+	}
+	/**
+	*
+	* Cancel the appointment
+	* 
+	* @param Integer $appointment id of the appointment
+	* @return Json Response
+	*
+	*/
+	private function cancelApointment($appointments)
+	{
+		if( is_null($appointments) ){
 				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 			}
 			foreach ($appointments as &$value) {
@@ -176,6 +248,35 @@ class appointmentUser extends Controller {
 				$schedule->save();
 			}
 			return  response()->json(['code' => 'success' , 'task' => 'cancelAppointment']);
+	}
+	/**
+	*
+	* take the post request and process them
+	* @return Json response
+	*/
+	public function viewInputs()
+	{
+		if( Request::get('task')=="loadtableconfirmed" ){
+			$x=Request::get('skip');
+			return $this->loadTableConfirmed($x);
+		}elseif( Request::get('task')=="loadtableunconfirmed" ){
+			$x=Request::get('skip');
+			return $this->loadTableUnConfirmed($x);
+		}elseif( Request::get('task')=="loadtablecanceled" ){
+			$x=Request::get('skip');
+			return $this->loadTableCanceled($x);
+		}elseif( Request::get('task')=="loadtablecompleted" ){
+			$x=Request::get('skip');
+			return $this->loadTableCompleted($x);
+		}elseif( Request::get('task')=="loadtableall" ){
+			$x=Request::get('skip');
+			return $this->loadTableAll($x);
+		}elseif( Request::get('task')=="viewDetails" ){
+			$appointment=Request::get('appointment');
+			return $this->viewDetails($appointment);
+		}elseif ( Request::get('task')=="cancelAppointment" ) {
+			$appointments=Request::get('appointments');
+			return $this->cancelApointment($appointments);
 		}
 
 		return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
@@ -257,7 +358,7 @@ class appointmentUser extends Controller {
 					if($newSchedule->save()){
 						$dName=$doctor->first_name." ".$doctor->last_name;
 						$user=Session::get('user');
-						Mail::send('mailtemplate/appointmentPlaced', ['name'=> $user->name,'dName'=>$dName,'Date'=>$startDate->toDateString(),'Time'=>$startDate->format('h:i A'),'code'=>$newSchedule->code], function ($m) use ($user) {
+						Mail::send('mailtemplate/appointmentPlaced', ['name'=> $user->name,'dName'=>$dName,'Date'=>$startDate->toDateString(),'Time'=>$startDate->format('h:i A'),'code'=>$newSchedule->code,'doctor'=>$doctor], function ($m) use ($user) {
 							$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
 							$m->to($user->email, $user->name)->subject('Appointment Details');

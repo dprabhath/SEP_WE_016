@@ -19,7 +19,7 @@
 
   }
 
-	#dbox{
+	#dbox,#buttton_previous,#buttton_next{
 		background-color:#fff;
 		padding:10px;
 		height:40px;
@@ -65,6 +65,11 @@
 <script type="text/javascript">
 const token = "{{ csrf_token() }}";
 var showing_table = 1;
+var loadtableconfirmed_count=0;
+var loadtableunconfirmed_count=0;
+var loadtablecanceled_count=0;
+var loadtablecompleted_count=0;
+var loadtableall_count=0;
 /****************************** send json requets to the server ******************************/
 	function jsend(dataString){
 		$('#wait').show();
@@ -98,28 +103,27 @@ var showing_table = 1;
 
 		if(type=="1"){
 			
-			var d = {"_token": token ,"task": "loadtableconfirmed"};
+			var d = {"_token": token ,"task": "loadtableconfirmed","skip":loadtableconfirmed_count};
 
 			jsend(d);
 			
 			
 		}else if(type=="2"){
 
-			var d = {"_token": token ,"task": "loadtableunconfirmed"};
+			var d = {"_token": token ,"task": "loadtableunconfirmed","skip":loadtableunconfirmed_count};
 
 			jsend(d);
 
 		}else if(type=="3"){
-			var d = {"_token": token ,"task": "loadtablecanceled"};
+			var d = {"_token": token ,"task": "loadtablecanceled","skip":loadtablecanceled_count};
 
 			jsend(d);
 		}else if(type=="4"){
-			var d = {"_token": token ,"task": "loadtablecompleted"};
+			var d = {"_token": token ,"task": "loadtablecompleted","skip":loadtablecompleted_count};
 
 			jsend(d);
 		}else if(type=="5"){
-			var d = {"_token": token ,"task": "loadtableall"};
-
+			var d = {"_token": token ,"task": "loadtableall","skip":loadtableall_count};
 			jsend(d);
 		}
 	}
@@ -137,8 +141,25 @@ var showing_table = 1;
 		}
 		if(data['task']=="loadtableconfirmed"){
 			var schedules = data['schedules'];
-			var tot = "Showing Confirmed Appointments "+schedules.length+" of "+data['total'];
+			var tot = "Showing Confirmed Appointments "+(data['skips']*(loadtableconfirmed_count+1))+" of "+data['total'];
 			var doctorName = data['doctorName'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtableconfirmed_count+1)>=totals){
+				tot = "Showing Confirmed Appointments "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtableconfirmed_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
@@ -153,8 +174,25 @@ var showing_table = 1;
 
 		}else if(data['task']=="loadtableunconfirmed"){
 			var schedules = data['schedules'];
-			var tot = "Showing Unconfirmed Appointments "+schedules.length+" of "+data['total'];
+			var tot = "Showing Unconfirmed Appointments "+(data['skips']*(loadtableunconfirmed_count+1))+" of "+data['total'];
 			var doctorName = data['doctorName'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtableunconfirmed_count+1)>=totals){
+				tot = "Showing Unconfirmed Appointments "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtableunconfirmed_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
@@ -169,8 +207,25 @@ var showing_table = 1;
 
 		}else if(data['task']=="loadtablecanceled"){
 			var schedules = data['schedules'];
-			var tot = "Showing Canceled Appointments "+schedules.length+" of "+data['total'];
+			var tot = "Showing Canceled Appointments "+(data['skips']*(loadtablecanceled_count+1))+" of "+data['total'];
 			var doctorName = data['doctorName'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtablecanceled_count+1)>=totals){
+				tot = "Showing Canceled Appointments "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtablecanceled_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
@@ -185,8 +240,25 @@ var showing_table = 1;
 
 		}else if(data['task']=="loadtablecompleted"){
 			var schedules = data['schedules'];
-			var tot = "Showing Completed Appointments "+schedules.length+" of "+data['total'];
+			var tot = "Showing Completed Appointments "+(data['skips']*(loadtablecompleted_count+1))+" of "+data['total'];
 			var doctorName = data['doctorName'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtablecompleted_count+1)>=totals){
+				tot = "Showing Completed Appointments "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtablecompleted_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
@@ -201,8 +273,25 @@ var showing_table = 1;
 
 		}else if(data['task']=="loadtableall"){
 			var schedules = data['schedules'];
-			var tot = "Showing All Appointments "+schedules.length+" of "+data['total'];
+			var tot = "Showing All Appointments "+(data['skips']*(loadtableall_count+1))+" of "+data['total'];
 			var doctorName = data['doctorName'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(loadtableall_count+1)>=totals){
+				tot = "Showing All Appointments "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			} 
+
+			if(loadtableall_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
@@ -217,13 +306,14 @@ var showing_table = 1;
 		}else if(data['task']=="viewDetails"){
 			var schedules = data['schedules'];
 			var doctor = data['doctor'];
-			$('#AppointmentDate').html("Schedule Date Time: "+schedules['schedule_start']);
+			$('#AppointmentDate').html("Schedule Date Time: "+data['startDate']);
 			$('#modalPlace').html("Address: "+doctor['address']);
 			$('#modalDoctorName').html("Name: "+doctor['first_name']+" "+doctor['last_name']);
 			$('#modalDoctorSpec').html("Specialization: "+doctor['specialization']);
 			$('#modalDoctorPhone').html("Phone: "+doctor['phone']);
 			$('#modalSessionCode').html("Session Code: "+schedules['code']);
 			$('#modalcancelAppointment').attr('value',schedules['id']);
+			$('#modalStatus').html("Status : "+data['status']);
 			if(schedules['cancelUser']==1 || schedules['cancelDoctor']==1){
 				$('#modalcancelAppointment').hide();
 			}else{
@@ -315,6 +405,49 @@ var showing_table = 1;
     			}
 			});
 		});
+		$('#buttton_previous').click(function(e){
+			if(showing_table==1){
+				loadtableconfirmed_count--;
+				
+				loadtable("1");
+
+			}else if(showing_table==2){
+				loadtableunconfirmed_count--;
+				loadtable("2");
+			}else if(showing_table==3){
+				loadtablecanceled_count--;
+				loadtable("3");
+			}else if(showing_table==4){
+				loadtablecompleted_count--;
+				loadtable("4");
+			}else{
+				loadtableall_count--;
+				loadtable("5");
+			}
+
+		});
+		
+		$('#buttton_next').click(function(e){
+			if(showing_table==1){
+				loadtableconfirmed_count++;
+				
+				loadtable("1");
+
+			}else if(showing_table==2){
+				loadtableunconfirmed_count++;
+				loadtable("2");
+			}else if(showing_table==3){
+				loadtablecanceled_count++;
+				loadtable("3");
+			}else if(showing_table==4){
+				loadtablecompleted_count++;
+				loadtable("4");
+			}else{
+				loadtableall_count++;
+				loadtable("5");
+			}
+
+		});
 
 	});
 </script>
@@ -373,10 +506,10 @@ var showing_table = 1;
 
 
 
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_next" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 						</div>
-						<div id="dbox" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_previous" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 						</div>
 						<div id="dbox" style="float:right;border-color: #fff;padding:7px;">
@@ -448,6 +581,7 @@ var showing_table = 1;
       </div>
       <div class="modal-body">
         <label id="modalPlace" class="control-label">Address:</label><br>
+        <label id="modalStatus" class="control-label">Session Code:</label><br>
         <label id="modalDoctorName" class="control-label">Doctor Name:</label><br>
         <label id="modalDoctorSpec" class="control-label">Doctor Specialization:</label><br>
         <label id="modalDoctorPhone" class="control-label">Phone Number:</label><br>

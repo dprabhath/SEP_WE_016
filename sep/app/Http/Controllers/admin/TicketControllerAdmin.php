@@ -26,7 +26,7 @@ class TicketControllerAdmin extends Controller
 	| 
 	|
 	*/
-
+	private $resultCount=10; //store the number of row count for each page
 	/**
 	 * Create a new controller instance.
 	 *
@@ -52,63 +52,63 @@ class TicketControllerAdmin extends Controller
 	*
 	* Return the Opened tickets as Json Response
 	* 
-	* 
+	* @param get the pagination number
 	* @return Json Response
 	*
 	*/
-	private function loadTableOpenedTickets()
+	private function loadTableOpenedTickets($skiper)
 	{
 		$user=Session::get('user');
 		$lists=adminUserTickets::where('adminid',$user->id)->lists('ticketid');
-		$tickets=tickets::whereIn('id', $lists)->where('opened',1)->skip(0)->take(20)->get();
+		$tickets=tickets::whereIn('id', $lists)->where('opened',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 		$count=tickets::whereIn('id', $lists)->where('opened',1)->count();
 		$lastMessages=array();
 		for( $x=0; $x < sizeof($tickets); $x++ ){
 			$ticketsMessages=tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
 			$lastMessages[]=$ticketsMessages;
 		}
-		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $lastMessages]);
+		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableopendtickets', 'total' =>$count, 'msgs' => $lastMessages,'skips' =>$this->resultCount]);
 	}
 	/**
 	*
 	* Return the Available tickets as Json Response
 	* 
-	* 
+	* @param get the pagination number
 	* @return Json Response
 	*
 	*/
-	private function loadTableAvailableTickets()
+	private function loadTableAvailableTickets($skiper)
 	{
 		$lists=adminUserTickets::lists('ticketid');
-		$tickets=tickets::whereNotIn('id', $lists)->where('opened',1)->skip(0)->take(20)->get();
+		$tickets=tickets::whereNotIn('id', $lists)->where('opened',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 		$count=tickets::whereNotIn('id', $lists)->where('opened',1)->count();
 		$lastMessages=array();
 		for( $x=0; $x < sizeof($tickets); $x++ ){
 			$ticketsMessages=tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
 			$lastMessages[]=$ticketsMessages;
 		}
-		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableAvailabletickets', 'total' =>$count, 'msgs' => $lastMessages]);
+		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableAvailabletickets', 'total' =>$count, 'msgs' => $lastMessages,'skips' =>$this->resultCount]);
 	}
 	/**
 	*
 	* Return the Closed tickets as Json Response
 	* 
-	* 
+	* @param get the pagination number
 	* @return Json Response
 	*
 	*/
-	private function loadTableClosedTickets()
+	private function loadTableClosedTickets($skiper)
 	{
 		$user=Session::get('user');
 		$lists=adminUserTickets::where('adminid',$user->id)->lists('ticketid');
-		$tickets=tickets::whereIn('id', $lists)->where('opened',0)->skip(0)->take(20)->get();
+		$tickets=tickets::whereIn('id', $lists)->where('opened',0)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 		$count=tickets::whereIn('id', $lists)->where('opened',0)->count();
 		$lastMessages=array();
 		for( $x=0; $x<sizeof($tickets); $x++ ){
 			$ticketsMessages=tickets_messages::where('ticket_id',$tickets[$x]->id)->orderBy('id', 'desc')->first();
 			$lastMessages[]=$ticketsMessages;
 		}
-		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $lastMessages]);
+		return  response()->json(['tickets' => $tickets, 'code' => 'success' , 'task' => 'loadtableclosedtickets', 'total' =>$count, 'msgs' => $lastMessages,'skips' =>$this->resultCount]);
 	}
 	/**
 	*
@@ -212,11 +212,14 @@ class TicketControllerAdmin extends Controller
 	{
 		$user=Session::get('user');
 		if( Request::get('task')=="loadtableopendtickets" ){
-			return $this->loadTableOpenedTickets();
+			$x=Request::get('skip');
+			return $this->loadTableOpenedTickets($x);
 		}elseif(Request::get('task')=="loadtableAvailabletickets"){
-			return $this->loadTableAvailableTickets();
+			$x=Request::get('skip');
+			return $this->loadTableAvailableTickets($x);
 		}elseif( Request::get('task')=="loadtableclosedtickets" ){
-			return $this->loadTableClosedTickets();
+			$x=Request::get('skip');
+			return $this->loadTableClosedTickets($x);
 		}elseif( Request::get('task')=="closeTicket" ){
 			$ids=Request::get('tickets');
 			return $this->closeTickets($ids);

@@ -141,7 +141,7 @@ class RegisterdUserManagment extends Controller
 					if($user->id==Session::get('userid')){
 						continue;
 					}
-					$user->active = 0;
+					$user->active=0;
 					$user->save();
 				}
 			}else{

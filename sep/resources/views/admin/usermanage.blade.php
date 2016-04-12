@@ -101,11 +101,11 @@
 			$('#ConfirmUsers').css("display","none");
 
 			var users = data['users'];
-			var tot = "Showing "+(data['skips']*(loadTableRegisterd_count+1))+" of "+data['total'];
+			var tot = "Showing Registed Users "+(data['skips']*(loadTableRegisterd_count+1))+" of "+data['total'];
 			var totals=data['total'];
 			var skips=data['skips'];
 			if(skips*(loadTableRegisterd_count+1)>=totals){
-				tot = "Showing "+data['total']+" of "+data['total'];
+				tot = "Showing Registed Users "+data['total']+" of "+data['total'];
 				//hide the next button
 				document.getElementById('buttton_next').style.visibility = 'hidden';
 			}else{
@@ -160,11 +160,11 @@
 			$('#ConfirmUsers').css("display","none");
 			
 			var users = data['users'];
-			var tot = "Showing "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
+			var tot = "Showing blocked Users "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
 			var totals=data['total'];
 			var skips=data['skips'];
 			if(skips*(loadTableBlocked_count+1)>=totals){
-				tot = "Showing "+data['total']+" of "+data['total'];
+				tot = "Showing blocked Users "+data['total']+" of "+data['total'];
 				//hide the next button
 				document.getElementById('buttton_next').style.visibility = 'hidden';
 			}else{
@@ -208,11 +208,11 @@
 			$('#ConfirmUsers').css("display","block");
 			
 			var users = data['users'];
-			var tot = "Showing "+(data['skips']*(loadTablePending_count+1))+" of "+data['total'];
+			var tot = "Showing pending users "+(data['skips']*(loadTablePending_count+1))+" of "+data['total'];
 			var totals=data['total'];
 			var skips=data['skips'];
 			if(skips*(loadTablePending_count+1)>=totals){
-				tot = "Showing "+data['total']+" of "+data['total'];
+				tot = "Showing pending users "+data['total']+" of "+data['total'];
 				//hide the next button
 				document.getElementById('buttton_next').style.visibility = 'hidden';
 			}else{

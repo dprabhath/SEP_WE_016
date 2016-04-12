@@ -12,7 +12,7 @@ class CreateDoctorSchedulesTable extends Migration
     public function up()
     {
         Schema::create('doctor_schedules', function (Blueprint $table) {
-            $table->increments('id')->index();
+            $table->increments('id');
             $table->timestamps();
             $table->integer('did');
             $table->integer('uid');
@@ -27,7 +27,7 @@ class CreateDoctorSchedulesTable extends Migration
             //$table->primary(array('id','did','schedule_start','schedule_end'));
 
         });
-        DB::statement('ALTER TABLE  `doctor_schedules` DROP PRIMARY KEY , ADD PRIMARY KEY ( `did` ,`schedule_start`,`schedule_end` ) ;');
+       
     }
      
     /**

@@ -29,6 +29,9 @@
 <script type="text/javascript">
 	const token = "{{ csrf_token() }}";
 	var showing_table = 1;
+	var openedTable_count=0;
+	var closedTable_count=0;
+	var availableTable_count=0;
 /****************************** send json requets to the server ******************************/
 	function jsend(dataString){
 		$('#wait').show();
@@ -62,17 +65,17 @@
 
 		if(type=="1"){
 			
-			var d = {"_token": token ,"task": "loadtableopendtickets"};
+			var d = {"_token": token ,"task": "loadtableopendtickets","skip":openedTable_count};
 
 			jsend(d);
 			
 			
 		}else if(type=="2"){
-			var d = {"_token": token ,"task": "loadtableclosedtickets"};
+			var d = {"_token": token ,"task": "loadtableclosedtickets","skip":closedTable_count};
 
 			jsend(d);
 		}else if(type=="3"){
-			var d = {"_token": token ,"task": "loadtableAvailabletickets"};
+			var d = {"_token": token ,"task": "loadtableAvailabletickets","skip":availableTable_count};
 
 			jsend(d);
 		}
@@ -93,8 +96,26 @@
 			$('#action_open_ticket').css("display","none");
 			$('#action_close_ticket').css("display","block");
 			var tickets = data['tickets'];
-			var tot = "Showing Opened Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Opened Tickets "+(data['skips']*(openedTable_count+1))+" of "+data['total'];
 			var last_messages = data['msgs'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(openedTable_count+1)>=totals){
+				tot = "Showing Opened Tickets "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			}
+
+			if(openedTable_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
+
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
@@ -114,8 +135,25 @@
 			$('#action_open_ticket').css("display","block");
 			$('#action_close_ticket').css("display","none");
 			var tickets = data['tickets'];
-			var tot = "Showing Closed Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Closed Tickets "+(data['skips']*(closedTable_count+1))+" of "+data['total'];
 			var last_messages = data['msgs'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(closedTable_count+1)>=totals){
+				tot = "Showing Closed Tickets "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			}
+
+			if(closedTable_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
@@ -133,8 +171,25 @@
 			$('#action_open_ticket').css("display","none");
 			$('#action_close_ticket').css("display","none");
 			var tickets = data['tickets'];
-			var tot = "Showing Available Tickets "+tickets.length+" of "+data['total'];
+			var tot = "Showing Available Tickets "+(data['skips']*(availableTable_count+1))+" of "+data['total'];
 			var last_messages = data['msgs'];
+			var totals=data['total'];
+			var skips=data['skips'];
+			if(skips*(availableTable_count+1)>=totals){
+				tot = "Showing Available Tickets "+data['total']+" of "+data['total'];
+				//hide the next button
+				document.getElementById('buttton_next').style.visibility = 'hidden';
+			}else{
+				document.getElementById('buttton_next').style.visibility = 'visible';
+			}
+
+			if(availableTable_count==0){
+				//hide previous button
+				document.getElementById('buttton_previous').style.visibility = 'hidden';
+			}else{
+				//show both of the buttons
+				document.getElementById('buttton_previous').style.visibility = 'visible';
+			}
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
@@ -308,6 +363,37 @@
 			jsend(requets);
 
 		});
+		$('#buttton_previous').click(function(e){
+			if(showing_table ==1){
+				openedTable_count--;
+
+				loadtable("1");
+
+			}else if(showing_table==2){
+				closedTable_count--;
+				loadtable("2");
+			}else{
+				availableTable_count--;
+				loadtable("3");
+			}
+
+		});
+		$('#buttton_next').click(function(e){
+			if(showing_table ==1){
+				openedTable_count++;
+				
+				loadtable("1");
+
+			}else if(showing_table==2){
+				closedTable_count++;
+				loadtable("2");
+
+			}else{
+				availableTable_count++;
+				loadtable("3");
+			}
+
+		});
 		
 
 	});
@@ -391,8 +477,8 @@
 								</div>
 							</div>
 							<div class="btn-group">
-								<a class="btn btn-default"><i class="fa fa-angle-left"></i></a>
-								<a class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
 							</div>
 
 
