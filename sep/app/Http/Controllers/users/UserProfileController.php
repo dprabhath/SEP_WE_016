@@ -117,9 +117,11 @@ class UserProfileController extends Controller {
 					}
 					$destinationPath = base_path() . '/../public/uploads/profile_pics';
 					$fullPath = 'uploads/profile_pics/'.Session::get('userid').'.'.$image->getClientOriginalExtension();
-        			if(!$image->move($destinationPath, Session::get('userid').'.'.$image->getClientOriginalExtension())) {
-            			return  response()->json(['message' => 'Error saving the file', 'code' => 'error']);
-        			}
+					try {
+							$image->move($destinationPath, Session::get('userid').'.'.$image->getClientOriginalExtension());
+						} catch(Exception $e) {
+						return  response()->json(['message' => 'Error saving the file', 'code' => 'error']);
+					}
         			$user->pic=$fullPath;
         			$user->save();
         			$this->updateSession();
