@@ -208,6 +208,7 @@ $('#picfile').change(function (){
       			/** upload to the server **/
 
       		});
+/*
 $("form#pictureForm").submit(function(e){
 	$('#wait').show();
 	var formData = new FormData($(this)[0]);
@@ -259,6 +260,7 @@ $("form#pictureForm").submit(function(e){
 	//e.unbind();
 	return false;
 });
+*/
 $('form#nameForm').submit(function(e){
 
 	e.preventDefault();
