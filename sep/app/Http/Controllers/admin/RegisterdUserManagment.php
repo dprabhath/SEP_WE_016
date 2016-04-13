@@ -229,8 +229,8 @@ class RegisterdUserManagment extends Controller
 		$user=null;
 		$max=30;
 		if( $tasktype==1 ){
-				$user=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->skip(0)->take($max)->get();
-				$count=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->count();
+				$user=user::where('active','1')->where('verified','=',1)->where('email', 'LIKE', "%$searchString%")->skip(0)->take($max)->get();
+				$count=user::where('active','1')->where('verified','=',1)->where('email', 'LIKE', "%$searchString%")->count();
 				if($count>$max){
 					$count=$max;
 				}
