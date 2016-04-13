@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers\users;
 use App\User;
 use App\Doctor;
+use App\tickets;
+use App\doctorSchedule;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -42,10 +44,12 @@ class UserProfileController extends Controller {
 	public function index()
 	{
 		$doctor=Session::get('doctor');
+		$count=tickets::where('userid',Session::get('userid'))->count();
+		$countAppointment=doctorSchedule::where('uid','=',Session::get('userid'))->count();
 		if( is_null($doctor) ){
-			return view('user.userprofile')->with('user',Session::get('user'));
+			return view('user.userprofile')->with('user',Session::get('user'))->with('ticketCount',$count)->with('appointmentCount',$countAppointment);
 		}else{
-			return view('user.userprofile')->with('user',Session::get('user'))->with('doctor',$doctor);
+			return view('user.userprofile')->with('user',Session::get('user'))->with('doctor',$doctor)->with('ticketCount',$count)->with('appointmentCount',$countAppointment);
 		}	
 		
 	}

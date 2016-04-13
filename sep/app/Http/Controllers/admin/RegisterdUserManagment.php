@@ -227,14 +227,28 @@ class RegisterdUserManagment extends Controller
 	private function search($searchString,$tasktype)
 	{
 		$user=null;
+		$max=30;
 		if( $tasktype==1 ){
-				$user=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
+				$user=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->skip(0)->take($max)->get();
 				$count=user::where('active','1')->where('email', 'LIKE', "%$searchString%")->count();
-				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd','total' =>$count]);
+				if($count>$max){
+					$count=$max;
+				}
+				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableRegisterd','total' =>$count,'skips' =>$max]);
+			}else if( $tasktype==2 ){
+				$user=user::where('active','0')->where('verified','=',1)->where('email', 'LIKE', "%$searchString%")->skip(0)->take($this->resultCount)->get();
+				$count=user::where('active','0')->where('verified','=',1)->where('email', 'LIKE', "%$searchString%")->count();
+				if($count>$max){
+					$count=$max;
+				}
+				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count,'skips' =>$max]);
 			}else{
-				$user=user::where('active','0')->where('email', 'LIKE', "%$searchString%")->skip(0)->take(20)->get();
-				$count=user::where('active','0')->where('email', 'LIKE', "%$searchString%")->count();
-				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtableBlocked','total' =>$count]);
+				$user=user::where('verified','=',0)->where('email', 'LIKE', "%$searchString%")->skip(0)->take($this->resultCount)->get();
+				$count=user::where('verified','=',0)->where('email', 'LIKE', "%$searchString%")->count();
+				if($count>$max){
+					$count=$max;
+				}
+				return  response()->json(['users' => $user, 'code' => 'success' , 'task' => 'loadtablePending','total' =>$count,'skips' =>$max]);
 			}
 	}
 	/**

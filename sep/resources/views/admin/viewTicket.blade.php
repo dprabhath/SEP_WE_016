@@ -18,12 +18,7 @@
 
 
 	}
-	td {
-		max-width: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
+	
 
 </style>
 <script type="text/javascript">
@@ -119,12 +114,12 @@
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
-				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
-				htmls+="<td style='width:20%;'>"+ last_messages[i]['created_at'] +"</td>";
-				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
-				htmls+="<td style='width:10%;''><a class='close_ticket_anchor' href='"+ tickets[i]['id'] +"'>Colse</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+="<td>"+ tickets[i]['subject'] +"</td>";
+				htmls+=" <td>"+ last_messages[i]['message'] +" </td>";
+				htmls+="<td>"+ last_messages[i]['created_at'] +"</td>";
+				htmls+="<td><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
+				htmls+="<td><a class='close_ticket_anchor' href='"+ tickets[i]['id'] +"'>Colse</a></td></tr>";
 
 			}
 			showing_table = 1;
@@ -157,12 +152,12 @@
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:10%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
-				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
-				htmls+="<td style='width:15%;'>"+ last_messages[i]['created_at'] +"</td>";
-				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
-				htmls+="<td style='width:10%;''><a class='open_ticket_anchor' href='"+ tickets[i]['id'] +"'>Open</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+="<td>"+ tickets[i]['subject'] +"</td>";
+				htmls+=" <td>"+ last_messages[i]['message'] +" </td>";
+				htmls+="<td>"+ last_messages[i]['created_at'] +"</td>";
+				htmls+="<td><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
+				htmls+="<td><a class='open_ticket_anchor' href='"+ tickets[i]['id'] +"'>Open</a></td></tr>";
 
 			}
 			showing_table = 2;
@@ -193,11 +188,11 @@
 			$('#user_count').html(tot);
 			for(var i = 0; i < tickets.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:10%;'><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+="<td style='width:25%;'>"+ tickets[i]['subject'] +"</td>";
-				htmls+=" <td style='width:30%;'>"+ last_messages[i]['message'] +" </td>";
-				htmls+="<td style='width:15%;'>"+ last_messages[i]['created_at'] +"</td>";
-				htmls+="<td style='width:10%;'><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ tickets[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+="<td>"+ tickets[i]['subject'] +"</td>";
+				htmls+=" <td>"+ last_messages[i]['message'] +" </td>";
+				htmls+="<td>"+ last_messages[i]['created_at'] +"</td>";
+				htmls+="<td><a class='view_ticket_anchor' href='"+tickets[i]['id']+"'>View</a></td>";
 				//htmls+="<td style='width:10%;''><a class='open_ticket_anchor' href='"+ tickets[i]['id'] +"'>Open</a></td></tr>";
 				htmls+="</tr>";
 

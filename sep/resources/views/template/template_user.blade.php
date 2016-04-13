@@ -105,7 +105,7 @@ min-height:70px !important;
    position: relative;
     top: -13px;
     float: left;
-    left: -5px;
+    left: 0px;
     width:45px !important;
     max-width:45px !important;
     max-height: 45px !important;
@@ -159,6 +159,15 @@ min-height:70px !important;
 
 
 	@yield('head')
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#myNavbar').on('shown.bs.collapse', function () {
+  				$('.dropdown-toggle').dropdown("toggle");
+			});	
+
+
+		});
+	</script>
 	
 </head>
 
@@ -167,13 +176,13 @@ min-height:70px !important;
 	<div id="wrapper" class="container-fluid r3_counter_box"  align="center">
 		
 		<div id="header" align="left">
-		<div class="container-fluid" style="min-height:30px;background:rgb(0,0,0);border:none;height:30px;">
-			<div class="row" style="height:30px;">
-				<div class="col-md-4 col-sm-4" style="color:white;font-size: 12px;padding-top:5px;">
-					Contact-No : 0774117218
+		<!--div class="container-fluid" style="min-height:10px;background:rgb(0,0,0);border:none;height:10px;">
+			<div class="row" style="height:10px;">
+				<div class="col-md-4 col-sm-4" style="color:white;font-size: 0px;padding-top:1px;">
+					
 				</div>
 			</div>
-		</div>
+		</div-->
 			<nav class="navbar navbar-default" style="border-radius:0px;background:rgba(255,255,255,1);border:none;">
 				<div class="container-fluid">
 					<div class="navbar-header">
@@ -201,7 +210,7 @@ min-height:70px !important;
 										<img src="{{ url('/') }}/uploads/profile_pics/emp.png" class="profile-image img-circle custom_profile_pic">
 									@endif
 
-									<b class="caret"></b></a>
+									</a>
 									<!--img src="http://placehold.it/60x60" class="profile-image img-circle custom_profile_pic"> Username <b class="caret"></b></a-->
 									<ul class="dropdown-menu">
 									@if(! empty($user))

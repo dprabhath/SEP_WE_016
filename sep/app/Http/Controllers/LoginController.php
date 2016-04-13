@@ -137,7 +137,7 @@ class LoginController extends Controller {
 			}else{
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
-				if( $user->level==2 ){
+				if( $user->level>=2 ){
 					$doctor=Doctor::where('email','=',$user->email)->first();
 					if( !is_null($doctor) ){
 						Session::put('doctor', $doctor);
@@ -224,7 +224,7 @@ class LoginController extends Controller {
 				}	
 				Session::put('userid', $user->id);
 				Session::put('user',$user);
-				if( $user->level==2 ){
+				if( $user->level>=2 ){
 					$doctor=Doctor::where('email','=',$user->email)->first();;
 					if( !is_null($doctor) ){
 						Session::put('doctor', $doctor);

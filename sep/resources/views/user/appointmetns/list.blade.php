@@ -52,9 +52,9 @@
 
 	}
 	td {
-		max-width: 0;
+		/*max-width: 0;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		text-overflow: ellipsis;*/
 		white-space: nowrap;
 	}
 	.control-label{
@@ -163,10 +163,10 @@ var loadtableall_count=0;
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+=" <td style='width:30%;'><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
-				htmls+="<td style='width:30%;'>"+ schedules[i]['schedule_start'] +"</td>";
-				htmls+="<td style='width:10%;''><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+=" <td><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
+				htmls+="<td>"+ schedules[i]['schedule_start'] +"</td>";
+				htmls+="<td><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
 
 			}
 			showing_table = 1;
@@ -196,10 +196,10 @@ var loadtableall_count=0;
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+=" <td style='width:30%;'><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
-				htmls+="<td style='width:30%;'>"+ schedules[i]['schedule_start'] +"</td>";
-				htmls+="<td style='width:10%;''><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+=" <td><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
+				htmls+="<td>"+ schedules[i]['schedule_start'] +"</td>";
+				htmls+="<td><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
 
 			}
 			showing_table = 2;
@@ -229,10 +229,10 @@ var loadtableall_count=0;
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+=" <td style='width:30%;'><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
-				htmls+="<td style='width:30%;'>"+ schedules[i]['schedule_start'] +"</td>";
-				htmls+="<td style='width:10%;''><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+=" <td><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
+				htmls+="<td>"+ schedules[i]['schedule_start'] +"</td>";
+				htmls+="<td><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
 
 			}
 			showing_table = 3;
@@ -262,10 +262,10 @@ var loadtableall_count=0;
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+=" <td style='width:30%;'><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
-				htmls+="<td style='width:30%;'>"+ schedules[i]['schedule_start'] +"</td>";
-				htmls+="<td style='width:10%;''><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+=" <td><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
+				htmls+="<td>"+ schedules[i]['schedule_start'] +"</td>";
+				htmls+="<td><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
 
 			}
 			showing_table = 4;
@@ -295,10 +295,10 @@ var loadtableall_count=0;
 			$('.showtotal').html(tot);
 			for(var i = 0; i < schedules.length; i++){
 				htmls+="<tr>";
-				htmls+="<td style='width:5%;'><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
-				htmls+=" <td style='width:30%;'><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
-				htmls+="<td style='width:30%;'>"+ schedules[i]['schedule_start'] +"</td>";
-				htmls+="<td style='width:10%;''><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
+				htmls+="<td><input type='checkbox' id='selectall' value='"+ schedules[i]['id'] +"' class='checkbox inside'></td>";
+				htmls+=" <td><a href='{{url('/')}}/doctors/"+ doctorName[i]['id'] +"'>"+ doctorName[i]['first_name']+ " " + doctorName[i]['last_name'] +"</a></td>";
+				htmls+="<td>"+ schedules[i]['schedule_start'] +"</td>";
+				htmls+="<td><a class='view_appointment_anchor' href='"+ schedules[i]['id'] +"'>View</a></td></tr>";
 
 			}
 			showing_table = 5;

@@ -159,7 +159,7 @@
 				<abbr title="Phone">Status:</abbr> Closed <br>
 				@endif
 
-				<abbr title="User">UserName: </abbr> {{$ticket_owner->email}}<br>
+				<abbr title="User">UserName: </abbr><a target='_blank' href="{{ url('/') }}/user/{{$ticket_owner->id}}" >{{$ticket_owner->email}}</a><br>
 				<abbr title="Phone">Opend Date:</abbr> {{ $ticket->created_at }} <br>
 				<?php
 

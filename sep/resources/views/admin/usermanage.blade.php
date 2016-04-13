@@ -125,7 +125,7 @@
 
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
-				htmls+="<td>"+users[i]['email']+"</td>"
+				htmls+="<td><a target='_blank' href='{{ url('/') }}/user/"+users[i]['id']+"'>"+users[i]['email']+"</a></td>"
 				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 				htmls+="<td><button id='userlevelchange' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">";
@@ -160,11 +160,11 @@
 			$('#ConfirmUsers').css("display","none");
 			
 			var users = data['users'];
-			var tot = "Showing blocked Users "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
+			var tot = "Showing Deactivated Users "+(data['skips']*(loadTableBlocked_count+1))+" of "+data['total'];
 			var totals=data['total'];
 			var skips=data['skips'];
 			if(skips*(loadTableBlocked_count+1)>=totals){
-				tot = "Showing blocked Users "+data['total']+" of "+data['total'];
+				tot = "Showing Deactivated Users "+data['total']+" of "+data['total'];
 				//hide the next button
 				document.getElementById('buttton_next').style.visibility = 'hidden';
 			}else{
@@ -181,7 +181,7 @@
 			for(var i = 0; i < users.length; i++){
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
-				htmls+="<td>"+users[i]['email']+"</td>"
+				htmls+="<td><a target='_blank' href='{{ url('/') }}/user/"+users[i]['id']+"'>"+users[i]['email']+"</a></td>"
 				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 
@@ -229,7 +229,7 @@
 			for(var i = 0; i < users.length; i++){
 				htmls+= "<tr class='unread checked'>";
 				htmls+="<td><input type='checkbox' class='checkbox inside' value="+ users[i]['id'] +"></td>";
-				htmls+="<td>"+users[i]['email']+"</td>"
+				htmls+="<td><a target='_blank' href='{{ url('/') }}/user/"+users[i]['id']+"'>"+users[i]['email']+"</a></td>"
 				htmls+="<td><button id='repassword' type='button' class='btn btn-link' style='padding:0px;margin:0px;' value="+users[i]['id']+">Reset Password</button></td>";
 				htmls+="<td>"+users[i]['created_at']+"</td>";
 
@@ -602,10 +602,13 @@
 			var strings = $('[name=searchBox]').val();
 			
 			var tasktype = 1;
+
 			if(showing_table ==1){
 				tasktype = 1;
-			}else{
+			}else if(showing_table ==2){
 				tasktype = 2;
+			}else{
+				tasktype = 3;
 			}
 			var requets = {"_token": token ,"task": "search","searchString":strings,"tasktype":tasktype};
 			e.preventDefault();

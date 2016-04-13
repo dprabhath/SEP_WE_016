@@ -7,7 +7,53 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
+		$('[name=heading]').prop('disabled', true);
+		$('[name=headingbanner]').css('visibility', 'hidden');
+		$('[name=heading]').css('visibility', 'hidden');
 
+		$('[name=options]').click(function(){
+			if($(this).val()=="custom"){
+				$('[name=heading]').prop('disabled', false);
+				$('[name=heading]').css('visibility', 'visible');
+				$('[name=headingbanner]').css('visibility', 'visible');
+			}else{
+				$('[name=heading]').prop('disabled', true);
+				$('[name=heading]').css('visibility', 'hidden');
+				$('[name=headingbanner]').css('visibility', 'hidden');
+			}
+		});
+
+		$('#submitTicket').submit(function(e){
+			
+			//e.unbind();
+			var text = document.getElementById("txtarea1").value;
+			text = text.trim();
+			//document.getElementById("replyText").value="";
+			if(text==""){
+				e.preventDefault();
+				Lobibox.notify("warning", {
+					title: 'warning',
+					msg: "You havent typed anything",
+					sound: '../resources/common/sounds/sound4'
+				});
+				return false;
+			}
+			if($('[name=options]').val()=="custom"){
+				var text = document.getElementById("smallinput").value;
+				text = text.trim();
+				//document.getElementById("replyText").value="";
+				if(text==""){
+					e.preventDefault();
+					Lobibox.notify("warning", {
+						title: 'warning',
+						msg: "You havent typed anything in heading",
+						sound: '../resources/common/sounds/sound4'
+					});
+					return false;
+				}
+			}
+
+		});
 
 	});
 </script>
@@ -28,7 +74,7 @@
 
 			<div class="tab-pane active" id="horizontal-form">
 
-				{!! Form::open(['class'=>'form-horizontal']) !!}
+				{!! Form::open(['class'=>'form-horizontal','id'=>'submitTicket']) !!}
 
 
 				<div class="form-group">
@@ -39,17 +85,19 @@
 				</div>
 				<div class="form-group">
 					<label for="selector1" class="col-sm-2 control-label">Subject</label>
-					<div class="col-sm-8"><select name="options" id="selector1" class="form-control1">
+					<div class="col-sm-8">
+					<select name="options" id="selector1" class="form-control1">
 						<option value="Problem 1">Problem 1</option>
 						<option value="Problem 2">Problem 2</option>
 						<option value="Problem 3">Problem 3</option>
 						<option value="custom">Custom</option>
-					</select></div>
+					</select>
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="smallinput" class="col-sm-2 control-label label-input-sm">Heading</label>
+					<label for="smallinput" name="headingbanner" class="col-sm-2 control-label label-input-sm">Heading</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control1 input-sm" id="smallinput" placeholder="Small Input" name="heading">
+						<input type="text" class="form-control1 input-sm" id="smallinput" placeholder="Type Heading in here" name="heading">
 					</div>
 				</div>
 				<div class="form-group">

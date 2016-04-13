@@ -116,9 +116,9 @@ class appointmentUser extends Controller {
 	private function loadTableCanceled($skiper)
 	{
 		$dt = Carbon::now('Asia/Colombo');
-			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
+			$schedules=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->skip($this->resultCount*$skiper)->take($this->resultCount)->get();
 
-			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->count();
+			$count=doctorSchedule::where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->where('cancelUser','=',1)->orWhere('cancelDoctor','=',1)->where('schedule_end','>',$dt->toDateTimeString())->where('uid','=',Session::get('userid'))->count();
 			$doctorName=array();
 			for( $x=0; $x < sizeof($schedules); $x++ ){
 				$doctor=Doctor::where('id',$schedules[$x]->did)->select('id','first_name', 'last_name')->first();
@@ -311,8 +311,19 @@ class appointmentUser extends Controller {
 
 			if( !is_null($doctor_id) && !is_null($start) && !is_null($end) && !is_null($timeVal) && $check==true ){
 				$doctor=Doctor::where('id',$doctor_id)->first();
+				if(is_null($doctor)){
+					return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
+				}
+				$user=Session::get('user');
+				if( $user->email==$doctor->email ){
+					return  response()->json(['message' => 'You cant place appointments to your self', 'code' => 'error']);
+				}
+				if($doctor->available==0){
+					return  response()->json(['message' => 'This Doctor is Not available', 'code' => 'error']);
+				}
 				$timeSlot=Timeslots::where('doctor_id','=',$doctor->id)->first();
-				if( !is_null($doctor) || !is_null($timeSlot) ){
+				if( !is_null($timeSlot) ){
+					
 					$period=explode(".", $timeSlot->period);
 					if( count($period)!=2 ){
 						return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
@@ -396,7 +407,7 @@ class appointmentUser extends Controller {
 			$userRequested=user::where('email','=',$doctor->email)->first();
 			if( !is_null($userRequested) ){
 				$timeSlots=Timeslots::where('doctor_id','=',$doctor->id)->first();
-				if( !is_null($timeSlots) ){
+				if( !is_null($timeSlots) && ($doctor->available==1) ){
 					//getting the time period
 					$period=explode(".", $timeSlots->period);
 					if(count($period)!=2){

@@ -299,7 +299,9 @@ function profile(url){
   				<div class="form-group">
     			<div class="col-sm-3 col-xs-1"></div>
 			    <div class="col-sm-6 col-xs-10">
+          @if(!empty($timetable))
 			      <button type="submit" id="makeAppointment" class="btn btn-info btn-block">Make an Appointment</button>
+          @endif
 			    </div>
 			    <div class="col-sm-3 col-xs-1">
 			    	

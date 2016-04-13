@@ -59,6 +59,7 @@ $(document).ready(function(){
 		<div class="list-group list-group-alternate"> 
 			<a data-toggle="tab" href="#home" class="list-group-item"><i class="ti ti-email"></i> Profile </a> 
 			@if(! empty($doctor) )
+				<a target="_blank" href="{{ url('/') }}/doctors/{{$doctor->id}}" class="list-group-item">Doctor Profile </a>
 				<a class="list-group-item"><span class="badge badge-warning">{{$doctor->rating}}</span>Rating </a> 
 				<a class="list-group-item" id='available'>
 				
@@ -66,11 +67,10 @@ $(document).ready(function(){
 				
 				 </a> 
 			@endif
-			
-			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Posts created </a>
-			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">100</span>Contributions </a> 
-			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-warning">14</span> Messages </a> 
-			<a data-toggle="tab" href="#menu1" class="list-group-item"><span class="badge badge-danger">30</span>Notifications </a> 
+			@if( $user->level>=5 )
+			<a href="#" class="list-group-item"><span class="badge badge-warning">{{ $ticketCount }}</span> Tickets Created </a>
+			<a href="#" class="list-group-item"><span class="badge badge-warning">{{ $appointmentCount }}</span>Placed Appointments </a>
+			@endif
 		</div>
 	</div>
 	<div class="col-md-8">
@@ -152,7 +152,7 @@ $(document).ready(function(){
 
 			</div>
 
-
+				@if( $user->level>=10 )
 				<div class="form-horizontal">
 				<div class="form-group">
 					<label class="col-sm-2 control-label">TP No</label>
@@ -172,6 +172,7 @@ $(document).ready(function(){
 					</div>
 				</div>
 				</div>
+				@endif
 
 				@if(! empty($doctor) && $doctor->phone!='' )
 

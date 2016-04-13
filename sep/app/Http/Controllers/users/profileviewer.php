@@ -2,6 +2,8 @@
 
 use App\User;
 use App\Doctor;
+use App\tickets;
+use App\doctorSchedule;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -50,11 +52,12 @@ class profileviewer extends Controller
             return "Not Found";
         }else{
             $doctor=Doctor::where('email','=',$wanted->email)->first();
-
+            $count=tickets::where('userid',$wanted->id)->count();
+            $countAppointment=doctorSchedule::where('uid','=',$wanted->id)->count();
             if( is_null($doctor) ){
-                return view('user.profileview')->with('user',Session::get('user'))->with('viewing',$wanted);
+                return view('user.profileview')->with('user',Session::get('user'))->with('viewing',$wanted)->with('ticketCount',$count)->with('appointmentCount',$countAppointment);
             }else{
-                return view('user.profileview')->with('user',Session::get('user'))->with('viewing',$wanted)->with('doctor',$doctor);
+                return view('user.profileview')->with('user',Session::get('user'))->with('viewing',$wanted)->with('doctor',$doctor)->with('ticketCount',$count)->with('appointmentCount',$countAppointment);
             }
             
         }
