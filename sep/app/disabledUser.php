@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class cancelSlots extends Model
+class disabledUser extends Model
 {
     //
 }

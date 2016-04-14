@@ -166,6 +166,14 @@ class RegistrationController extends Controller {
 			$newUser->active=1;
 			$newUser->verified=0;
 			$newUser->save();
+			try {
+			Mail::send('mailtemplate/sociallogin', ['name'=> $newUser->name,'pass'=>$password], function ($m) use ($newUser) {
+						$m->from('daemon@mail.altairsl.us', 'Native Physician');
+						$m->to($newUser->email, $newUser->name)->subject('New Password!');
+			});
+			}catch(Exception $e) {
+  				//echo 'Message: ' .$e->getMessage();
+			}
 			Session::put('loginMsg','user_created');
 			return Redirect::to('login');
 		}

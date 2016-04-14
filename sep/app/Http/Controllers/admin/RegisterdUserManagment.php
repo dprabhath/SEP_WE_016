@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers\admin;
 use App\user;
 use App\cronResetPassword;
+use App\deletedUser;
+use App\disabledUser;
 use Mail;
 use Illuminate\Support\Str;
 use Session;
@@ -143,6 +145,10 @@ class RegisterdUserManagment extends Controller
 					}
 					$user->active=0;
 					$user->save();
+					$disabledUser=new disabledUser;
+					$disabledUser->name=$user->name;
+					$disabledUser->email=$user->email;
+					$disabledUser->save();
 				}
 			}else{
 				return  response()->json(['message' => 'Unauthorized Access', 'code' => 'error']);
@@ -181,12 +187,15 @@ class RegisterdUserManagment extends Controller
 				foreach ($ids as &$value) {
 					$user = user::find($value);
 					if( $user->level<10 && $user->verified==0 ){
+						$deletedUser=new deletedUser;
+						$deletedUser->name=$user->name;
+						$deletedUser->email=$user->email;
+						$deletedUser->save();
+						//Mail::send('mailtemplate/accountDelete', ['name'=> $user->name], function ($m) use ($user) {
+						//	$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
-						Mail::send('mailtemplate/accountDelete', ['name'=> $user->name], function ($m) use ($user) {
-							$m->from('daemon@mail.altairsl.us', 'Native Physician');
-
-							$m->to($user->email, $user->name)->subject('Account Deleted');
-						});
+						//	$m->to($user->email, $user->name)->subject('Account Deleted');
+						//});
 						$user->delete();
 					}
 				}

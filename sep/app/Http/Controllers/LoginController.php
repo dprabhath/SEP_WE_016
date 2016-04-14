@@ -109,10 +109,14 @@ class LoginController extends Controller {
 				$pass=Str::random(10);
 				$user->password=md5($pass);
 				if($user->save()){
+					try{
 					Mail::send('mailtemplate/passwordreset', ['name'=> $user->name,'pass'=>$pass], function ($m) use ($user) {
 						$m->from('daemon@mail.altairsl.us', 'Daemon');
 						$m->to($user->email, $user->name)->subject('New Password!');
 					});
+						}catch(Exception $e){
+
+					}
 					return "ok";
 				}else{
 					return "Check the Email Settings or your internet connection";
@@ -203,10 +207,14 @@ class LoginController extends Controller {
 				$newUser->active=1;
 				$newUser->verified=0;
 				if( $newUser->save() ){
+					try{
 					Mail::send('mailtemplate/sociallogin', ['name'=> $newUser->name,'pass'=>$pass], function ($m) use ($newUser) {
 						$m->from('daemon@mail.altairsl.us', 'Native Physician');
 						$m->to($newUser->email, $newUser->name)->subject('New Password!');
 					});
+					}catch(Exception $e) {
+  						//echo 'Message: ' .$e->getMessage();
+					}
 					//return "Check the Email Settings or your internet connection";
 				}else{
 					return "Check the Email Settings or your internet connection";

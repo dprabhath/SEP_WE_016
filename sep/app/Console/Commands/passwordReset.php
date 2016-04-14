@@ -4,6 +4,8 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use App\cronResetPassword;
+use App\deletedUser;
+use App\disabledUser;
 use Mail;
 
 class passwordReset extends Command {
@@ -47,7 +49,24 @@ class passwordReset extends Command {
 				});
 				$task->delete();
 		}
+		$deletedUsers=deletedUser::all();
+		foreach( $deletedUsers as $deletedUser ) {
+				Mail::queue('mailtemplate/accountDelete', ['name'=> $deletedUser->name], function ($m) use ($deletedUser) {
+					$m->from('daemon@mail.altairsl.us', 'Native Physician');
+					$m->to($deletedUser->email, $deletedUser->name)->subject('Your Account Removed!');
+				});
+				$deletedUser->delete();
+		}
+		$disabledUsers=disabledUser::all();
+		foreach( $disabledUsers as $disabledUser ) {
+				Mail::queue('mailtemplate/accountDeactivate', ['name'=> $disabledUser->name], function ($m) use ($disabledUser) {
+					$m->from('daemon@mail.altairsl.us', 'Native Physician');
+					$m->to($disabledUser->email, $disabledUser->name)->subject('Your Account Disabled!');
+				});
+				$disabledUser->delete();
+		}
 		$this->info('Password reset emails were sent successfully!');
+
 	}
 
 }

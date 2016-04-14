@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration {
 			$table->string('level');
 			$table->boolean('active');
 			$table->boolean('verified');
-			
+			//$table->string('note')->nullable();
 		});
 	}
 

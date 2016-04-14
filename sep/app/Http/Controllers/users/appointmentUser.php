@@ -236,6 +236,9 @@ class appointmentUser extends Controller {
 	*/
 	private function cancelApointment($appointments)
 	{
+		$asd=array();
+		$asd[0]=14;
+		$appointments=$asd;
 		if( is_null($appointments) ){
 				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 			}
@@ -243,6 +246,28 @@ class appointmentUser extends Controller {
 				$schedule=doctorSchedule::where('uid','=',Session::get('userid'))->where('id','=',$value)->first();
 				if( is_null($schedule) ){
 					continue;
+				}
+				try{
+
+					if($schedule->confirmed==1){
+						$doctor=Doctor::where('id','=',$schedule->did)->first();
+						if(!is_null($doctor)){
+							$dUser=user::where('email','=',$doctor->email)->first();
+							if(!is_null($dUser)){
+								SMS::queue("Appointment on $schedule->schedule_start is canceled by the user", [], function($sms) use ($dUser) {
+					    			$sms->to($dUser->tp);
+								});
+								Mail::raw("Appointment on $schedule->schedule_start is canceled by the user", function ($m) use ($dUser) {
+									$m->from('daemon@mail.altairsl.us', 'Native Physician');
+
+									$m->to($dUser->email, $dUser->name)->subject('Appointment Canceled');
+								});
+							}
+						}
+					}
+				
+				}catch(Exception $e) {
+  						//echo 'Message: ' .$e->getMessage();
 				}
 				$schedule->cancelUser=1;
 				$schedule->save();
@@ -374,7 +399,13 @@ class appointmentUser extends Controller {
 
 							$m->to($user->email, $user->name)->subject('Appointment Details');
 						});
+						
+						Mail::raw("An Appointment is placed on $newSchedule->schedule_start", function ($m) use ($doctor) {
+									$m->from('daemon@mail.altairsl.us', 'Native Physician');
 
+									$m->to($doctor->email, "$doctor->first_name $doctor->last_name")->subject('New Appointment Placed');
+						});
+						
 						return  response()->json(['message' => 'Your appointment placed successfully', 'code' => 'success','task'=>'makeAppointment']);
 					}else{
 						return  response()->json(['message' => 'Selected slot is already reserved', 'code' => 'error']);
