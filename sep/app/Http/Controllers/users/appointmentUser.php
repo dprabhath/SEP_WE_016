@@ -236,9 +236,7 @@ class appointmentUser extends Controller {
 	*/
 	private function cancelApointment($appointments)
 	{
-		$asd=array();
-		$asd[0]=14;
-		$appointments=$asd;
+		
 		if( is_null($appointments) ){
 				return  response()->json(['message' => 'Data missmatched', 'code' => 'error']);
 			}
