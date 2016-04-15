@@ -9,6 +9,38 @@
       document.location.href = theUrl;
     }
 
+    function ValidateEmail()
+    {
+         var emailID = document.getElementById("email").value;
+         atpos = emailID.indexOf("@");
+         dotpos = emailID.lastIndexOf(".");
+         
+         if (atpos < 1 || ( dotpos - atpos < 2 )) 
+         {
+            alert("Please enter a valid Email Address")
+            document.editForm.email.focus() ;
+            return false;
+         }
+         return( true );
+    }
+
+    function ValidatePhone(phone)
+    {
+        if(phone.length == 10) {
+            if(isNaN(phone)) {
+                alert("Phone Number is Invalid.");
+                return false;
+            }
+            else {
+                return true;
+            }   
+        } 
+        else {
+            alert("Phone Number is Invalid.");
+            return false;
+        }
+    }
+
     function validateForm() 
     {
         var spec = document.getElementById("spec").value;
@@ -71,7 +103,13 @@
           alert("A field is empty.");
           return false;
         }
-        
+        if(!ValidateEmail()) {
+          return false;
+        }
+        if(!ValidatePhone(phone)) {
+            return false;
+        }
+
         return true;
     }
 

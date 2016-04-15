@@ -125,6 +125,9 @@
                 @if($user->level>4)
                 <input class="btn btn_5 btn-lg btn-info" value="Edit" onclick="NavigateTo('edit/{!! $doctor->id!!}')">
                 @endif
+                @if($user->level>4)
+                <input class="btn btn_5 btn-lg btn-info" value="Suggest Change" onclick="NavigateTo('suggest/{!! $doctor->id!!}')">
+                @endif
     </div>
 
         

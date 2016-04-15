@@ -32,11 +32,24 @@ Route::get('profile', 'users\UserProfileController@index');
 Route::get('profile/schedule', 'DoctorController@createSchedule');
 Route::post('profile/schedule', 'DoctorController@updateSchedule');
 Route::post('profile', 'users\UserProfileController@inputs');
+Route::get('profile/cancelslot', 'DoctorController@setCancelSlot');
+Route::post('profile/cancelslot', 'DoctorController@insertCancelSlot');
+Route::get('profile/pending', 'DoctorController@showPendingAppointments');
+Route::post('profile/pending', 'DoctorController@pendingAppointmentAction');
+Route::get('profile/confirmed', 'DoctorController@showConfirmedAppointments');
+Route::post('profile/confirmed', 'DoctorController@confirmedAppointmentAction');
 
 
 Route::get('doctors', 'DoctorController@index');
 Route::get('doctors/edit/{id}', 'DoctorController@edit');
 Route::post('doctors/edit/{id}', 'DoctorController@update');
+
+Route::get('doctors/suggest/{id}', 'DoctorController@suggestEdit');
+Route::post('doctors/suggest/{id}', 'DoctorController@insertSuggestEdit');
+
+Route::get('admin/pendingedit', 'DoctorController@pendingEdit');
+Route::post('admin/pendingedit', 'DoctorController@insertPendingEdit');
+
 Route::get('doctors/review/{id}', 'DoctorController@doctorReview');
 Route::post('doctors/review/{id}', 'DoctorController@updateDoctorReview');
 Route::get('newdoctor', 'DoctorController@newdoctor');
