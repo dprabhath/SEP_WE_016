@@ -445,6 +445,11 @@ function returnofjsend(data){
 			<a data-toggle="tab" href="#home" class="list-group-item"><i class="ti ti-email"></i> Profile </a> 
 			@if(! empty($doctor) )
 				<a target="_blank" href="{{ url('/') }}/doctors/{{$doctor->id}}" class="list-group-item">Doctor Profile </a>
+
+				<a target="_blank" href="{{ url('/') }}/profile/cancelslot" class="list-group-item"> Cancel Slots </a>
+
+				<a target="_blank" href="{{ url('/') }}/profile/schedule" class="list-group-item"> Timeslots </a>
+
 				<a class="list-group-item"><span class="badge badge-warning">{{$doctor->rating}}</span>Rating </a> 
 				<a class="list-group-item" id='available'>
 				

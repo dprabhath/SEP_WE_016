@@ -2,13 +2,47 @@
 	
 @section('head')
     <script type="text/javascript">
+
+    function ValidateEmail()
+    {
+         var emailID = document.getElementById("email").value;
+         atpos = emailID.indexOf("@");
+         dotpos = emailID.lastIndexOf(".");
+         
+         if (atpos < 1 || ( dotpos - atpos < 2 )) 
+         {
+            alert("Please enter correct email ID")
+            document.editForm.email.focus() ;
+            return false;
+         }
+         return( true );
+    }
+
+    function ValidatePhone(phone)
+    {
+        if(phone.length == 10) {
+            if(isNaN(phone)) {
+                alert("Phone Number is Invalid.");
+                return false;
+            }
+            else {
+                return true;
+            }   
+        } 
+        else {
+            alert("Phone Number is Invalid.");
+            return false;
+        }
+    }
+
     function validateForm() 
     {
         var spec = document.getElementById("spec").value;
         var fname = document.getElementById("fname").value;
         var lname = document.getElementById("lname").value;
-        
-    
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("phone").value;
+
         if ((spec == null || spec == "") || (fname == null || fname == "") || (lname == null || lname == "")) 
         {
            alert("Fields marked with * must be filled.");
@@ -16,8 +50,17 @@
         }
         else
         {
-            return true;
-        }       
+            if((email == "") && (phone == ""))
+                return true;
+
+            if(email == "")
+                return ValidatePhone(phone);
+
+            if(phone == "")
+                return ValidateEmail();
+
+            return (ValidateEmail() && ValidatePhone(phone));
+        }
     }
 
     function NavigateTo(theUrl)

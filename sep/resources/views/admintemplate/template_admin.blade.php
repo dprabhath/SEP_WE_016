@@ -220,6 +220,9 @@
                                 <li>
                                     <a href="approvedlist">Approved Physicians</a>
                                 </li>
+                                <li>
+                                    <a href="pendingedit">Pending Suggestions</a>
+                                </li>
                             </ul>
 						</li>
 

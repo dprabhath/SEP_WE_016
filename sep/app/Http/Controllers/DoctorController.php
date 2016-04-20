@@ -3,6 +3,8 @@
 use App\Doctor;
 use App\user;
 use App\pendingDoctor;
+use App\doctorSchedule;
+use App\cancelSlots;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +16,8 @@ use Mail;
 use DB;
 use App\reviews;
 use App\Timeslots;
+use App\PendingEdit;
+use Carbon\Carbon;
 
 class DoctorController extends Controller {
 
@@ -68,6 +72,62 @@ class DoctorController extends Controller {
 	}
 
 	/**
+	 * Shows the page for creating a new Cancel Slot.
+	 *
+	 * @return createcancelslot view
+	 */
+	public function setCancelSlot()
+	{
+		$user = Session::get('user');
+
+		return View::make('doctor.createcancelslot')->with('user',$user);
+	}
+
+	/**
+	 * Inserts a new Cancel Slot.
+	 *
+	 * @return createcancelslot view
+	 */
+	public function insertCancelSlot()
+	{
+		$user = Session::get('user');
+
+		$from = Request::get('from');
+		$till = Request::get('till');
+		$date = Request::get('date');
+
+		$newCancelSlot = new cancelSlots();
+
+		$startDateTime = Carbon::createFromFormat('Y/m/d-H.i', $date .'-'. $from);
+		$endDateTime = Carbon::createFromFormat('Y/m/d-H.i', $date .'-'. $till);
+
+		$newCancelSlot->did = $user->id;
+		$newCancelSlot->time = $from .'-'. $till;
+		$newCancelSlot->slotdate = $startDateTime->toDateString();
+
+		$newCancelSlot->save();
+
+		$appointments = doctorSchedule::where(function ($query) use ($startDateTime, $endDateTime) { $query->where('schedule_start', '>', $startDateTime->toDateTimeString())->where('schedule_start', '<', $endDateTime->toDateTimeString());})->orWhere(function ($query) use ($startDateTime, $endDateTime) { $query->where('schedule_end', '>', $startDateTime->toDateTimeString())->where('schedule_end', '<', $endDateTime->toDateTimeString());})->get();
+
+		$currentDoctor = Doctor::find($user->id);
+		$doctorName = $currentDoctor->first_name .' '. $currentDoctor->last_name;
+
+		foreach ($appointments as $value) {
+    		$currentUser = User::find($value->uid);
+
+    		Mail::send('mailtemplate/appointmentCancelled', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Appointment Notice');
+					});
+    		doctorSchedule::where('id', $value->id)->update(['cancelDoctor' => '1']);
+		}
+
+		return View::make('doctor.createcancelslot')->with('user',$user);
+	}
+
+
+	/**
 	 * Shows the Doctor List to the user.
 	 *
 	 * @return index view
@@ -75,8 +135,14 @@ class DoctorController extends Controller {
 	public function createSchedule()
 	{
 		$user = Session::get('user');
+		$ifExists = Timeslots::where('doctor_id', $user->id)->get();
+		$created = 0;
 
-		return view('doctor.createschedule')->with('user',$user);
+		if(count($ifExists) > 0) {
+			$created = 1;
+		}
+
+		return view('doctor.createschedule')->with('user',$user)->with('created',$created);
 		//return $doctors;
 	}
 
@@ -90,6 +156,7 @@ class DoctorController extends Controller {
 		$user = Session::get('user');
 
 		$ifExists = Timeslots::where('doctor_id', $user->id)->get();
+		$created = 0;
 
 		if(count($ifExists) > 0) {
 			Timeslots::where('doctor_id', $user->id)->update(['monday' => Request::get('monday_from') .'-'. Request::get('monday_till')]);
@@ -100,6 +167,7 @@ class DoctorController extends Controller {
 			Timeslots::where('doctor_id', $user->id)->update(['saturday' => Request::get('saturday_from') .'-'. Request::get('saturday_till')]);
 			Timeslots::where('doctor_id', $user->id)->update(['sunday' => Request::get('sunday_from') .'-'. Request::get('sunday_till')]);
 			Timeslots::where('doctor_id', $user->id)->update(['notes' => 'None']);
+			$created = 1;
 		}
 		else {
 			$newTimeslot = new Timeslots();
@@ -118,7 +186,7 @@ class DoctorController extends Controller {
 			$newTimeslot->save();
 		}
 
-		return view('doctor.createschedule')->with('user',$user);
+		return view('doctor.createschedule')->with('user',$user)->with('created',$created);
 		//return $doctors;
 	}
 
@@ -187,6 +255,262 @@ class DoctorController extends Controller {
 		$user = Session::get('user');
 
 		return view('doctor.showpending')->with('doctor', $doctor)->with('user',$user);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function suggestEdit($id)
+	{
+		$user = Session::get('user');
+		$doctor = Doctor::findOrFail($id);
+		
+		return view('doctor.suggestEdit')->with('user',$user)->with('doctor',$doctor);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function insertSuggestEdit($id)
+	{
+		$user = Session::get('user');
+		$doctor = Doctor::find($id);
+
+		$newEdit = new PendingEdit();
+
+		$newEdit->doctor_id = $id;
+		$newEdit->doctorname = $doctor->first_name .' '. $doctor->last_name;
+		$newEdit->user_id = $user->id;
+		$newEdit->username = $user->name;
+		$newEdit->field = Request::get('field');
+		$newEdit->value = Request::get('fieldValue');
+
+		$newEdit->save();
+		
+		return view('doctor.suggestEdit')->with('user',$user)->with('doctor',$doctor);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function pendingEdit()
+	{
+		$user = Session::get('user');
+		$suggests = PendingEdit::all();
+		
+		return view('doctor.pendingSuggest')->with('user',$user)->with('suggests', $suggests);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function insertPendingEdit()
+	{
+		$ids = Request::get('pendingid');
+
+		if(Request::get('approve')) {
+			foreach ($ids as $key => $value) 
+			{
+				$this->approveEdit($value);
+			}
+		}
+		else if(Request::get('delete')) {
+			foreach ($ids as $key => $value) 
+			{
+				$this->deleteEdit($value);
+			}
+		}
+
+		return redirect()->back();
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function approveEdit($id)
+	{
+		$suggest = PendingEdit::find($id);
+		$currentUser = User::find($suggest->user_id);
+		$doctor = Doctor::find($suggest->doctor_id);
+		$doctorName = $doctor->first_name .' '. $doctor->last_name;
+
+		if($suggest->field == 'edu') {
+			Doctor::where('id', $doctor->id)->update(['eduqual' => $suggest->value]);
+		}
+		if($suggest->field == 'prof') {
+			Doctor::where('id', $doctor->id)->update(['profqual' => $suggest->value]);
+		}
+		if($suggest->field == 'ads') {
+			Doctor::where('id', $doctor->id)->update(['address' => $suggest->value]);
+		}
+		if($suggest->field == 'tele') {
+			Doctor::where('id', $doctor->id)->update(['phone' => $suggest->value]);
+		}
+		if($suggest->field == 'email') {
+			Doctor::where('id', $doctor->id)->update(['email' => $suggest->value]);
+		}
+		if($suggest->field == 'hos') {
+			Doctor::where('id', $doctor->id)->update(['hospital' => $suggest->value]);
+		}
+
+		Mail::send('mailtemplate/suggestApproved', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Profile Suggestion Notice');
+					});
+
+		$suggest->delete();
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function deleteEdit($id)
+	{
+		$suggest = PendingEdit::find($id);
+		$currentUser = User::find($suggest->user_id);
+		$doctor = Doctor::find($suggest->doctor_id);
+		$doctorName = $doctor->first_name .' '. $doctor->last_name;
+
+		Mail::send('mailtemplate/suggestRejected', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Profile Suggestion Notice');
+					});
+
+		$suggest->delete();
+	}
+
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function showPendingAppointments()
+	{
+		$user = Session::get('user');
+		$appointments = doctorSchedule::where('did', $user->id)->where('confirmed', 0)->get();
+
+		return view('doctor.pendingAppointments')->with('appointments', $appointments)->with('user',$user);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function pendingAppointmentAction()
+	{
+		$ids = Request::get('pendingid');
+
+		if(Request::get('confirm')) {
+			foreach ($ids as $key => $value) 
+			{
+				$this->confirmAppointment($value);
+			}
+		}
+		else if(Request::get('cancel')) {
+			foreach ($ids as $key => $value) 
+			{
+				$this->cancelAppointment($value);
+			}
+		}
+
+		return redirect()->back();
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function showConfirmedAppointments()
+	{
+		$user = Session::get('user');
+		$appointments = doctorSchedule::where('did', $user->id)->where('confirmed', 1)->get();
+
+		return view('doctor.confirmedAppointments')->with('appointments', $appointments)->with('user',$user);
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function confirmedAppointmentAction()
+	{
+		$ids = Request::get('pendingid');
+
+		foreach ($ids as $key => $value) 
+		{
+			$this->cancelAppointment($value);
+		}
+		
+		return redirect()->back();
+	}
+
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function confirmAppointment($id)
+	{
+		doctorSchedule::where('id', $id)->update(['confirmed' => '1']);
+
+		$schedule = doctorSchedule::find($id);
+
+		$currentDoctor = Doctor::find($schedule->did);
+		$doctorName = $currentDoctor->first_name .' '. $currentDoctor->last_name;
+
+		$currentUser = User::find($schedule->uid);
+
+		Mail::send('mailtemplate/appointmentConfirmed', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Appointment Notice');
+					});
+    		doctorSchedule::where('id', $value->id)->update(['cancelDoctor' => '1']);
+
+
+	}
+
+	/**
+	 * Shows the page of a pending Doctor to the admin.
+	 *
+	 * @return showpending view
+	 */
+	public function cancelAppointment($id)
+	{
+		doctorSchedule::where('id', $id)->update(['cancelDoctor' => '1']);
+
+		$schedule = doctorSchedule::find($id);
+
+		$currentDoctor = Doctor::find($schedule->did);
+		$doctorName = $currentDoctor->first_name .' '. $currentDoctor->last_name;
+
+		$currentUser = User::find($schedule->uid);
+
+		Mail::send('mailtemplate/appointmentCancelled', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
+					{
+						$m->from('daemon@mail.altairsl.us', 'Daemon');
+						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Appointment Notice');
+					});
+    		doctorSchedule::where('id', $value->id)->update(['cancelDoctor' => '1']);
 	}
 
 	/**
