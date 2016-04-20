@@ -128,6 +128,7 @@ class LoginController extends Controller {
 			*	User Login
 			*
 			*/
+			$keepme=Request::get('keepme');
 			$email=Request::get('email_login');
 			$password=md5(Request::get('password_login'));
 			$user=null;
@@ -170,6 +171,7 @@ class LoginController extends Controller {
 		unset($_SESSION['access_token']);
 		unset($_SESSION['OAuth_email']);
 		unset($_SESSION['OAuth_name']);
+		session_regenerate_id();
 		return Redirect::to('home');
 	}
 	/**
@@ -249,6 +251,7 @@ class LoginController extends Controller {
 				unset($_SESSION['access_token']);
 				unset($_SESSION['OAuth_email']);
 				unset($_SESSION['OAuth_name']);
+				session_regenerate_id();
 				return Redirect::to('login');
 		}
 	}

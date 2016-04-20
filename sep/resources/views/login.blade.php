@@ -156,6 +156,7 @@
 				50% 50% 
 				no-repeat;
 			}
+			
 		</style>
 		<script>
 		function profile(url){
@@ -347,6 +348,13 @@
 							</div>
 
 						</div>
+						<!--div class="row">
+							
+							<div align="center">
+  								<label style="font-size:15px;"><input type="checkbox" name="keepme" value="keepme"><strong> Remember Me</strong></label>
+							</div>
+							
+						</div-->
 						<div class="row" >
 							<div class="col-sm-2">
 							</div>
@@ -357,27 +365,35 @@
 							</div>
 							<div class="col-sm-2">
 							</div>
+
+						</div><br><br>
+							<div class="row" >
+							<div class="col-sm-2">
+							</div>
+							<div class="col-sm-8" align="center"><a style="text-decoration:none !important;" href="GAuth/idtoken.php?logout">
+								<div style="background-color: #F44336 !important;border:none !important;color:white !important;text-decoration:none !important;" class="btn btn-primary btn-lg btn-block">
+									login with <span>Google</span>
+								</div></a>
+							</div>
+							<div class="col-sm-2">
+							</div>
+							
+						</div>
+						<div class="row" >
+							<div class="col-sm-2">
+							</div>
+							<div class="col-sm-8" align="center"><a style="text-decoration:none !important;" href="FBAuth/fbconfig.php">
+								<div style="background-color: #3B5998 !important;border:none !important;color:white !important;text-decoration:none !important;" class="btn btn-primary btn-lg btn-block">
+									login with <span>facebook</span>
+								</div></a>
+							</div>
+							<div class="col-sm-2">
+							</div>
+							
 						</div>
 
 
-
-
-						<div class="row" style="padding-top:20px;">
-							<div class="col-md-2 col-sm-2 col-xs-2">
-							</div>
-							<div class="col-md-2 col-sm-2 col-xs-2" align="center" style="padding-right:0px;margin-right:0px;"><a href="GAuth/idtoken.php?logout">
-								<i class="icon_4">G</i></a>
-							</div>
-							<div class="col-md-3 col-sm-3 col-xs-3" align="center" style="padding-left:0px;margin-left:0px;"><a href="FBAuth/fbconfig.php">
-								<i class="icon_4 icon_5">F</i></a>
-							</div>
-
-
-
-
-						</div>
-
-						<div class="row" style="padding-top:40px;">
+						<div class="row" style="background-color:black;margin-top:40px;margin-left:-10px;margin-right:-10px;margin-bottom:-10px;">
 							<div class="col-sm-6" align="center" style="padding-left:0px;margin-left:0px;">
 
 

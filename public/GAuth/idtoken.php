@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+session_regenerate_id();
 session_start();
 
 require_once realpath('src/Google/autoload.php');
