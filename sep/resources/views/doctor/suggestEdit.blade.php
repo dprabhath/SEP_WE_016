@@ -8,9 +8,66 @@
       document.location.href = theUrl;
     }
 
+    function ValidateEmail()
+    {
+         var emailID = document.getElementById("fieldValue").value;
+         atpos = emailID.indexOf("@");
+         dotpos = emailID.lastIndexOf(".");
+         
+         if (atpos < 1 || ( dotpos - atpos < 2 )) 
+         {
+            alert("Please enter correct email ID")
+            document.editForm.email.focus() ;
+            return false;
+         }
+         else
+            return true;
+         
+    }
+
+    function ValidatePhone(phone)
+    {
+        if(phone.length == 10) {
+            if(isNaN(phone)) {
+                alert("Phone Number is Invalid.");
+                return false;
+            }
+            else {
+                return true;
+            }   
+        } 
+        else {
+            alert("Phone Number is Invalid.");
+            return false;
+        }
+    }
+
     function validateForm() 
     {
+        var fvalue = document.getElementById("fieldValue");
+        var field = document.getElementById("field").value;
+
+       // alert("Field is empty, please fill.");
+
         
+        if(fvalue == "" || fvalue == null)
+        {
+            alert("Field is empty, please fill.");
+            return false;
+        }
+
+        if(field == 'email')
+        {
+            return ValidateEmail();
+        }
+        if(field == 'tele')
+        {
+            return ValidatePhone(fvalue);
+        }
+
+        
+
+        //return true;
     }
 
     function fillTextbox()

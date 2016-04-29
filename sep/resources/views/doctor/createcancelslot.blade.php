@@ -25,9 +25,26 @@
 
     function validateForm() 
     {
-      
+      var from_$input = $('#from').pickatime();
+      var fromPicker = from_$input.pickatime('picker');
+
+      var till_$input = $('#till').pickatime();
+      var tillPicker = till_$input.pickatime('picker');
+      var date = document.getElementById("date");
 
       
+      var fromTime = fromPicker.get('value');
+      var tillTime = tillPicker.get('value');
+
+      if(fromTime > tillTime)
+      {
+        alert("Invalid");
+        return false;
+      }
+      else
+      {
+        return true;
+      }
 
     }
 
@@ -119,7 +136,7 @@
                         <div class="panel-footer">
 	                      <div class="row">
 	                          <div class="col-sm-8">
-	                               {!! Form::submit('Set Schedule', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
+	                               {!! Form::submit('Create Slot', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
 	                               <input class="btn btn_5 btn-lg btn-info" value="Back" onclick="NavigateTo('../profile')">
 	                              {!! Form::close() !!}
 	                          </div>

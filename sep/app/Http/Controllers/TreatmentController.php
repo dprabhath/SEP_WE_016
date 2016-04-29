@@ -19,7 +19,7 @@ class TreatmentController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('AdminloginCheck');
+		//$this->middleware('AdminloginCheck');
 	}
 
 	/**
