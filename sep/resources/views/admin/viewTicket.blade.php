@@ -413,14 +413,14 @@
 
 		<div class="col-md-12 inbox_right">
 
-			<form id="search">
+			<!--form id="search">
 				<div class="input-group">
 					<input type="text" name="searchBox" class="form-control1 input-search" placeholder="Search...">
 					<span class="input-group-btn">
 						<button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
 					</span>
-				</div><!-- Input Group -->
-			</form>
+				</div>
+			</form-->
 			<div class="mailbox-content">
 
 				<div class="mail-toolbar clearfix"  >
@@ -479,8 +479,8 @@
 								</div>
 							</div>
 							<div class="btn-group">
-								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
-								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
 							</div>
 
 

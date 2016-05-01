@@ -374,10 +374,10 @@
 
 		</div>
 		<div class="col-sm-4">
-			<div class="input-group" style="border-radius:0px !important;">
+			<!--div class="input-group" style="border-radius:0px !important;">
 				<input type="text" class="form-control" placeholder="&#xf002;" style="font-family: 'FontAwesome';border-radius:0px !important;">
 				
-			</div>
+			</div-->
 		</div>
 		
 	</div>
