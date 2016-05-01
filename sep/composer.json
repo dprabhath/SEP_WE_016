@@ -10,7 +10,8 @@
         "laravelcollective/html": "5.1.*",
 		"arcanedev/no-captcha": "~2.2",
 		"simplesoftwareio/simple-sms": "~2",
-		"nesbot/carbon": "^1.21"
+		"nesbot/carbon": "^1.21",
+		"barryvdh/laravel-ide-helper": "^2.1"
 	},
 	"require-dev": {
 		"fzaninotto/faker": "~1.4",

@@ -148,6 +148,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 		 Arcanedev\NoCaptcha\NoCaptchaServiceProvider::class,
 		 SimpleSoftwareIO\SMS\SMSServiceProvider::class,
+		Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
 	],
 
