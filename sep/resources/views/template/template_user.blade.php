@@ -195,7 +195,7 @@ $(document).ready(function () {
                         <div class="collapse navbar-collapse" id="myNavbar">
                             <ul class="nav navbar-nav navbar-right">
                                 @if(! empty($user))
-                                <li class="active hidden-xs"><a href="home">Home</a></li>
+                                <li class="hidden-xs"><a href="home">Home</a></li>
                                 <li class="hidden-xs"><a href="forum/public/">Forum</a></li>
                                 <li class="hidden-xs"><a href="{{ url('/') }}/treatments"> Treatments</a></li>
                                 <li class="hidden-xs"><a href="{{ url('/') }}/doctors">Physicians</a></li>
