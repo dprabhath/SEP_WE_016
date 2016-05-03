@@ -8,21 +8,20 @@
       document.location.href = theUrl;
     }
 
-    function ValidateEmail()
+    function ValidateEmail(emailID)
     {
-         var emailID = document.getElementById("fieldValue").value;
-         atpos = emailID.indexOf("@");
-         dotpos = emailID.lastIndexOf(".");
+        var emailAdd = emailID.toString();    
+         atpos = emailAdd.indexOf("@");
+         dotpos = emailAdd.lastIndexOf(".");
          
          if (atpos < 1 || ( dotpos - atpos < 2 )) 
          {
             alert("Please enter correct email ID")
-            document.editForm.email.focus() ;
             return false;
          }
-         else
+         else {
             return true;
-         
+         } 
     }
 
     function ValidatePhone(phone)
@@ -46,11 +45,9 @@
     {
         var fvalue = document.getElementById("fieldValue");
         var field = document.getElementById("field").value;
-
-       // alert("Field is empty, please fill.");
-
-        
-        if(fvalue == "" || fvalue == null)
+        var fvaluestring = fvalue.value;
+     
+        if(fvaluestring == "" || fvaluestring == null || fvaluestring == " ")
         {
             alert("Field is empty, please fill.");
             return false;
@@ -58,16 +55,14 @@
 
         if(field == 'email')
         {
-            return ValidateEmail();
+            return ValidateEmail(fvalue);
         }
         if(field == 'tele')
         {
             return ValidatePhone(fvalue);
         }
 
-        
-
-        //return true;
+        return true;
     }
 
     function fillTextbox()
@@ -104,6 +99,11 @@
             var fvalue = document.getElementById("fieldValue");
             fvalue.value = "<?php echo $doctor->address; ?>";
         }
+        if(field == 'cty')
+        {
+            var fvalue = document.getElementById("fieldValue");
+            fvalue.value = "<?php echo $doctor->city; ?>";
+        }
         //document.getElementById("fieldValue").value = {!! $doctor->eduqual !!};
 
         //alert(field);
@@ -133,7 +133,7 @@
                                     <label for="focusedinput" class="col-sm-2 control-label"> Field : </label>
                                     <div class="col-sm-8">
                                         
-                                        {!! Form::select('field', ['prof' => 'Professional Qualifications', 'edu' => 'Educational Qualifications', 'hos' => 'Hospital','tele' => 'Telephone', 'email' => 'Email', 'ads' => 'Address'], 'prof', ['class' => 'form-control1', 'onchange' => 'fillTextbox()','id' => 'field']) !!}
+                                        {!! Form::select('field', ['prof' => 'Professional Qualifications', 'edu' => 'Educational Qualifications', 'hos' => 'Hospital','tele' => 'Telephone', 'email' => 'Email', 'ads' => 'Address', 'cty' => 'City'], 'prof', ['class' => 'form-control1', 'onchange' => 'fillTextbox()','id' => 'field']) !!}
                                     </div>
                                    
                                 </div>

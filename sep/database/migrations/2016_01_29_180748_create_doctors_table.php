@@ -29,6 +29,7 @@ class CreateDoctorsTable extends Migration {
 			$table->string('imagepath');
 			$table->boolean('formal');
 			$table->boolean('available')->default(0);
+			$table->boolean('rated');
 			$table->boolean('has_account');
 			$table->string('city');
 		});

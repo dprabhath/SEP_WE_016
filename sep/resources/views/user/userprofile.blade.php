@@ -450,6 +450,10 @@ function returnofjsend(data){
 
 				<a target="_blank" href="{{ url('/') }}/profile/schedule" class="list-group-item"> Timeslots </a>
 
+				<a target="_blank" href="{{ url('/') }}/profile/pending" class="list-group-item"> Pending Appointments </a>
+
+				<a target="_blank" href="{{ url('/') }}/profile/confirmed" class="list-group-item"> Confirmed Appointments </a>
+
 				<a class="list-group-item"><span class="badge badge-warning">{{$doctor->rating}}</span>Rating </a> 
 				<a class="list-group-item" id='available'>
 				

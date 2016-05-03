@@ -52,6 +52,7 @@
         var email = document.getElementById("email").value;
         var address = document.getElementById("address").value;
         var image = document.getElementById("image").value;
+        var city = document.getElementById("city").value;
 
         var path = image.split("\\");
 
@@ -100,6 +101,10 @@
           return false;
         }
         if (address == null || address == "") {
+          alert("A field is empty.");
+          return false;
+        }
+        if (city == null || city == "") {
           alert("A field is empty.");
           return false;
         }
@@ -206,9 +211,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> Address : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Street Address : </label>
                                     <div class="col-sm-8">
                                         {!! Form::text('address', null,  [ 'class' => 'form-control1','id' => 'address']) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="focusedinput" class="col-sm-2 control-label"> City : </label>
+                                    <div class="col-sm-8">
+                                        {!! Form::text('city', null,  [ 'class' => 'form-control1','id' => 'city']) !!}
                                     </div>
                                 </div>
                              

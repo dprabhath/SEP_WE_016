@@ -182,6 +182,7 @@
 @section('body')
 
   
+  
   <div class="panel-body1">
     <div  class="panel-footer">
             <h3><span class="semi-bold">Approved Informal Physician List</span></h3>
@@ -200,6 +201,20 @@
       <tbody>
         
           @foreach ($doctors as $doctor)
+
+            <?php 
+              $ratingString;
+
+              if($doctor->rating > 8)
+                $ratingString = 'Excellent';
+              else if($doctor->rating > 5)
+                $ratingString = 'Good';
+              else if($doctor->rating == 5)
+                $ratingString = 'Average';
+              else if($doctor->rating < 5)
+                $ratingString = 'Below Average';
+
+            ?>
           
             <tr onmouseover="ChangeColor(this, true);" 
                 onmouseout="ChangeColor(this, false);" 
@@ -209,7 +224,7 @@
                 <td> {!! $doctor->last_name !!} </td>
                 <td> {!! $doctor->specialization !!} </td>
                 <td> {!! $doctor->hospital !!} </td>
-                <td> {!! $doctor->rating !!} </td>
+                <td> {!! $ratingString !!} </td>
 
               </tr>  
           

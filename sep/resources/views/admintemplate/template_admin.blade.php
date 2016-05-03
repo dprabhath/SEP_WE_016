@@ -198,16 +198,21 @@
                             </ul>
 						</li>
 						@endif
+						@if($user->level > 2)
 						<li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Pending<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
                                 <li>
                                     <a href="pending">Physicians</a>
                                 </li>
+                                <li>
+                                    <a href="pendingedit">Profile Suggestions</a>
+                                </li>
                               
                             </ul>
 						</li>
-
+						@endif
+						@if($user->level > 2)
 						<li>
 							<a href="#"><i class="fa fa-users fa-fw nav_icon"></i>Physicians<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
@@ -219,12 +224,10 @@
                                 </li>
                                 <li>
                                     <a href="approvedlist">Approved Physicians</a>
-                                </li>
-                                <li>
-                                    <a href="pendingedit">Pending Suggestions</a>
-                                </li>
+                                </li>  
                             </ul>
 						</li>
+						@endif
 
 						@endif
 						<li>

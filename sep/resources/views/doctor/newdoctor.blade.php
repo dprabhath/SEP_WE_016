@@ -156,9 +156,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> Address : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Street Address : </label>
                                     <div class="col-sm-8">
                                         {!! Form::text('address', null,  [ 'class' => 'form-control1','id' => 'address']) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="focusedinput" class="col-sm-2 control-label"> City : </label>
+                                    <div class="col-sm-8">
+                                        {!! Form::text('city', null,  [ 'class' => 'form-control1','id' => 'city']) !!}
                                     </div>
                                 </div>
                              

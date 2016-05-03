@@ -19,6 +19,7 @@
         var email = document.getElementById("email").value;
         var address = document.getElementById("address").value;
         var image = document.getElementById("image").value;
+        var city = document.getElementById("city").value;
 
         var path = image.split("\\");
 
@@ -82,6 +83,12 @@
             return true;
         }
         if (address == null || address == "") {
+          
+        }
+        else {
+            return true;       
+        }
+        if (city == null || city == "") {
           
         }
         else {
@@ -167,9 +174,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="focusedinput" class="col-sm-2 control-label"> Address : </label>
+                                    <label for="focusedinput" class="col-sm-2 control-label"> Street Address : </label>
                                     <div class="col-sm-8">
                                         {!! Form::text('address', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->address", 'id' => 'address']) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="focusedinput" class="col-sm-2 control-label"> City : </label>
+                                    <div class="col-sm-8">
+                                        {!! Form::text('city', null,  [ 'class' => 'form-control1', 'placeholder' => "$doctor->city", 'id' => 'city']) !!}
                                     </div>
                                 </div>
                              

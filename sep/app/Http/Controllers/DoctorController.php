@@ -199,7 +199,7 @@ class DoctorController extends Controller {
 	public function approvedList()
 	{
 		$user = Session::get('user');
-		$doctors = Doctor::all()->where('formal', 0);
+		$doctors = Doctor::where('formal', 0)->get();
 
 		return View::make('doctor.approvedlist')->with('user',$user)->with('doctors',$doctors);
 	}
@@ -362,14 +362,17 @@ class DoctorController extends Controller {
 		if($suggest->field == 'hos') {
 			Doctor::where('id', $doctor->id)->update(['hospital' => $suggest->value]);
 		}
+		if($suggest->field == 'cty') {
+			Doctor::where('id', $doctor->id)->update(['city' => $suggest->value]);
+		}
+
+		$suggest->delete();
 
 		Mail::send('mailtemplate/suggestApproved', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
 					{
 						$m->from('daemon@mail.altairsl.us', 'Daemon');
 						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Profile Suggestion Notice');
 					});
-
-		$suggest->delete();
 	}
 
 	/**
@@ -384,13 +387,15 @@ class DoctorController extends Controller {
 		$doctor = Doctor::find($suggest->doctor_id);
 		$doctorName = $doctor->first_name .' '. $doctor->last_name;
 
+		$suggest->delete();
+
 		Mail::send('mailtemplate/suggestRejected', ['name'=> $currentUser->name,'doctor'=> $doctorName], function ($m) use ($currentUser) 
 					{
 						$m->from('daemon@mail.altairsl.us', 'Daemon');
 						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Profile Suggestion Notice');
 					});
 
-		$suggest->delete();
+		
 	}
 
 
@@ -416,18 +421,19 @@ class DoctorController extends Controller {
 	{
 		$ids = Request::get('pendingid');
 
-		if(Request::get('confirm')) {
-			foreach ($ids as $key => $value) 
-			{
-				$this->confirmAppointment($value);
+		if (count($ids) > 0) {
+			if(Request::get('confirm')) {
+				foreach ($ids as $key => $value) {
+					$this->confirmAppointment($value);
+				}
+			}
+			else if(Request::get('cancel')) {
+				foreach ($ids as $key => $value) {
+					$this->cancelAppointment($value);
+				}
 			}
 		}
-		else if(Request::get('cancel')) {
-			foreach ($ids as $key => $value) 
-			{
-				$this->cancelAppointment($value);
-			}
-		}
+		
 
 		return redirect()->back();
 	}
@@ -454,9 +460,10 @@ class DoctorController extends Controller {
 	{
 		$ids = Request::get('pendingid');
 
-		foreach ($ids as $key => $value) 
-		{
-			$this->cancelAppointment($value);
+		if(count($ids) > 0) {
+			foreach ($ids as $key => $value) {
+				$this->cancelAppointment($value);
+			}
 		}
 		
 		return redirect()->back();
@@ -564,6 +571,7 @@ class DoctorController extends Controller {
 		$email = Request::get('email');
 		$phone = Request::get('phone');
 		$address = Request::get('address');
+		$city = Request::get('city');
 
 		if(\Input::hasFile('image')) {
 			$file = \Input::file('image');
@@ -596,6 +604,9 @@ class DoctorController extends Controller {
 		}
 		if($address != null && $address != "") {
 			Doctor::where('id', $id)->update(['address' => $address]);
+		}
+		if($city != null && $city != "") {
+			Doctor::where('id', $id)->update(['city' => $city]);
 		}
 
 
@@ -648,10 +659,11 @@ class DoctorController extends Controller {
 		$address =  $doctor->address;
 		$email = $doctor->email;
 		$phone = $doctor->phone;
+		$city = $doctor->city;
 
 		$userToSend = User::find($doctor->user_id);	
 
-		$newDoctor = new Doctor;
+		$newDoctor = new Doctor();
 
 		$newDoctor->first_name = $first_name;
 		$newDoctor->last_name = $last_name;
@@ -661,6 +673,7 @@ class DoctorController extends Controller {
 		$newDoctor->eduqual = $eduqual;
 		$newDoctor->hospital = $hospital;
 		$newDoctor->address = $address;
+		$newDoctor->city = $city;
 		$newDoctor->email = $email;
 		$newDoctor->phone = $phone;
 		$newDoctor->formal = 0;
@@ -712,7 +725,7 @@ class DoctorController extends Controller {
 	{
 		$input = Request::all();
 
-		$pendingDoctor = new pendingDoctor;
+		$pendingDoctor = new pendingDoctor();
 
 		$pendingDoctor->first_name = Request::get('fname');
 		$pendingDoctor->last_name = Request::get('lname');
@@ -722,6 +735,7 @@ class DoctorController extends Controller {
 		$pendingDoctor->eduqual = Request::get('eduqual');
 		$pendingDoctor->hospital = Request::get('hospital');
 		$pendingDoctor->address = Request::get('address');
+		$pendingDoctor->city = Request::get('city');
 		$pendingDoctor->email = Request::get('email');
 		$pendingDoctor->phone = Request::get('phone');
 		$pendingDoctor->formal = 0;
@@ -801,7 +815,7 @@ class DoctorController extends Controller {
 	{
 		$input = Request::all();
 
-		$newDoctor = new Doctor;
+		$newDoctor = new Doctor();
 
 		$newDoctor->first_name = Request::get('fname');
 		$newDoctor->last_name = Request::get('lname');
@@ -811,6 +825,7 @@ class DoctorController extends Controller {
 		$newDoctor->eduqual = Request::get('eduqual');
 		$newDoctor->hospital = Request::get('hospital');
 		$newDoctor->address = Request::get('address');
+		$newDoctor->city = Request::get('city');
 		$newDoctor->email = Request::get('email');
 		$newDoctor->phone = Request::get('phone');
 		$newDoctor->formal = 1;

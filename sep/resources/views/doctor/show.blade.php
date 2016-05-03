@@ -98,8 +98,12 @@
                 <td>: {!! $doctor->email!!}</td>
               </tr>
               <tr>
-                <td class="breadcrumb" style="font-weight:bold"> Address</td>
+                <td class="breadcrumb" style="font-weight:bold"> Street Address</td>
                 <td class="breadcrumb">: {!! $doctor->address!!}</td>
+              <tr>
+              <tr>
+                <td class="breadcrumb" style="font-weight:bold"> City</td>
+                <td class="breadcrumb">: {!! $doctor->city!!}</td>
               <tr>
               
                 <!--tr>
@@ -122,12 +126,11 @@
                 </div>
                 <input class="btn btn_5 btn-lg btn-info" type="submit" value="Back" onclick="NavigateTo('../doctors')">
                 <input class="btn btn_5 btn-lg btn-info" value="Rate and Comment" onclick="NavigateTo('review/{!! $doctor->id!!}')">
-                @if($user->level>4)
+                @if($user->level>2)
                 <input class="btn btn_5 btn-lg btn-info" value="Edit" onclick="NavigateTo('edit/{!! $doctor->id!!}')">
-                @endif
-                @if($user->level>4)
+                @endif  
                 <input class="btn btn_5 btn-lg btn-info" value="Suggest Change" onclick="NavigateTo('suggest/{!! $doctor->id!!}')">
-                @endif
+
     </div>
 
         

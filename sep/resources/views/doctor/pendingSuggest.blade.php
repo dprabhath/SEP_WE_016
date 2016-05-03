@@ -212,7 +212,7 @@
 
 <div class="col-md-12 graphs">
        <div class="xs">
-        <h3>Approval-Pending Physicians</h3>
+        <h3>Approval-Pending Suggestions</h3>
             <table id="indextable" class="table table-striped">
                <thead>
                   <tr>
@@ -228,6 +228,26 @@
 
                       {!! Form::open(array('url' => 'admin/pendingedit')) !!}
                       @foreach ($suggests as $suggest)
+
+                      <?php 
+                        $fieldString;
+
+                        if($suggest->field == 'tele')
+                          $fieldString = 'Telephone';
+                        else if($suggest->field == 'email')
+                          $fieldString = 'Email';
+                        else if($suggest->field == 'ads')
+                          $fieldString = 'Street Address';
+                        else if($suggest->field == 'prof')
+                          $fieldString = 'Professional Qualifications';
+                        else if($suggest->field == 'edu')
+                          $fieldString = 'Educational Qualifications';
+                        else if($suggest->field == 'hos')
+                          $fieldString = 'Hospital';
+                        else if($suggest->field == 'cty')
+                          $fieldString = 'City';
+
+                      ?>
                       
                           <tr onmouseover="ChangeColor(this, true);" 
                               onmouseout="ChangeColor(this, false);" 
@@ -236,7 +256,7 @@
                               <td> {!! Form::checkbox("pendingid[$count]", $suggest->id, false) !!} </td>
                               <td  style="cursor: pointer;"> {!! $suggest->doctorname !!} </td>
                               <td  style="cursor: pointer;"> {!! $suggest->username !!} </td>
-                              <td  style="cursor: pointer;"> {!! $suggest->field !!} </td>
+                              <td  style="cursor: pointer;"> {!! $fieldString !!} </td>
                               <td  style="cursor: pointer;"> {!! $suggest->value !!} </td>
 
                               
