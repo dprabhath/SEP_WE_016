@@ -57,7 +57,7 @@
 	                      <div class="row">
 	                          <div class="col-sm-8 col-sm-offset-2">
 	                               {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-	                              <input class="btn btn_3 btn-lg btn-info" value="Back" onclick="NavigateTo('../../doctors/{{ $doctor->id }}')">
+	                              <input type="button "class="btn btn_3 btn-lg btn-info" value="Back" onclick="NavigateTo('../../doctors/{{ $doctor->id }}')">
 	                              {!! Form::close() !!}
 	                          </div>
 	                      </div>
