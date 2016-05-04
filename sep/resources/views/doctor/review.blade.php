@@ -69,12 +69,18 @@
 		<div  class="panel-footer">
             <h3><span class="semi-bold"> User Comments </span></h3>
         </div>
- 		<div class="wid_blog" >
-        @foreach ($reviews as $review)
-                    <h1> {!!  $review->review !!} </h1>
-                    <h3> {!!  $review->user_name !!} </h3>
-        @endforeach 
-         </div>
+          @if(count($reviews) > 0)
+   		    <div class="wid_blog" >
+            @foreach ($reviews as $review)
+                        <h1> {!!  $review->review !!} </h1>
+                        <h3> {!!  $review->user_name !!} </h3>
+            @endforeach 
+          </div>
+          @else
+                <div class="wid_blog" >
+                  <h2><span class="semi-bold"> No Reviews Yet! </span></h2>
+                </div>
+          @endif
 </div>
         
     
