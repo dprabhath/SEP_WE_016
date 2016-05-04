@@ -87,9 +87,8 @@
 					<label for="selector1" class="col-sm-2 control-label">Subject</label>
 					<div class="col-sm-8">
 					<select name="options" id="selector1" class="form-control1">
-						<option value="Problem 1">Problem 1</option>
-						<option value="Problem 2">Problem 2</option>
-						<option value="Problem 3">Problem 3</option>
+						<option value="Appointments">Appointments</option>
+						<option value="Profile">Profile</option>
 						<option value="custom">Custom</option>
 					</select>
 					</div>
