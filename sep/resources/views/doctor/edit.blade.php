@@ -8,6 +8,39 @@
       document.location.href = theUrl;
     }
 
+    function ValidateEmail(emailID)
+    {
+        var emailAdd = emailID.toString();    
+         atpos = emailAdd.indexOf("@");
+         dotpos = emailAdd.lastIndexOf(".");
+         
+         if (atpos < 1 || ( dotpos - atpos < 2 )) 
+         {
+            alert("Please enter correct email ID")
+            return false;
+         }
+         else {
+            return true;
+         } 
+    }
+
+    function ValidatePhone(phone)
+    {
+        if(phone.length == 10) {
+            if(isNaN(phone)) {
+                alert("Phone Number is Invalid.");
+                return false;
+            }
+            else {
+                return true;
+            }   
+        } 
+        else {
+            alert("Phone Number is Invalid.");
+            return false;
+        }
+    }
+
     function validateForm() 
     {
         var spec = document.getElementById("spec").value;
@@ -74,13 +107,13 @@
           
         }
         else {
-            return true;
+            return ValidatePhone(phone);
         }
         if (email == null || email == "") {
            
         }
         else  {
-            return true;
+            return ValidateEmail(email);
         }
         if (address == null || address == "") {
           
@@ -115,7 +148,11 @@
         </div>
             <div class="tab-content">
                         <div  class="row" style="margin:auto; width:30%; padding-top:30px; padding-bottom:30px;">
-                            <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/{!! $doctor->imagepath !!}"  width="200" height="200">
+                            @if($doctor->imagepath!='')
+                                <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/{!! $doctor->imagepath !!}"  width="200" height="200">
+                            @else
+                                <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/uploads/profile_pics/emp.png"  width="200" height="200">
+                            @endif
                         </div>
 
                         <div class="tab-pane active" id="horizontal-form">
@@ -192,7 +229,7 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                  {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-                <input class="btn btn_5 btn-lg btn-info" value="Cancel" onclick="NavigateTo('../{!! $doctor->id!!}')">
+                 <input class="btn btn_5 btn-lg btn-info" value="Cancel" type="button" onclick="NavigateTo('../{!! $doctor->id!!}')">
                 {!! Form::close() !!}
             </div>
         </div>

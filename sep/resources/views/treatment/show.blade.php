@@ -53,21 +53,21 @@
            
             </div>
 
-            @if($image1 == 1 || $image2 == 1 || $image3 == 1 || $image4 == 1)
+            @if($treatment->image1 != '' || $treatment->image2 != '' || $treatment->image3 != '' || $treatment->image4 != '')
             <h3>Images</h3>
             <div class="but_list">
            
               <div class="well">
-              @if($image1 == 1)
+              @if($treatment->image1 != '')
                   <img alt="" src="{{ url('/') }}/{!! $treatment->image1 !!}"  width="800" height="450">
               @endif
-               @if($image2 == 1)
+               @if($treatment->image2 != '')
                   <img alt="" src="{{ url('/') }}/{!! $treatment->image2 !!}"  width="800" height="450">
               @endif
-               @if($image3 == 1)
+               @if($treatment->image3 != '')
                   <img alt="" src="{{ url('/') }}/{!! $treatment->image3 !!}"  width="800" height="450">
               @endif
-               @if($image4 == 1)
+               @if($treatment->image4 != '')
                   <img alt="" src="{{ url('/') }}/{!! $treatment->image4 !!}"  width="800" height="450">
               @endif
               </div>

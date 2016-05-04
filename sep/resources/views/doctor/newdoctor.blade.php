@@ -3,19 +3,20 @@
 @section('head')
     <script type="text/javascript">
 
-    function ValidateEmail()
+     function ValidateEmail(emailID)
     {
-         var emailID = document.getElementById("email").value;
-         atpos = emailID.indexOf("@");
-         dotpos = emailID.lastIndexOf(".");
+        var emailAdd = emailID.toString();    
+         atpos = emailAdd.indexOf("@");
+         dotpos = emailAdd.lastIndexOf(".");
          
          if (atpos < 1 || ( dotpos - atpos < 2 )) 
          {
             alert("Please enter correct email ID")
-            document.editForm.email.focus() ;
             return false;
          }
-         return( true );
+         else {
+            return true;
+         } 
     }
 
     function ValidatePhone(phone)
@@ -57,9 +58,9 @@
                 return ValidatePhone(phone);
 
             if(phone == "")
-                return ValidateEmail();
+                return ValidateEmail(email);
 
-            return (ValidateEmail() && ValidatePhone(phone));
+            return (ValidateEmail(email) && ValidatePhone(phone));
         }
     }
 
@@ -174,7 +175,7 @@
                       <div class="row">
                           <div class="col-sm-8 col-sm-offset-2">
                                {!! Form::submit('Submit', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-                              <input class="btn btn_3 btn-lg btn-info" value="Cancel" onclick="NavigateTo('doctors')">
+                              <input type="button" class="btn btn_3 btn-lg btn-info" value="Cancel" onclick="NavigateTo('doctors')">
                               {!! Form::close() !!}
                           </div>
                       </div>

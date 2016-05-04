@@ -66,7 +66,7 @@
         <div class="tab-content">
                         <div class="tab-pane active" id="horizontal-form">
                              {!! Form::open(array('class' => 'form-horizontal', 'files' => true, 'name' => 'editForm', 'onsubmit' => 'return validateForm()')) !!} 
-                          <div class="col-lg-12">
+                          <div class="col-lg-12" style="margin-top: 20px;">
                               <div class="col-xs-2">
                                     <label for="focusedinput" class="col-sm-2 control-label"> From</label>
           
@@ -137,7 +137,7 @@
 	                      <div class="row">
 	                          <div class="col-sm-8">
 	                               {!! Form::submit('Create Slot', ['class' => 'btn btn_5 btn-lg btn-info']) !!}  
-	                               <input class="btn btn_5 btn-lg btn-info" value="Back" onclick="NavigateTo('../profile')">
+	                               <input type="button" class="btn btn_5 btn-lg btn-info" value="Back" onclick="NavigateTo('../profile')">
 	                              {!! Form::close() !!}
 	                          </div>
 	                      </div>

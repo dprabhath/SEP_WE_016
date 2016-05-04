@@ -45,8 +45,11 @@
                 
                 <div class="row" style="padding-top:30px">
                     <div class="col-sm-3" style="padding-bottom:20px">
+                    @if($doctor->imagepath!='')
                         <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/{!! $doctor->imagepath !!}"  width="200" height="200">
-
+                    @else
+                        <img class="img-circle big-profile-pic p-t-10" alt="" src="{{ url('/') }}/uploads/profile_pics/emp.png"  width="200" height="200">
+                    @endif
                     </div>
                     <div class="col-sm-9">
                       <div class="col-sm-8">
@@ -118,18 +121,26 @@
                 <div  class="panel-footer">
                   <h3><span class="semi-bold"> User Comments </span></h3>
                 </div>
+                @if(count($reviews) > 0)
                 <div class="wid_blog" >
                   @foreach ($reviews as $review)
                               <h1> {!!  $review->review !!} </h1>
                               <h3> {!!  $review->user_name !!} </h3>
                   @endforeach 
                 </div>
-                <input class="btn btn_5 btn-lg btn-info" type="submit" value="Back" onclick="NavigateTo('../doctors')">
-                <input class="btn btn_5 btn-lg btn-info" value="Rate and Comment" onclick="NavigateTo('review/{!! $doctor->id!!}')">
-                @if($user->level>2)
-                <input class="btn btn_5 btn-lg btn-info" value="Edit" onclick="NavigateTo('edit/{!! $doctor->id!!}')">
-                @endif  
-                <input class="btn btn_5 btn-lg btn-info" value="Suggest Change" onclick="NavigateTo('suggest/{!! $doctor->id!!}')">
+                @else
+                <div class="wid_blog" >
+                  <h2><span class="semi-bold"> No Reviews Yet! </span></h2>
+                </div>
+                @endif
+                <div style="margin-top: 20px;">
+                  <input type="button" class="btn btn_5 btn-lg btn-info" type="submit" value="Back" onclick="NavigateTo('../doctors')">
+                  <input type="button" class="btn btn_5 btn-lg btn-info" value="Rate and Comment" onclick="NavigateTo('review/{!! $doctor->id!!}')">
+                  @if($user->level>2)
+                    <input type="button" class="btn btn_5 btn-lg btn-info" value="Edit" onclick="NavigateTo('edit/{!! $doctor->id!!}')">
+                  @endif  
+                  <input type="button" class="btn btn_5 btn-lg btn-info" value="Suggest Change" onclick="NavigateTo('suggest/{!! $doctor->id!!}')">
+                </div>
 
     </div>
 
