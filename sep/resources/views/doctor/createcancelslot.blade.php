@@ -30,22 +30,20 @@
 
       var till_$input = $('#till').pickatime();
       var tillPicker = till_$input.pickatime('picker');
-      var date = document.getElementById("date");
 
-      
       var fromTime = fromPicker.get('value');
       var tillTime = tillPicker.get('value');
 
       if(fromTime > tillTime)
       {
         alert("Invalid");
+        alert(date.get('value'));
         return false;
       }
       else
       {
         return true;
       }
-
     }
 
 </script>
@@ -115,7 +113,7 @@
                                 <script>
                                   
                                   $(function() {
-                                        $('#date').pickadate( { formatSubmit: 'yyyy/mm/dd', hiddenName: true });
+                                        $('#date').pickadate( { min: new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate() + 1), formatSubmit: 'yyyy/mm/dd', hiddenName: true });
                                     });
                                 </script>
                       
