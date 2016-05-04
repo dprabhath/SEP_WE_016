@@ -479,8 +479,8 @@
 								</div>
 							</div>
 							<div class="btn-group">
-								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
-								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+								<a id="buttton_previous" class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+								<a id="buttton_next" class="btn btn-default"><i class="fa fa-angle-right"></i></a>
 							</div>
 
 

@@ -419,10 +419,10 @@
 
 
 
-						<div id="buttton_previous" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_next" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 						</div>
-						<div id="buttton_next" style="float:right;font-size: 12px;padding-top:12px;">
+						<div id="buttton_previous" style="float:right;font-size: 12px;padding-top:12px;">
 							<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 						</div>
 						<div id="dbox" style="float:right;border-color: #fff;padding:7px;">
