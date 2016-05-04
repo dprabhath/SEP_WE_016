@@ -58,7 +58,7 @@ class api extends Controller {
 				$doctors=null;
 				$doctors=Doctor::where('city', 'LIKE', "%$city%")->select('first_name', 'last_name','specialization','hospital','phone')->get();
 
-				return  response()->json(['doctors' => $doctors, 'code' => 'ok']);
+				return  response()->json(['doctors' => $doctors, 'code' => 'ok','count' => sizeof($doctors)]);
 		}elseif( Request::get('task')=="doctorspecialization" ){
 			$specialization=Request::get('specialization');
 
@@ -68,7 +68,7 @@ class api extends Controller {
 			$doctors=null;
 			$doctors=Doctor::where('specialization', 'LIKE', "%$specialization%")->select('first_name', 'last_name','specialization','hospital','phone')->get();
 
-			return  response()->json(['doctors' => $doctors, 'code' => 'ok']);
+			return  response()->json(['doctors' => $doctors, 'code' => 'ok','count' => sizeof($doctors)]);
 
 		}elseif( Request::get('task')=="doctorhospital" ){
 			$hospital=Request::get('hospital');
@@ -79,7 +79,7 @@ class api extends Controller {
 			$doctors=null;
 			$doctors=Doctor::where('hospital', 'LIKE', "%$hospital%")->select('first_name', 'last_name','specialization','hospital','phone')->get();
 
-			return  response()->json(['doctors' => $doctors, 'code' => 'ok']);
+			return  response()->json(['doctors' => $doctors, 'code' => 'ok','count' => sizeof($doctors)]);
 
 		}else{
 			return  response()->json(['message' => 'you should pass the paramater task', 'code' => 'error']);
