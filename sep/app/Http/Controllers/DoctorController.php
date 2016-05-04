@@ -143,7 +143,6 @@ class DoctorController extends Controller {
 		}
 
 		return view('doctor.createschedule')->with('user',$user)->with('created',$created);
-		//return $doctors;
 	}
 
 	/**
@@ -439,9 +438,9 @@ class DoctorController extends Controller {
 	}
 
 	/**
-	 * Shows the page of a pending Doctor to the admin.
+	 * Shows the confirmed apppointments
 	 *
-	 * @return showpending view
+	 * @return confirmed appointments view
 	 */
 	public function showConfirmedAppointments()
 	{
@@ -452,9 +451,9 @@ class DoctorController extends Controller {
 	}
 
 	/**
-	 * Shows the page of a pending Doctor to the admin.
+	 * Takes Relevant action according to appointment
 	 *
-	 * @return showpending view
+	 * 
 	 */
 	public function confirmedAppointmentAction()
 	{
@@ -471,9 +470,9 @@ class DoctorController extends Controller {
 
 
 	/**
-	 * Shows the page of a pending Doctor to the admin.
+	 * Confirm Selected Appointment
 	 *
-	 * @return showpending view
+	 * 
 	 */
 	public function confirmAppointment($id)
 	{
@@ -492,14 +491,13 @@ class DoctorController extends Controller {
 						$m->to($currentUser->email, $currentUser->name)->subject('Wedaduru Appointment Notice');
 					});
     		doctorSchedule::where('id', $value->id)->update(['cancelDoctor' => '1']);
-
-
+	
 	}
 
 	/**
-	 * Shows the page of a pending Doctor to the admin.
+	 * Cancel Selected Appointment
 	 *
-	 * @return showpending view
+	 * 
 	 */
 	public function cancelAppointment($id)
 	{
