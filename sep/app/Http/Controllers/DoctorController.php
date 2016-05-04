@@ -781,7 +781,8 @@ class DoctorController extends Controller {
 	public function createDoctorCredentials()
 	{
 		$doctorID = Request::get('doctors');
-		$password = Str::random(10);
+		//$password = Str::random(10);
+		$password = '1234';
 		$doctorInfo = Doctor::find($doctorID);
 
 		Doctor::where('id', $doctorID)->update(['has_account' => 1]);
