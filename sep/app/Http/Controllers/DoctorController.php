@@ -791,7 +791,9 @@ class DoctorController extends Controller {
 		$newUser->name = $doctorInfo->first_name . ' ' . $doctorInfo->last_name;
 		$newUser->password = md5($password);
 		$newUser->tp = $doctorInfo->phone;
-		$newUser->level = 5;
+		$newUser->level = 2;
+		$newUser->active = 1;
+		$newUser->verified = 1;
 
 		$newUser->save();
 
