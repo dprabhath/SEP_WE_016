@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\user;
+use App\spam;
 use App\Doctor;
 use Mail;
 use Illuminate\Support\Str;
@@ -31,6 +32,26 @@ class LoginController extends Controller {
 	{
 		//$this->middleware('auth');
 		
+	}
+	/**
+	* Get the Ip address of the client
+	*
+	*/
+	private function getRealIpAddr()
+	{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
 	}
 	/**
 	 * Show the application dashboard to the user.
@@ -132,13 +153,31 @@ class LoginController extends Controller {
 			$email=Request::get('email_login');
 			$password=md5(Request::get('password_login'));
 			$user=null;
+			$ip=$this->getRealIpAddr();
+			$retry=spam::where('ip','=',$ip)->first();
+			if( is_null($retry) ){
+				$retry = new spam;
+				$retry->ip=$ip;
+				$retry->retry=1;
+				$retry->save();
+			}else{
+				if($retry->retry>6){
+					return view('login')->with('fail',3);
+				}else{
+					$count=$retry->retry;
+				$count++;
+				$retry->retry=$count;
+				$retry->save();
+				}
+				
+			}
 			if( $this->regex($email,"EMAIL") ){
 				$user=user::where('email',$email)->where('password','=',$password)->where('active','=',1)->first();
 			}elseif ($this->regex($email,"TP")) {
 				$user=user::where('tp',"+94".$email)->where('password','=',$password)->where('active','=',1)->first();
 			}
 			if( is_null($user) ){
-				return view('login')->with('fail',1);
+				return view('login')->with('fail',1)->with('emails',$email);
 			}else{
 				Session::put('userid', $user->id);
 				Session::put('user',$user);

@@ -253,7 +253,7 @@ $(document).ready(function () {
                                         </script>
                                         @endif
                                         @endif
-                                        <li class="divider"></li>
+                                        
                                         <li><a href="{{ url('/') }}/signout"><span class="glyphicon glyphicon-log-out"></span> Sign-out</a></li>
                                         @else
                                         <li><a href="{{ url('/') }}/login"><span class="glyphicon glyphicon-log-out"></span> Sign-in</a></li>

@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\Inspire',
 		'App\Console\Commands\passwordReset',
 		'App\Console\Commands\smsReset',
+		'App\Console\Commands\spams',
 	];
 
 	/**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel {
 		//$schedule->command('inspire')->hourly();
 		$schedule->command('passwordReset:cron')->cron('*/2 * * * * *')->sendOutputTo(storage_path('logs/cronPasswordReset.log'));
 		$schedule->command('smsReset:cron')->daily()->sendOutputTo(storage_path('logs/cronsmsReset.log'));
+		$schedule->command('spams:reset')->cron('*/1 * * * * *')->sendOutputTo(storage_path('logs/spam.log'));
 
 	}
 

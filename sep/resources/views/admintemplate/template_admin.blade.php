@@ -154,14 +154,15 @@
 	        		<!--span class="badge">9</span--></a>
 	        		<ul class="dropdown-menu">
 						<li class="dropdown-menu-header text-center">
-							<strong>Account</strong>
+							<strong>Menu</strong>
 						</li>
-						
+						<li class="m_2"><a href="{{ url('/') }}"><i class="fa fa-skyatlas"></i> Visit Site</a></li>
 						<li class="m_2"><a href="../profile"><i class="fa fa-user"></i> Profile</a></li>
 						
-						<li class="divider"></li>
 						
-						<li class="m_2"><a href="../signout"><i class="fa fa-lock"></i> Logout</a></li>	
+						
+						<li class="m_2"><a href="../signout"><i class="fa fa-lock"></i> Logout</a></li>
+						
 	        		</ul>
 	      		</li>
 			</ul>
@@ -171,19 +172,6 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-
-                        <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw nav_icon"></i>Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-laptop nav_icon"></i>Layouts<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="grids.html">Grid System</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
                         @if($user->level>4)
                         @if($user->level>9)
                         <li>
@@ -191,9 +179,6 @@
 							<ul class="nav nav-second-level">
                                 <li>
                                     <a href="usermanage">Manage</a>
-                                </li>
-                                <li>
-                                    <a href="#">New</a>
                                 </li>
                             </ul>
 						</li>
@@ -231,7 +216,7 @@
 
 						@endif
 						<li>
-							<a href="view-ticket"><i class="fa fa-users fa-fw nav_icon"></i>Tickets</a>
+							<a href="view-ticket"><i class="fa fa-ticket fa-fw nav_icon"></i>Tickets</a>
 						</li>
                         @yield('navigation')
                     </ul>

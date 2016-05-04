@@ -181,6 +181,14 @@
 						sound: '../resources/common/sounds/sound5'
 					});
 		@endif
+		@if(!empty($fail) && $fail == 3)
+					
+					Lobibox.notify("error", {
+						title: 'Too Many',
+						msg: 'Too Many Login Attempts please try again later',
+						sound: '../resources/common/sounds/sound5'
+					});
+		@endif
 	});
 			
 			$(document).ready(function(){
@@ -338,7 +346,13 @@
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon transparent-icon" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;"><span  class="glyphicon glyphicon-envelope"></span></span>
-								<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" name="email_login" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number">
+								
+								@if(!empty($emails))
+						
+										<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" name="email_login" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number" value={{$emails}}>
+								@else
+									<input type="text" style="background:rgba(0,0,0,0.5);color:white;background-color: transparent;" name="email_login" class="form-control1 transparent" id="email" placeholder="Email address/Phone Number">
+								@endif
 							</div>
 						</div>
 						<div class="form-group">

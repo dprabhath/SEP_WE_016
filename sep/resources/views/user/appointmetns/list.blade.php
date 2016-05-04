@@ -60,6 +60,10 @@
 	.control-label{
 		font-size: 20px;
 	}
+	#selectall{
+		visibility: hidden;
+	}
+	
 </style>
 
 <script type="text/javascript">
